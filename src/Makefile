@@ -1,9 +1,9 @@
 default_target: all
 
 all:
-	tsc
-	javascript-obfuscator js
-	uglifyjs js/*-obfuscated.js > retcon.min.js
+	npx tsc
+	npx javascript-obfuscator js
+	npx uglifyjs js/*-obfuscated.js > retcon.min.js
 	cp retcon.min.js ..
 
 release:
