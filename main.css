@@ -6,6 +6,11 @@ canvas {
         border: 1px solid magenta;
 }
 
+canvas.test-canvas {
+        width: 320px;
+}
+
+/*
 button {
         padding: 0;
         margin: auto;
@@ -13,4 +18,21 @@ button {
         display: block;
         width: 128px;
         height: 32px;
+}
+*/
+
+.button-container {
+    width: 1024px;
+    overflow-y: auto;
+    margin:auto;
+    display:block;
+}
+
+.button-container > button {
+    width: 100px;
+    height: 50px;
+    font-weight: bold;
+    float: left;
+    background: lightgray;   
+    margin: 15px;
 }

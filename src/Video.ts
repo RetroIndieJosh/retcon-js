@@ -26,6 +26,7 @@ class Video extends Surface
                 if (Video.instance == undefined) return;
 
                 setInterval(function () {
+                        //console.log("frame");
                         let instance: Video = Video.get_instance();
                         if (instance == undefined) return;
 
@@ -64,9 +65,44 @@ class Video extends Surface
                 this.randomize_pixels();
         }
 
-        public add_sprite(sprite: Sprite) {
+        // returns the index of the added sprite, or -1 if it wasn't added (already in list)
+        public add_sprite(sprite: Sprite): number {
+                if(this.has_sprite(sprite)) {
+                        console.warn(`Video: tried to add sprite, but already in list: ${sprite}`)
+                        return -1;
+                }
+
                 this.sprite_list.push(sprite);
+                return this.sprite_list.length - 1;
         }
+
+        private has_sprite(sprite: Sprite): boolean {
+                return this.sprite_list.indexOf(sprite) >= 0;
+        }
+
+        // returns whether the sprite was removed
+        public remove_sprite(sprite: Sprite): boolean {
+                if(!this.has_sprite(sprite)) {
+                        console.warn(`Video: tried to remove sprite not in list: ${sprite}`)
+                        return false;
+                }
+
+                const sprite_id = this.sprite_list.indexOf(sprite);
+                return this.remove_sprite_at(sprite_id);
+        }
+
+        // returns whether the sprite was removed
+        public remove_sprite_at(sprite_id: number): boolean {
+                if(sprite_id < 0 || sprite_id >= this.sprite_list.length) {
+                        console.warn(`Video: index out of range trying to remove sprite by id: ${sprite_id}`);
+                        return false;
+                }
+
+                this.sprite_list.splice(sprite_id, 1);
+                return true;
+        }
+
+        public sprite_count() : number { return this.sprite_list.length; }
 
         public render(x: number, y: number, color: Color) {
                 if (this.scale == undefined)

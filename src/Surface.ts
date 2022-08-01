@@ -21,11 +21,7 @@ class Surface {
         public blit(target_surface: Surface, left: number, top: number) {
                 this.forall_pixels(function (surface: Surface, x: number, y: number) {
                         if (surface.pixels == undefined) return;
-
-                        // wrap
-                        let xx = (left + x) % surface.get_width();
-                        let yy = (top + y) % surface.get_height();
-                        target_surface.set_pixel(xx, yy, surface.pixels[x][y]);
+                        target_surface.set_pixel(left + x, top + y, surface.pixels[x][y]);
                 });
 
         }
@@ -68,9 +64,15 @@ class Surface {
         public set_pixel(x: number, y: number, color: Color) {
                 if (this.pixels == undefined) return;
 
-                // wrap
-                x %= this.get_width();
-                y %= this.get_height();
+                // wrap horizontal
+                const width = this.get_width();
+                while(x < 0) x += width;
+                while(x >= width) x -= width;
+
+                // wrap vertical
+                const height = this.get_height();
+                while(y < 0) y += height;
+                while(y >= height) y -= height;
 
                 this.pixels[x][y] = color;
         }
