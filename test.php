@@ -13,10 +13,5 @@
                 <button onclick="retconjs_test_pixels();">Test Pixels</button>
                 <button onclick="retconjs_test_sprite();">Test Sprite</button>
         </body>
-        <script src="Color.js"></script>
-        <script src="Surface.js"></script>
-        <script src="Video.js"></script>
-        <script src="Sprite.js"></script>
-        <script src="TileMap.js"></script>
-        <script src="retcon.js"></script>
+        <?php require_once "retconjs.php" ?>
 </html>
