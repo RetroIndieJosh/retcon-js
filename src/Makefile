@@ -3,8 +3,7 @@ default_target: all
 all:
 	make clean
 	npx tsc
-	cat js/*.js > retcon.min.js
-	cp retcon.min.js ..
+	cp js/*.js ..
 
 obfuscate:
 	npx javascript-obfuscator js
@@ -23,3 +22,4 @@ clean:
 	rm -rf ./js
 	rm -rf ../release
 	rm -f ./*.js
+	rm -f ../*.js

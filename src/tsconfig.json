@@ -12,8 +12,9 @@
                 "target": "ES2015"
         },
         "files": [
-                "main.ts",
+                "retcon.ts",
                 "Color.ts",
+                "Sprite.ts",
                 "Surface.ts",
                 "Video.ts"
         ],

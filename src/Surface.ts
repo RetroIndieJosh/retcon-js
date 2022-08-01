@@ -41,7 +41,17 @@ class Surface {
         public draw_pixel(x: number, y: number) {
                 if (this.pixels == undefined || this.out_of_bounds(x, y))
                         return;
-                Video.get_instance().draw_pixel(x, y, this.pixels[x][y]);
+                render(x, y, this.pixels[x][y]);
+        }
+
+        public get_height(): number {
+                if (this.height == undefined) return -1;
+                return this.height;
+        }
+
+        public get_width(): number {
+                if (this.width == undefined) return -1;
+                return this.width;
         }
 
         public randomize_pixels() {
