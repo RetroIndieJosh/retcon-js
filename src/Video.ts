@@ -5,21 +5,25 @@ class Video
         private canvas: HTMLCanvasElement;
         private ctx: CanvasRenderingContext2D;
 
-        private width: number | undefined = undefined;
-        private height: number | undefined = undefined;
+        private surface: Surface;
         private scale: number | undefined = undefined;
 
         private pixels: Array<Array<Color>> | undefined = undefined;
 
-        public static start() {
+        public static get_instance(): Video {
                 if (Video.instance == undefined) {
-                        throw new Error("Tried to start video but it was not initialized");
+                        throw new Error("Tried to get video but it was not initialized");
                 }
 
+                return Video.instance;
+        }
+
+        public static start() {
                 setInterval(function () {
-                        if (Video.instance == undefined) return;
-                        Video.instance.clear(color_random());
-                        Video.instance.draw();
+                        let instance: Video = Video.get_instance();
+                        if (instance == undefined) return;
+                        instance.clear(color_random());
+                        instance.draw();
                 }, 1000);
         }
 
@@ -40,61 +44,45 @@ class Video
                         throw new Error("Failed to create canvas");
                 }
 
-                this.width = width;
-                this.height = height;
-                this.scale = scale;
+                this.surface = new Surface(width, height, 1);
 
+                this.scale = scale;
                 this.canvas.width = width * scale;
                 this.canvas.height = height * scale;
 
-                this.pixels = new Array(width);
-                for (let x = 0; x < width; ++x) {
-                        this.pixels[x] = new Array(height);
-                }
-                this.randomize_pixels();
+                this.surface.randomize_pixels();
         }
 
         public clear(color: Color) {
-                this.forall_pixels(function (video: Video, x: number, y: number) {
-                        video.set_pixel(x, y, color);
-                });
+                this.surface.clear(color);
         }
 
         public draw() {
-                this.forall_pixels(function (video: Video, x: number, y: number) {
-                        video.draw_pixel(x, y);
-                });
+                this.surface.draw();
         }
 
-        public draw_pixel(x: number, y: number) {
-                if (this.pixels == undefined || this.scale == undefined || this.out_of_bounds(x, y))
+        public draw_pixel(x: number, y: number, color: Color) {
+                if (this.scale == undefined || this.out_of_bounds(x, y))
                         return;
-                this.ctx.fillStyle = this.pixels[x][y];
+                this.ctx.fillStyle = color;
                 this.ctx.fillRect(x * this.scale, y * this.scale, this.scale, this.scale);
         }
 
         public randomize_pixels() {
-                this.forall_pixels(function (video: Video, x: number, y: number) {
-                        video.set_pixel(x, y, color_random());
-                });
+                this.surface.randomize_pixels();
         }
 
         public set_pixel(x: number, y: number, color: Color) {
-                if (this.pixels == undefined || this.out_of_bounds(x, y)) return;
-                this.pixels[x][y] = color;
-        }
-
-        private forall_pixels(func: (video: Video, x: number, y: number) => void) {
-                if (this.width == undefined || this.height == undefined)
-                        return;
-                for (let x = 0; x < this.width; ++x)
-                        for (let y = 0; y < this.height; ++y)
-                                func(this, x, y);
+                this.surface.set_pixel(x, y, color);
         }
 
         private out_of_bounds(x: number, y: number): boolean {
+                return false;
+                // TODO fix
+                /*
                 if (this.width == undefined || this.height == undefined)
                         return true;
                 return x < 0 || x >= this.width || y < 0 || y >= this.height;
+                */
         }
 } 
