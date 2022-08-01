@@ -16,6 +16,7 @@
                 "Color.ts",
                 "Sprite.ts",
                 "Surface.ts",
+                "TileMap.ts",
                 "Video.ts"
         ],
         "$schema": "https://json.schemastore.org/tsconfig",

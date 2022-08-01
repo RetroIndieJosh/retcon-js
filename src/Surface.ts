@@ -11,9 +11,9 @@ class Surface {
                 this.height = height;
                 //this.scale = scale;
 
-                this.pixels = new Array(width);
+                this.pixels = new Array<Array<Color>>(width);
                 for (let x = 0; x < width; ++x) {
-                        this.pixels[x] = new Array(height);
+                        this.pixels[x] = new Array<Color>(height);
                 }
                 this.randomize_pixels();
         }

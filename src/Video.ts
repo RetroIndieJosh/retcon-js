@@ -1,3 +1,4 @@
+// TODO should this be all static? to cut through get_instance?
 class Video extends Surface
 {
         private static instance: Video | undefined = undefined;
