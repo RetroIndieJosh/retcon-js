@@ -18,15 +18,21 @@
                         <button onclick="retconjs_test_sprite_move_vertical();">Vertical Movement</button>
                         <button onclick="retconjs_test_sprite_move_random();">Random Movement</button>
                         <button onclick="retconjs_test_clear_sprites();">Clear All Sprites</button>
+                        <button onclick="retconjs_test_increase_move_speed();">Increase Move Speed</button>
+                        <button onclick="retconjs_test_decrease_move_speed();">Decrease Move Speed</button>
                 </div>
         </div>
         <canvas id="retcon" width="1" height="1" class="test-canvas">
                 Sorry, your browser must support canvas to play this game.
         </canvas>
         <div style="text-align:center;font-weight:bold;">
-                Sprite Count: <span id="sprite-count">0</span>
+                Sprite Count: <span id="sprite-count"></span>
+        </div>
+        <div style="text-align:center;font-weight:bold;">
+                Move Speed: <span id="move-speed"></span>
         </div>
 </body>
 <?php require_once "retconjs.php" ?>
+<script src="Test.js"></script>
 
 </html>

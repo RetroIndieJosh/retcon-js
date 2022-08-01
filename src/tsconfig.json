@@ -16,6 +16,7 @@
                 "Color.ts",
                 "Sprite.ts",
                 "Surface.ts",
+                "Test.ts",
                 "TileMap.ts",
                 "Video.ts"
         ],
