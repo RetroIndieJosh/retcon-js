@@ -5,3 +5,12 @@ canvas {
         width: 512px;
         border: 1px solid magenta;
 }
+
+button {
+        padding: 0;
+        margin: auto;
+        margin-top:10px;
+        display: block;
+        width: 128px;
+        height: 32px;
+}

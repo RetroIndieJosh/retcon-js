@@ -2,6 +2,8 @@ class Video extends Surface
 {
         private static instance: Video | undefined = undefined;
 
+        public auto_clear: boolean = true;
+
         private canvas: HTMLCanvasElement;
         private ctx: CanvasRenderingContext2D;
 
@@ -26,7 +28,8 @@ class Video extends Surface
                         let instance: Video = Video.get_instance();
                         if (instance == undefined) return;
 
-                        instance.clear(instance.clear_color);
+                        if(instance.auto_clear)
+                                instance.clear(instance.clear_color);
                         instance.sprite_list.forEach(function (sprite: Sprite) {
                                 sprite.draw_sprite(instance);
                         });
