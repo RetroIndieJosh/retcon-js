@@ -1,6 +1,8 @@
 *.map
 *.js
 release
+*.swp
+*.swo
 
 # Logs
 logs
