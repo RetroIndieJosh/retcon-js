@@ -9,7 +9,7 @@ class Video
         private height: number | undefined = undefined;
         private scale: number | undefined = undefined;
 
-        private colors: Array<Array<Color>> | undefined = undefined;
+        private pixels: Array<Array<Color>> | undefined = undefined;
 
         public static start() {
                 if (Video.instance == undefined) {
@@ -18,9 +18,9 @@ class Video
 
                 setInterval(function () {
                         if (Video.instance == undefined) return;
-                        Video.instance.randomize_colors();
+                        Video.instance.clear(color_random());
                         Video.instance.draw();
-                }, 1000 / 60);
+                }, 1000);
         }
 
         constructor(canvas_id: string, width: number, height: number, scale: number) {
@@ -47,60 +47,54 @@ class Video
                 this.canvas.width = width * scale;
                 this.canvas.height = height * scale;
 
-                this.colors = new Array(width);
+                this.pixels = new Array(width);
                 for (let x = 0; x < width; ++x) {
-                        this.colors[x] = new Array(height);
-                        for (let y = 0; y < height; ++y) {
-                                this.colors[x][y] = random_color();
-                        }
+                        this.pixels[x] = new Array(height);
                 }
+                this.randomize_pixels();
         }
 
-        /*
         public clear(color: Color) {
-                for (let x = 0; x < this.width; ++x) {
-                        for (let y = 0; y < this.height; ++y) {
-                        }
-                }
+                this.forall_pixels(function (video: Video, x: number, y: number) {
+                        video.set_pixel(x, y, color);
+                });
         }
-        */
 
         public draw() {
-                if (this.width == undefined || this.height == undefined || this.scale == undefined || this.colors == undefined)
-                        return;
-                for (let x = 0; x < this.width; ++x) {
-                        for (let y = 0; y < this.height; ++y) {
-                                this.ctx.fillStyle = this.colors[x][y];
-                                this.ctx.fillRect(x * this.scale, y * this.scale, this.scale, this.scale);
-                        }
-                }
+                this.forall_pixels(function (video: Video, x: number, y: number) {
+                        video.draw_pixel(x, y);
+                });
         }
 
-        public redraw(x: number, y: number) {
+        public draw_pixel(x: number, y: number) {
+                if (this.pixels == undefined || this.scale == undefined || this.out_of_bounds(x, y))
+                        return;
+                this.ctx.fillStyle = this.pixels[x][y];
+                this.ctx.fillRect(x * this.scale, y * this.scale, this.scale, this.scale);
+        }
+
+        public randomize_pixels() {
+                this.forall_pixels(function (video: Video, x: number, y: number) {
+                        video.set_pixel(x, y, color_random());
+                });
+        }
+
+        public set_pixel(x: number, y: number, color: Color) {
+                if (this.pixels == undefined || this.out_of_bounds(x, y)) return;
+                this.pixels[x][y] = color;
+        }
+
+        private forall_pixels(func: (video: Video, x: number, y: number) => void) {
                 if (this.width == undefined || this.height == undefined)
                         return;
+                for (let x = 0; x < this.width; ++x)
+                        for (let y = 0; y < this.height; ++y)
+                                func(this, x, y);
         }
 
-        public randomize_colors() {
-                if (this.width == undefined || this.height == undefined || this.scale == undefined || this.colors == undefined)
-                        return;
-                for (let x = 0; x < this.width; ++x) {
-                        for (let y = 0; y < this.height; ++y) {
-                                this.colors[x][y] = random_color();
-                        }
-                }
+        private out_of_bounds(x: number, y: number): boolean {
+                if (this.width == undefined || this.height == undefined)
+                        return true;
+                return x < 0 || x >= this.width || y < 0 || y >= this.height;
         }
 } 
-
-function random_color(include_alpha: boolean = false): Color {
-        let r = Math.floor(Math.random() * 255);
-        let g = Math.floor(Math.random() * 255);
-        let b = Math.floor(Math.random() * 255);
-
-        if (include_alpha) {
-                let a = Math.floor(Math.random() * 255);
-                return `rgba(${r}, ${g}, ${b}, ${a})`;
-        }
-
-        return `rgb(${r}, ${g}, ${b})`;
-}
