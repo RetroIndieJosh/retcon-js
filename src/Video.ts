@@ -1,23 +1,43 @@
 class Video
 {
+        private static instance: Video | undefined = undefined;
+
         private canvas: HTMLCanvasElement;
         private ctx: CanvasRenderingContext2D;
 
-        private width: number = 64;
-        private height: number = 64;
-        private scale: number = 4;
+        private width: number | undefined = undefined;
+        private height: number | undefined = undefined;
+        private scale: number | undefined = undefined;
 
-        private colors: Array<string> | null = null;
+        private colors: Array<Array<Color>> | undefined = undefined;
+
+        public static start() {
+                if (Video.instance == undefined) {
+                        throw new Error("Tried to start video but it was not initialized");
+                }
+
+                setInterval(function () {
+                        if (Video.instance == undefined) return;
+                        Video.instance.randomize_colors();
+                        Video.instance.draw();
+                }, 1000 / 60);
+        }
 
         constructor(canvas_id: string, width: number, height: number, scale: number) {
+                if (Video.instance != undefined) {
+                        throw new Error("Video already defined (can only have one)");
+                }
+
+                Video.instance = this;
+
                 this.canvas = document.getElementById(canvas_id) as HTMLCanvasElement;
                 if (this.canvas == null) {
+                        throw new Error(`Could not access canvas element by id '${canvas_id}'`);
                 }
 
                 this.ctx = this.canvas.getContext('2d') as CanvasRenderingContext2D;
                 if (this.ctx == null) {
-                        console.error("Failed to create canvas");
-                        return;
+                        throw new Error("Failed to create canvas");
                 }
 
                 this.width = width;
@@ -27,26 +47,60 @@ class Video
                 this.canvas.width = width * scale;
                 this.canvas.height = height * scale;
 
-                let pixels = new Array(width);
+                this.colors = new Array(width);
                 for (let x = 0; x < width; ++x) {
-                        pixels[x] = new Array(height);
+                        this.colors[x] = new Array(height);
+                        for (let y = 0; y < height; ++y) {
+                                this.colors[x][y] = random_color();
+                        }
                 }
         }
 
-        draw() {
+        /*
+        public clear(color: Color) {
                 for (let x = 0; x < this.width; ++x) {
                         for (let y = 0; y < this.height; ++y) {
-                                this.ctx.fillStyle = random_color();
+                        }
+                }
+        }
+        */
+
+        public draw() {
+                if (this.width == undefined || this.height == undefined || this.scale == undefined || this.colors == undefined)
+                        return;
+                for (let x = 0; x < this.width; ++x) {
+                        for (let y = 0; y < this.height; ++y) {
+                                this.ctx.fillStyle = this.colors[x][y];
                                 this.ctx.fillRect(x * this.scale, y * this.scale, this.scale, this.scale);
+                        }
+                }
+        }
+
+        public redraw(x: number, y: number) {
+                if (this.width == undefined || this.height == undefined)
+                        return;
+        }
+
+        public randomize_colors() {
+                if (this.width == undefined || this.height == undefined || this.scale == undefined || this.colors == undefined)
+                        return;
+                for (let x = 0; x < this.width; ++x) {
+                        for (let y = 0; y < this.height; ++y) {
+                                this.colors[x][y] = random_color();
                         }
                 }
         }
 } 
 
-function random_color(): string
-{
+function random_color(include_alpha: boolean = false): Color {
         let r = Math.floor(Math.random() * 255);
         let g = Math.floor(Math.random() * 255);
         let b = Math.floor(Math.random() * 255);
-        return `rgb(${r}, ${g}, ${b}`;
+
+        if (include_alpha) {
+                let a = Math.floor(Math.random() * 255);
+                return `rgba(${r}, ${g}, ${b}, ${a})`;
+        }
+
+        return `rgb(${r}, ${g}, ${b})`;
 }

@@ -13,7 +13,7 @@
         },
         "files": [
                 "main.ts",
-                "Tile.ts",
+                "Color.ts",
                 "Video.ts"
         ],
         "$schema": "https://json.schemastore.org/tsconfig",
