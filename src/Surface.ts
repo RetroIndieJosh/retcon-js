@@ -21,7 +21,11 @@ class Surface {
         public blit(target_surface: Surface, left: number, top: number) {
                 this.forall_pixels(function (surface: Surface, x: number, y: number) {
                         if (surface.pixels == undefined) return;
-                        target_surface.set_pixel(left + x, top + y, surface.pixels[x][y]);
+
+                        // wrap
+                        let xx = (left + x) % surface.get_width();
+                        let yy = (top + y) % surface.get_height();
+                        target_surface.set_pixel(xx, yy, surface.pixels[x][y]);
                 });
 
         }
@@ -39,8 +43,9 @@ class Surface {
         }
 
         public draw_pixel(x: number, y: number) {
-                if (this.pixels == undefined || this.out_of_bounds(x, y))
+                if (this.pixels == undefined)
                         return;
+                
                 render(x, y, this.pixels[x][y]);
         }
 
@@ -61,7 +66,12 @@ class Surface {
         }
 
         public set_pixel(x: number, y: number, color: Color) {
-                if (this.pixels == undefined || this.out_of_bounds(x, y)) return;
+                if (this.pixels == undefined) return;
+
+                // wrap
+                x %= this.get_width();
+                y %= this.get_height();
+
                 this.pixels[x][y] = color;
         }
 
@@ -71,11 +81,5 @@ class Surface {
                 for (let x = 0; x < this.width; ++x)
                         for (let y = 0; y < this.height; ++y)
                                 func(this, x, y);
-        }
-
-        private out_of_bounds(x: number, y: number): boolean {
-                if (this.width == undefined || this.height == undefined)
-                        return true;
-                return x < 0 || x >= this.width || y < 0 || y >= this.height;
         }
 } 

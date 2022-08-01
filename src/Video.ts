@@ -71,6 +71,11 @@ class Video extends Surface
                 if (this.scale == undefined)
                         return;
                 this.ctx.fillStyle = color;
+
+                // wrap
+                x %= this.get_width();
+                y %= this.get_height();
+
                 this.ctx.fillRect(x * this.scale, y * this.scale, this.scale, this.scale);
         }
 
