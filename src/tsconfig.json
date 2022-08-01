@@ -13,7 +13,8 @@
         },
         "files": [
                 "main.ts",
-                "video.ts"
+                "Tile.ts",
+                "Video.ts"
         ],
         "$schema": "https://json.schemastore.org/tsconfig",
         "display": "Recommended"

@@ -15,3 +15,4 @@ release:
 clean:
 	rm -r js
 	rm -r ../release
+	rm *.js
