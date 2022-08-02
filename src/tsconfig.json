@@ -17,9 +17,9 @@
                 "Palette.ts",
                 "Surface.ts",
                 "Video.ts",
-                "Sprite.ts",
                 "Tile.ts",
-                "TileMap.ts",
+                "Tilemap.ts",
+                "Sprite.ts",
                 "retcon.ts",
                 "Test.ts"
         ],

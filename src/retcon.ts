@@ -40,21 +40,26 @@ class GameData {
         public tilemaps: Array<TilemapData> = new Array<TilemapData>();
 }
 
-const background: Surface = new Surface(256, 256);
-
 function retconjs_init(scale: number, debug: boolean = false): void {
         fetch("./game/sample.json").then(res => res.json()).then(res => retconjs_load_game(res, scale, debug));
 }
 
 function retconjs_load_game(game_data: GameData, scale: number, debug: boolean) {
         const video = new Video('retcon', 64, 64, scale, game_data.colors);
-        //video.add_background(background);
-        Video.start();
 
+        // load palettes
         game_data.palettes.forEach(palette_data => {
                 const palette = new Palette(palette_data.colors);
                 Video.get_instance().add_palette(palette);
         });
+
+        // load backgrounds
+        const bg0 = new Tilemap(8, 256, 256, 0);
+        //const bg1 = new Tilemap(8, 256, 256, 0);
+        video.add_background(bg0);
+        //video.add_background(bg1);
+
+        Video.start();
 
         if(!debug) return;
 

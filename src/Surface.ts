@@ -32,11 +32,26 @@ class Surface extends Sized {
         }
 
         public blit(target_surface: Surface, left: number, top: number) {
-                this.forall_pixels(function (surface: Surface, x: number, y: number) {
-                        if (surface.pixels == undefined) return;
-                        target_surface.set_pixel(left + x, top + y, surface.pixels[x][y]);
-                });
+                if (this.pixels == undefined) return;
 
+                const width = this.get_width();
+                const height = this.get_height();
+                const target_width = target_surface.get_width();
+                const target_height = target_surface.get_height();
+                for (let x = 0; x < width; ++x) {
+                        const xx = left + x;
+                        // TODO flag whether we wrap (this prevents wrapping)
+                        if(xx < 0) continue;
+                        if(xx >= target_width) continue;
+
+                        for (let y = 0; y < height; ++y) {
+                                const yy = top + y;
+                                if(yy < 0) continue;
+                                if(yy >= target_height) continue;
+
+                                target_surface.set_pixel(left + x, top + y, this.pixels[x][y]);
+                        }
+                };
         }
 
         public clear(color: Color) {

@@ -22,8 +22,10 @@ function retconjs_test_clear_random(): void {
 
 
 function retconjs_test_clear_sprites(): void {
-        while(Video.get_instance().sprite_count() > 0)
-                Video.get_instance().remove_sprite_at(0);
+        const video = Video.get_instance();
+        while(video.sprite_count() > 0)
+                video.remove_sprite_at(0);
+        video.set_clear_color("#000");
 }
 
 function retconjs_test_pixels(): void {

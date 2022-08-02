@@ -15,7 +15,7 @@ class Video extends Surface
         private color_list: Array<Color> = new Array<Color>();
         private palette_list: Array<Palette> = new Array<Palette>();
 
-        private background_list: Array<Surface> = new Array<Surface>();
+        private background_list: Array<Tilemap> = new Array<Tilemap>();
         private sprite_list: Array<Sprite> = new Array<Sprite>();
 
         public static get_instance(): Video {
@@ -33,22 +33,11 @@ class Video extends Surface
                         let instance: Video = Video.get_instance();
                         if (instance == undefined) return;
 
-                        // clear if desired
                         if(instance.auto_clear)
                                 instance.clear(instance.clear_color);
 
-                        // blit backgrounds
-                        // TODO background scrolling (extend Surface and disable alpha)
-                        instance.background_list.forEach((background: Surface) => {
-                                instance.blit(background, 0, 0);
-                        });
-
-                        // blit sprites
-                        instance.sprite_list.forEach((sprite: Sprite) => {
-                                sprite.draw(instance);
-                        });
-
-                        // render to browser
+                        instance.background_list.forEach(background => background.blit(instance));
+                        instance.sprite_list.forEach(sprite => sprite.blit(instance));
                         instance.render();
                 }, 1000 / 60);
         }
@@ -87,7 +76,10 @@ class Video extends Surface
         }
 
         // TODO 
-        public add_background(background: Surface) {}
+        public add_background(background: Tilemap) {
+                this.background_list.push(background);
+
+        }
 
         public add_palette(palette: Palette) {
                 this.palette_list.push(palette);
@@ -115,17 +107,25 @@ class Video extends Surface
 
         public get_color(color_id: number) {
                 // TODO checking
+                if(color_id < 0 || color_id >= this.color_list.length)
+                        console.warn(`Illegal color index: ${color_id}`);
                 return this.color_list[color_id];
+        }
+
+        public get_palette(palette_id: number): Palette {
+                if(palette_id < 0 || palette_id >= this.palette_list.length)
+                        console.warn(`Illegal palette index: ${palette_id}`);
+                // TODO checking
+                return this.palette_list[palette_id];
         }
 
         // TODO use tilesets
         public get_tile(tile_id: number) {
-                return new Tile(8, 8, 0);
-        }
-
-        public get_palette(palette_id: number): Palette {
-                // TODO checking
-                return this.palette_list[palette_id];
+                /*
+                if(tile_id < 0 || tile_id >= this.tile_list.length)
+                        console.warn(`Illegal tile index: ${tile_id}`);
+                        */
+                return new Tile(8, 0);
         }
 
         // returns whether the sprite was removed

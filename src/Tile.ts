@@ -1,26 +1,33 @@
-class Tile extends Sized {
+class Tile {
+        private size: number = -1;
         private color_ids: Array<Array<number>> = new Array<Array<number>>();
 
-        constructor(width: number, height: number, palette_id: number) {
-                super(width, height);
-
-                this.color_ids = new Array<Array<number>>(width);
-                for (let x = 0; x < width; x++) {
-                        this.color_ids[x] = new Array<number>(height);
-                        for (let y = 0; y < height; y++) {
+        constructor(size: number, palette_id: number) {
+                this.size = size;
+                this.color_ids = new Array<Array<number>>(size);
+                for (let x = 0; x < size; x++) {
+                        this.color_ids[x] = new Array<number>(size);
+                        for (let y = 0; y < size; y++) {
                                 this.color_ids[x][y] = Math.floor(Math.random() * 16);
                         }
                 }
         }
 
-        public sync_pixels(surface: Surface, palette: Palette) {
-                for (let x = 0; x < surface.get_width(); x++) {
-                        for (let y = 0; y < surface.get_height(); y++) {
+        public blit(surface: Surface, palette: Palette, left: number, top: number) {
+                const video = Video.get_instance();
+                for (let x = 0; x < this.size; x++) {
+                        for (let y = 0; y < this.size; y++) {
+                                const xx = x + left;
+                                const yy = y + top;
                                 const color_id = palette.get_color_id(this.color_ids[x][y]);
-                                const color = Video.get_instance().get_color(color_id);
-                                surface.set_pixel(x, y, color);
+                                const color = video.get_color(color_id);
+                                surface.set_pixel(xx, yy, color);
                         }
                 }
+        }
+
+        public get_size(): number {
+                return this.size;
         }
 
         public set_pixel(x: number, y: number, palette_color_id: number) {
