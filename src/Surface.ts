@@ -33,21 +33,19 @@ class Surface {
         }
 
         public draw() {
-                this.forall_pixels(function (surface: Surface, x: number, y: number) {
-                        surface.draw_pixel(x, y);
-                });
-        }
-
-        public draw_pixel(x: number, y: number) {
-                if (this.pixels == undefined)
-                        return;
-                
-                render(x, y, this.pixels[x][y]);
+                Video.get_instance().blit(this, 0, 0);
         }
 
         public get_height(): number {
                 if (this.height == undefined) return -1;
                 return this.height;
+        }
+
+        public get_pixel(x: number, y: number): Color {
+                if (this.pixels == undefined) return "#000";
+                x %= this.get_width();
+                y %= this.get_height();
+                return this.pixels[x][y];
         }
 
         public get_width(): number {
@@ -77,7 +75,7 @@ class Surface {
                 this.pixels[x][y] = color;
         }
 
-        private forall_pixels(func: (surface: Surface, x: number, y: number) => void) {
+        protected forall_pixels(func: (surface: Surface, x: number, y: number) => void) {
                 if (this.width == undefined || this.height == undefined)
                         return;
                 for (let x = 0; x < this.width; ++x)

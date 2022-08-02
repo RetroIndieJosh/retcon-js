@@ -29,6 +29,7 @@ class PaletteData extends IdDataBase {
         public colors: string = "";
 
 }
+
 // TODO write separate software (Python?) compiler that converts .map, .set, .tile, and .pal files into json, then retcon reads that json file
 class GameData {
         public title: string = "";
@@ -37,6 +38,8 @@ class GameData {
         public tilesets: Array<TilesetData> = new Array<TilesetData>();
         public tilemaps: Array<TilemapData> = new Array<TilemapData>();
 }
+
+const background: Surface = new Surface(256, 256, 1);
 
 function retconjs_init(scale: number, debug: boolean = false): void {
         new Video('retcon', 64, 64, scale);
@@ -64,10 +67,4 @@ function retconjs_load_game(game_data: GameData, debug: boolean) {
                 if(move_speed_element == null) return;
                 move_speed_element.innerHTML = `${move_speed}`;
         }, 1000 / 60);
-}
-
-// TODO rename retconjs_render
-// TODO better yet, move this back into video and figure out how to handle circular dependency with surface
-function render(x: number, y: number, color: Color) {
-        Video.get_instance().render(x, y, color);
 }

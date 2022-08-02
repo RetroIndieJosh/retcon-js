@@ -35,7 +35,7 @@ class Video extends Surface
                         instance.sprite_list.forEach(function (sprite: Sprite) {
                                 sprite.draw_sprite(instance);
                         });
-                        instance.draw();
+                        instance.render();
                 }, 1000 / 60);
         }
 
@@ -104,16 +104,15 @@ class Video extends Surface
 
         public sprite_count() : number { return this.sprite_list.length; }
 
-        public render(x: number, y: number, color: Color) {
-                if (this.scale == undefined)
-                        return;
-                this.ctx.fillStyle = color;
+        public render() {
+                if (this.scale == undefined) return;
 
-                // wrap
-                x %= this.get_width();
-                y %= this.get_height();
-
-                this.ctx.fillRect(x * this.scale, y * this.scale, this.scale, this.scale);
+                for (let x = 0; x < this.get_width(); ++x) {
+                        for (let y = 0; y < this.get_height(); ++y) {
+                                this.ctx.fillStyle = this.get_pixel(x, y);
+                                this.ctx.fillRect(x * this.scale, y * this.scale, this.scale, this.scale);
+                        }
+                }
         }
 
         public set_clear_color(color: Color) {

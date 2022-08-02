@@ -56,7 +56,7 @@ function retconjs_test_sprite_move_horizontal(): void {
                 else sprite.x -= move_speed;
                 
                 if (move > 200) move = 200;
-        }, 100);
+        }, 1000 / 60);
 
         setTimeout(() => {
                 Video.get_instance().remove_sprite(sprite);
@@ -78,7 +78,7 @@ function retconjs_test_sprite_move_vertical(): void {
                 else sprite.y -= move_speed;
                 
                 if (move > 200) move = 200;
-        }, 100);
+        }, 1000 / 60);
 
         setTimeout(() => {
                 Video.get_instance().remove_sprite(sprite);
@@ -97,7 +97,7 @@ function retconjs_test_sprite_move_random(): void {
         const sprite_move = setInterval(() => {
                 sprite.x += Math.floor(Math.random() * MOVE_MULT) - move_speed;
                 sprite.y += Math.floor(Math.random() * MOVE_MULT) - move_speed;
-        }, 100);
+        }, 1000 / 60);
 
         setTimeout(() => {
                 Video.get_instance().remove_sprite(sprite);
