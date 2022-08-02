@@ -1,27 +1,50 @@
 {
         "title": "Sample Game",
-        "description": [
-                "A sample game to show the RetConJS format. Be careful to keep",
-                "empty strings for removed elements, as changing the position of",
-                "items may break everything. See examples below with empty quotes",
-                "and brackets.",
-
-                "NOTE: This description isn't part of the standard - it's simply",
-                "here as a (slightly awkward) comment."
-        ],
+        "tile_size": 8,
         "palettes": [
-                "",
-                "forest.pal"
+                {
+                        "id": 0,
+                        "color_count": 5,
+                        "comment": "color 0 is always clear, so the first color in this list is #1 (1-5, not 0-4)",
+                        "colors": "C800800A0000FFF"
+                }
         ],
         "tiles": [
-                "tree.tile", 
-                "",
-                "grass.tile"
+                {
+                        "id": 0,
+                        "pixels": "0000000000020000000220000002220000222200002222000001100000011000"
+                },
+                {
+                        "id": 1,
+                        "pixels": "2323232323232323232323232323232323232323232323232323232323232323"
+                },
+                {
+                        "id": 2,
+                        "pixels": "3434343434343434343434343434343434343434343434343434343434343434"
+                }
         ],
         "tilesets": [
-                "forest.set"
+                {
+                        "id": 0,
+                        "tiles": [0, 1]
+                }
         ],
         "tilemaps": [
-                "forest.map"
+                {
+                        "id": 0,
+                        "tileset": 0,
+                        "palette": 0,
+                        "width": 16,
+                        "height": 8,
+                        "tiles": "11111111111111111001100000111101100000000000110110001100000000011000000000011001100111000001100110111100000110011111111111111111"
+                }
+        ],
+        "actors": [
+                {
+                        "id": 0,
+                        "width": 1,
+                        "height": 1,
+                        "tiles": "2"
+                }
         ]
 }

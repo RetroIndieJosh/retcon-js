@@ -1,3 +1,4 @@
+// TODO write separate software (Python?) compiler that converts .map, .set, .tile, and .pal files into json, then retcon reads that json file
 class GameData {
         public title: string = "";
         public palettes: Array<string> = new Array<string>();
