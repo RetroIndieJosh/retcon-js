@@ -2,6 +2,8 @@ function retconjs_init(scale: number, debug: boolean = false): void {
         new Video('retcon', 64, 64, scale);
         Video.start();
 
+        //console.info(`Starting game ${game_data.title}`);
+
         if(!debug) return;
 
         setInterval(() => {

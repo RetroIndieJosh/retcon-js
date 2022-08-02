@@ -1,0 +1,10 @@
+0 palette ID in hex, max F = 16 palettes (parser ignores anything past the length it expects, which here is 1)
+8 tile size (always square)
+         row 0 (each row has single-digit hex value from  0-F mapping to a palette color)
+   2     row 1 (can also use empty space for 0 to help visualization)
+   22    row 2 (anything after a # is ignored)
+   222   row 3 (parser reads exactly tile size chars so anything after char 7 is ignored in these lines)
+  2222   row 4
+  2222   row 5
+   11    row 6
+   11    row 7

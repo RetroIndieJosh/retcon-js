@@ -1,0 +1,7 @@
+6 number of colors in palette (hex, max F = 16 colors)
+0000 clear (RGBA where A is 0 for clear and 1 for solid)
+C801 brown
+0801 dark green
+0A01 light green
+0001 black
+FFF1 white

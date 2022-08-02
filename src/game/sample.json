@@ -1,0 +1,24 @@
+{
+        "title": "Sample Game",
+        "description": [
+                "A sample game to show the RetConJS format. Use explicit",
+                "identifiers for palettes, tiles, and maps in case they are",
+                "changed later, so changes don't break everything.",
+
+                "NOTE: This description isn't part of the standard - it's simply",
+                "here as a (slightly awkward) comment."
+        ],
+        "palettes": {
+                "0": "forest.pal"
+        },
+        "tiles": {
+                "0": "tree.tile", 
+                "1": "grass.tile"
+        },
+        "tilesets": {
+                "forest": [0, 1]
+        },
+        "tilemaps": {
+                "0": "forest.map"
+        }
+}

@@ -4,6 +4,7 @@ all:
 	npx tsc
 	cp js/*.js ..
 	cp js/*.map ..
+	cp -r game ..
 
 obfuscate:
 	rm js/*.map
@@ -21,5 +22,6 @@ release:
 clean:
 	rm -rf ./js
 	rm -rf ../release
-	rm -f ./*.js
 	rm -f ../*.js
+	rm -rf ../game
+	rm -f ../*.map
