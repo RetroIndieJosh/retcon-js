@@ -45,7 +45,7 @@ class Video extends Surface
 
                         // blit sprites
                         instance.sprite_list.forEach((sprite: Sprite) => {
-                                sprite.draw_sprite(instance);
+                                sprite.draw(instance);
                         });
 
                         // render to browser
@@ -53,6 +53,7 @@ class Video extends Surface
                 }, 1000 / 60);
         }
 
+        // TODO have a set number of color spaces available and initialize them to random values
         constructor(canvas_id: string, width: number, height: number, scale: number, color_string: string) {
                 super(width, height);
 
@@ -76,11 +77,20 @@ class Video extends Surface
                 this.canvas.width = width * scale;
                 this.canvas.height = height * scale;
 
+                // load colors
+                this.color_list.push("rgba(0, 0, 0, 0)");
                 const color_string_list = color_string.match(/.{1,3}/g);
                 color_string_list?.forEach(color_string => this.color_list.push(`#${color_string}`));
-                this.color_list?.forEach(color => console.log(`Color loaded: ${color} `));
+                console.log(`Colors: ${this.color_list}`);
 
                 this.randomize_pixels();
+        }
+
+        // TODO 
+        public add_background(background: Surface) {}
+
+        public add_palette(palette: Palette) {
+                this.palette_list.push(palette);
         }
 
         // returns the index of the added sprite, or -1 if it wasn't added (already in list)

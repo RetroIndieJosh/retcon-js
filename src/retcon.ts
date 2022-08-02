@@ -52,7 +52,8 @@ function retconjs_load_game(game_data: GameData, scale: number, debug: boolean) 
         Video.start();
 
         game_data.palettes.forEach(palette_data => {
-                new Palette(palette_data.colors);
+                const palette = new Palette(palette_data.colors);
+                Video.get_instance().add_palette(palette);
         });
 
         if(!debug) return;

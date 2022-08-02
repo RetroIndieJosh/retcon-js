@@ -80,17 +80,3 @@ class Surface {
                                 func(this, x, y);
         }
 } 
-
-// TODO move to its own file
-class PaletteSurface extends Surface {
-        private palette_id: number;
-
-        constructor(width: number, height: number, palette_id: number) {
-                super(width, height);
-                this.palette_id = palette_id;
-        }
-
-        public set_pixel_id(x: number, y: number, color_id: number) {
-                this.set_pixel(x, y, Video.get_instance().get_color(this.palette_id, color_id))
-        }
-}
