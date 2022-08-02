@@ -113,10 +113,19 @@ class Video extends Surface
                 return this.sprite_list.indexOf(sprite) >= 0;
         }
 
-        public get_color(palette_id: number, palette_color_id: number) {
+        public get_color(color_id: number) {
                 // TODO checking
-                const color_id = this.palette_list[palette_id].get_color_id(palette_color_id);
                 return this.color_list[color_id];
+        }
+
+        // TODO use tilesets
+        public get_tile(tile_id: number) {
+                return new Tile(8, 8, 0);
+        }
+
+        public get_palette(palette_id: number): Palette {
+                // TODO checking
+                return this.palette_list[palette_id];
         }
 
         // returns whether the sprite was removed

@@ -1,12 +1,28 @@
-class Surface {
-        private width: number | undefined = undefined;
-        private height: number | undefined = undefined;
-
-        private pixels: Array<Array<Color>> | undefined = undefined;
+class Sized {
+        private width: number = -1;
+        private height: number = -1;
 
         constructor(width: number, height: number) {
                 this.width = width;
                 this.height = height;
+        }
+
+        public get_height(): number {
+                if (this.height == undefined) return -1;
+                return this.height;
+        }
+
+        public get_width(): number {
+                if (this.width == undefined) return -1;
+                return this.width;
+        }
+}
+
+class Surface extends Sized {
+        private pixels: Array<Array<Color>> | undefined = undefined;
+
+        constructor(width: number, height: number) {
+                super(width, height);
 
                 this.pixels = new Array<Array<Color>>(width);
                 for (let x = 0; x < width; ++x) {
@@ -33,11 +49,6 @@ class Surface {
                 Video.get_instance().blit(this, 0, 0);
         }
 
-        public get_height(): number {
-                if (this.height == undefined) return -1;
-                return this.height;
-        }
-
         public get_pixel(x: number, y: number): Color {
                 if (this.pixels == undefined) return "#000";
                 x %= this.get_width();
@@ -45,10 +56,6 @@ class Surface {
                 return this.pixels[x][y];
         }
 
-        public get_width(): number {
-                if (this.width == undefined) return -1;
-                return this.width;
-        }
 
         public randomize_pixels() {
                 this.forall_pixels(function (surface: Surface, x: number, y: number) {
@@ -73,10 +80,8 @@ class Surface {
         }
 
         protected forall_pixels(func: (surface: Surface, x: number, y: number) => void) {
-                if (this.width == undefined || this.height == undefined)
-                        return;
-                for (let x = 0; x < this.width; ++x)
-                        for (let y = 0; y < this.height; ++y)
+                for (let x = 0; x < this.get_width(); ++x)
+                        for (let y = 0; y < this.get_height(); ++y)
                                 func(this, x, y);
         }
 } 

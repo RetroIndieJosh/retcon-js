@@ -18,6 +18,7 @@
                 "Surface.ts",
                 "Video.ts",
                 "Sprite.ts",
+                "Tile.ts",
                 "TileMap.ts",
                 "retcon.ts",
                 "Test.ts"
