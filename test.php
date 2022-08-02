@@ -33,6 +33,5 @@
         </div>
 </body>
 <?php require_once "retconjs.php" ?>
-<script src="Test.js"></script>
 
 </html>

@@ -1,8 +1,25 @@
+class GameData {
+        public title: string = "";
+        public palettes: Array<string> = new Array<string>();
+        public tiles: Array<string> = new Array<string>();
+        public tilesets: Array<string> = new Array<string>();
+        public tilemaps: Array<string> = new Array<string>();
+}
+
 function retconjs_init(scale: number, debug: boolean = false): void {
         new Video('retcon', 64, 64, scale);
         Video.start();
 
-        //console.info(`Starting game ${game_data.title}`);
+        fetch("./game/sample.json").then(res => res.json()).then(res => retconjs_load_game(res, debug));
+}
+
+function retconjs_load_game(game_data: GameData, debug: boolean) {
+        console.info(`Starting game ${game_data.title} with:\n`
+                + `${game_data.palettes.length} palettes\n`
+                + `${game_data.tiles.length} tiles\n`
+                + `${game_data.tilesets.length} tilesets\n`
+                + `${game_data.tilemaps.length} tilemaps\n`
+        );
 
         if(!debug) return;
 
