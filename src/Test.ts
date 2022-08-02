@@ -10,12 +10,16 @@ function retconjs_test_increase_move_speed() {
         move_speed += 1;
 }
 
-function retconjs_test_clear(): void {
-        Video.get_instance().auto_clear = false;
-
+function retconjs_test_clear_black(): void {
         console.info("Clear to black");
-        Video.get_instance().clear("#000");
+        Video.get_instance().set_clear_color("#000");
 }
+
+function retconjs_test_clear_random(): void {
+        console.info("clear to random colors");
+        Video.get_instance().set_clear_color(color_random());
+}
+
 
 function retconjs_test_clear_sprites(): void {
         while(Video.get_instance().sprite_count() > 0)
@@ -23,15 +27,12 @@ function retconjs_test_clear_sprites(): void {
 }
 
 function retconjs_test_pixels(): void {
-        Video.get_instance().auto_clear = false;
-
-        console.info("Clear to randomized pixels");
+        console.info("clear to randomized pixels");
+        console.info("NOTE: if Video.auto_clear is enabled, this will immediately revert to the set clear color");
         Video.get_instance().randomize_pixels();
 }
 
 function retconjs_test_sprite(): Sprite {
-        Video.get_instance().auto_clear = true;
-
         let sprite: Sprite = new Sprite(0, 0);
         sprite.x = Math.floor(Math.random() * 64);
         sprite.y = Math.floor(Math.random() * 64);

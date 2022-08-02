@@ -3,7 +3,7 @@ class Video extends Surface
 {
         private static instance: Video | undefined = undefined;
 
-        public auto_clear: boolean = true;
+        public auto_clear: boolean = false;
 
         private canvas: HTMLCanvasElement;
         private ctx: CanvasRenderingContext2D;
@@ -163,7 +163,8 @@ class Video extends Surface
                 }
         }
 
-        public set_clear_color(color: Color) {
+        public set_clear_color(color: Color, clear: boolean = true) {
                 this.clear_color = color;
+                if(clear) this.clear(this.clear_color);
         }
 } 
