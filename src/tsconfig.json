@@ -14,6 +14,7 @@
         },
         "files": [
                 "Color.ts",
+                "Palette.ts",
                 "Surface.ts",
                 "Video.ts",
                 "Sprite.ts",

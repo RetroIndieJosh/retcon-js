@@ -12,6 +12,10 @@ class Video extends Surface
 
         private clear_color: Color = "#000";
 
+        private color_list: Array<Color> = new Array<Color>();
+        private palette_list: Array<Palette> = new Array<Palette>();
+
+        private background_list: Array<Surface> = new Array<Surface>();
         private sprite_list: Array<Sprite> = new Array<Sprite>();
 
         public static get_instance(): Video {
@@ -26,21 +30,31 @@ class Video extends Surface
                 if (Video.instance == undefined) return;
 
                 setInterval(function () {
-                        //console.log("frame");
                         let instance: Video = Video.get_instance();
                         if (instance == undefined) return;
 
+                        // clear if desired
                         if(instance.auto_clear)
                                 instance.clear(instance.clear_color);
-                        instance.sprite_list.forEach(function (sprite: Sprite) {
+
+                        // blit backgrounds
+                        // TODO background scrolling (extend Surface and disable alpha)
+                        instance.background_list.forEach((background: Surface) => {
+                                instance.blit(background, 0, 0);
+                        });
+
+                        // blit sprites
+                        instance.sprite_list.forEach((sprite: Sprite) => {
                                 sprite.draw_sprite(instance);
                         });
+
+                        // render to browser
                         instance.render();
                 }, 1000 / 60);
         }
 
-        constructor(canvas_id: string, width: number, height: number, scale: number) {
-                super(width, height, 1);
+        constructor(canvas_id: string, width: number, height: number, scale: number, color_string: string) {
+                super(width, height);
 
                 if (Video.instance != undefined) {
                         throw new Error("Video already defined (can only have one)");
@@ -62,6 +76,10 @@ class Video extends Surface
                 this.canvas.width = width * scale;
                 this.canvas.height = height * scale;
 
+                const color_string_list = color_string.match(/.{1,3}/g);
+                color_string_list?.forEach(color_string => this.color_list.push(`#${color_string}`));
+                this.color_list?.forEach(color => console.log(`Color loaded: ${color} `));
+
                 this.randomize_pixels();
         }
 
@@ -76,8 +94,19 @@ class Video extends Surface
                 return this.sprite_list.length - 1;
         }
 
+        public color_count(): number {
+                return this.color_list.length;
+        }
+
+        // TODO move to private section
         private has_sprite(sprite: Sprite): boolean {
                 return this.sprite_list.indexOf(sprite) >= 0;
+        }
+
+        public get_color(palette_id: number, palette_color_id: number) {
+                // TODO checking
+                const color_id = this.palette_list[palette_id].get_color_id(palette_color_id);
+                return this.color_list[color_id];
         }
 
         // returns whether the sprite was removed

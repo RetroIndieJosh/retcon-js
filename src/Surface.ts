@@ -1,15 +1,12 @@
 class Surface {
         private width: number | undefined = undefined;
         private height: number | undefined = undefined;
-        // TODO scale
-        //private scale: number | undefined = undefined;
 
         private pixels: Array<Array<Color>> | undefined = undefined;
 
-        constructor(width: number, height: number, scale: number) {
+        constructor(width: number, height: number) {
                 this.width = width;
                 this.height = height;
-                //this.scale = scale;
 
                 this.pixels = new Array<Array<Color>>(width);
                 for (let x = 0; x < width; ++x) {
@@ -83,3 +80,17 @@ class Surface {
                                 func(this, x, y);
         }
 } 
+
+// TODO move to its own file
+class PaletteSurface extends Surface {
+        private palette_id: number;
+
+        constructor(width: number, height: number, palette_id: number) {
+                super(width, height);
+                this.palette_id = palette_id;
+        }
+
+        public set_pixel_id(x: number, y: number, color_id: number) {
+                this.set_pixel(x, y, Video.get_instance().get_color(this.palette_id, color_id))
+        }
+}

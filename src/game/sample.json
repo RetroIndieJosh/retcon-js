@@ -1,12 +1,12 @@
 {
         "title": "Sample Game",
         "tile_size": 8,
+        "comment": "color 0 is always clear, so the first color in this list is #1 (1-5, not 0-4)",
+        "colors": "C800800A0000FFF",
         "palettes": [
                 {
                         "id": 0,
-                        "color_count": 5,
-                        "comment": "color 0 is always clear, so the first color in this list is #1 (1-5, not 0-4)",
-                        "colors": "C800800A0000FFF"
+                        "colors": "012345"
                 }
         ],
         "tiles": [

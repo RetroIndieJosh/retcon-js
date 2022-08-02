@@ -33,30 +33,37 @@ class PaletteData extends IdDataBase {
 // TODO write separate software (Python?) compiler that converts .map, .set, .tile, and .pal files into json, then retcon reads that json file
 class GameData {
         public title: string = "";
+        public colors: string = "";
         public palettes: Array<PaletteData> = new Array<PaletteData>();
         public tiles: Array<TileData> = new Array<TileData>();
         public tilesets: Array<TilesetData> = new Array<TilesetData>();
         public tilemaps: Array<TilemapData> = new Array<TilemapData>();
 }
 
-const background: Surface = new Surface(256, 256, 1);
+const background: Surface = new Surface(256, 256);
 
 function retconjs_init(scale: number, debug: boolean = false): void {
-        new Video('retcon', 64, 64, scale);
-        Video.start();
-
-        fetch("./game/sample.json").then(res => res.json()).then(res => retconjs_load_game(res, debug));
+        fetch("./game/sample.json").then(res => res.json()).then(res => retconjs_load_game(res, scale, debug));
 }
 
-function retconjs_load_game(game_data: GameData, debug: boolean) {
+function retconjs_load_game(game_data: GameData, scale: number, debug: boolean) {
+        const video = new Video('retcon', 64, 64, scale, game_data.colors);
+        //video.add_background(background);
+        Video.start();
+
+        game_data.palettes.forEach(palette_data => {
+                new Palette(palette_data.colors);
+        });
+
+        if(!debug) return;
+
         console.info(`Starting game ${game_data.title} with:\n`
+                + `${Video.get_instance().color_count()} colors\n`
                 + `${game_data.palettes.length} palettes\n`
                 + `${game_data.tiles.length} tiles\n`
                 + `${game_data.tilesets.length} tilesets\n`
                 + `${game_data.tilemaps.length} tilemaps\n`
         );
-
-        if(!debug) return;
 
         setInterval(() => {
                 let sprite_count_element = document.getElementById("sprite-count");

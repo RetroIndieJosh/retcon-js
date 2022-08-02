@@ -16,8 +16,3 @@ function color_random(include_alpha: boolean = false): Color {
 
         return `rgb(${r}, ${g}, ${b})`;
 }
-
-class Palette {
-        constructor(filename: string) {
-        }
-}

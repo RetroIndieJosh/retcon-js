@@ -32,7 +32,7 @@ function retconjs_test_pixels(): void {
 function retconjs_test_sprite(): Sprite {
         Video.get_instance().auto_clear = true;
 
-        let sprite: Sprite = new Sprite(8, 8, 1);
+        let sprite: Sprite = new Sprite(8, 8, 0);
         sprite.x = Math.floor(Math.random() * 64);
         sprite.y = Math.floor(Math.random() * 64);
 
