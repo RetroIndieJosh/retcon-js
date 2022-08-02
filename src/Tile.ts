@@ -13,13 +13,21 @@ class Tile {
                 }
         }
 
-        public blit(surface: Surface, palette: Palette, left: number, top: number) {
+        public blit(surface: Surface, palette: Palette, left: number, top: number, opaque: boolean) {
                 const video = Video.get_instance();
                 for (let x = 0; x < this.size; x++) {
                         for (let y = 0; y < this.size; y++) {
                                 const xx = x + left;
                                 const yy = y + top;
-                                const color_id = palette.get_color_id(this.color_ids[x][y]);
+
+                                const palette_color_id = this.color_ids[x][y];
+                                if(palette_color_id == 0 && !opaque) {
+                                        console.log("clear pixel");
+                                        surface.set_pixel(xx, yy, "rgba(0, 0, 0, 0)");
+                                        continue;
+                                }
+
+                                const color_id = palette.get_color_id(palette_color_id);
                                 const color = video.get_color(color_id);
                                 surface.set_pixel(xx, yy, color);
                         }

@@ -30,7 +30,6 @@ function retconjs_test_clear_sprites(): void {
 
 function retconjs_test_pixels(): void {
         console.info("clear to randomized pixels");
-        console.info("NOTE: if Video.auto_clear is enabled, this will immediately revert to the set clear color");
         Video.get_instance().randomize_pixels();
 }
 

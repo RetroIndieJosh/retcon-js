@@ -31,7 +31,7 @@ class Surface extends Sized {
                 this.randomize_pixels();
         }
 
-        public blit(target_surface: Surface, left: number, top: number) {
+        public blit(target_surface: Surface, left: number, top: number, wrap: boolean) {
                 if (this.pixels == undefined) return;
 
                 const width = this.get_width();
@@ -40,14 +40,17 @@ class Surface extends Sized {
                 const target_height = target_surface.get_height();
                 for (let x = 0; x < width; ++x) {
                         const xx = left + x;
-                        // TODO flag whether we wrap (this prevents wrapping)
-                        if(xx < 0) continue;
-                        if(xx >= target_width) continue;
+                        if(!wrap) {
+                                if(xx < 0) continue;
+                                if(xx >= target_width) continue;
+                        }
 
                         for (let y = 0; y < height; ++y) {
                                 const yy = top + y;
-                                if(yy < 0) continue;
-                                if(yy >= target_height) continue;
+                                if(!wrap) {
+                                        if(yy < 0) continue;
+                                        if(yy >= target_height) continue;
+                                }
 
                                 target_surface.set_pixel(left + x, top + y, this.pixels[x][y]);
                         }
@@ -61,7 +64,7 @@ class Surface extends Sized {
         }
 
         public draw() {
-                Video.get_instance().blit(this, 0, 0);
+                Video.get_instance().blit(this, 0, 0, false);
         }
 
         public get_pixel(x: number, y: number): Color {

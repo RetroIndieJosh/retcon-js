@@ -3,8 +3,6 @@ class Video extends Surface
 {
         private static instance: Video | undefined = undefined;
 
-        public auto_clear: boolean = false;
-
         private canvas: HTMLCanvasElement;
         private ctx: CanvasRenderingContext2D;
 
@@ -33,9 +31,7 @@ class Video extends Surface
                         let instance: Video = Video.get_instance();
                         if (instance == undefined) return;
 
-                        if(instance.auto_clear)
-                                instance.clear(instance.clear_color);
-
+                        instance.clear(instance.clear_color);
                         instance.background_list.forEach(background => background.blit(instance));
                         instance.sprite_list.forEach(sprite => sprite.blit(instance));
                         instance.render();
@@ -67,7 +63,6 @@ class Video extends Surface
                 this.canvas.height = height * scale;
 
                 // load colors
-                this.color_list.push("rgba(0, 0, 0, 0)");
                 const color_string_list = color_string.match(/.{1,3}/g);
                 color_string_list?.forEach(color_string => this.color_list.push(`#${color_string}`));
                 console.log(`Colors: ${this.color_list}`);

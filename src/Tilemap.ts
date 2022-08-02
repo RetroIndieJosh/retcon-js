@@ -4,6 +4,9 @@ class Tilemap {
         public x: number = 0;
         public y: number = 0;
 
+        protected opaque: boolean = true;
+        protected wrap: boolean = false;
+
         // width and height of the map in tiles
         private width: number;
         private height: number;
@@ -33,7 +36,7 @@ class Tilemap {
         }
 
         public blit(target_surface: Surface) {
-                this.surface.blit(target_surface, this.x, this.y);
+                this.surface.blit(target_surface, this.x, this.y, this.wrap);
         }
 
         public get_pixel_height(): number {
@@ -62,7 +65,8 @@ class Tilemap {
                         for(let y = 0; y < this.height; y++) {
                                 const tile = video.get_tile(this.tile_ids[x][y]);
                                 //console.log(`Tile: ${tile} @ ${x}, ${y}`);
-                                tile.blit(this.surface, palette, x * this.tile_size, y * this.tile_size);
+                                // TODO  make sure we don't draw clear
+                                tile.blit(this.surface, palette, x * this.tile_size, y * this.tile_size, this.opaque);
                         }
                 }
         }
