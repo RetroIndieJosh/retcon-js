@@ -1,17 +1,17 @@
 default_target: all
 
 all:
-	make clean
 	npx tsc
 	cp js/*.js ..
+	cp js/*.map ..
 
 obfuscate:
+	rm js/*.map
 	npx javascript-obfuscator js
 	npx uglifyjs js/*-obfuscated.js > retcon.min.js
 	cp retcon.min.js ..
 
 release:
-	make clean
 	make obfuscate
 	mkdir ../release
 	cp ../index.html ../release

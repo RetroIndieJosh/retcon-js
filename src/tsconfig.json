@@ -8,17 +8,18 @@
                 "preserveConstEnums": true,
                 "removeComments": true,
                 "skipLibCheck": true,
+                "sourceMap": true,
                 "strict": true,
                 "target": "ES2015"
         },
         "files": [
-                "retcon.ts",
                 "Color.ts",
-                "Sprite.ts",
                 "Surface.ts",
-                "Test.ts",
+                "Video.ts",
+                "Sprite.ts",
                 "TileMap.ts",
-                "Video.ts"
+                "retcon.ts",
+                "Test.ts"
         ],
         "$schema": "https://json.schemastore.org/tsconfig",
         "display": "Recommended"
