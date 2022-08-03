@@ -28,7 +28,7 @@ class NumberGrid {
 
         public apply_each(func: (x: number, y: number, self: NumberGrid) => void) {
                 for (let x = 0; x < this.width; x++) {
-                        for (let y = 0; y < this.width; y++) {
+                        for (let y = 0; y < this.height; y++) {
                                 func(x, y, this);
                         }
                 }
@@ -40,7 +40,7 @@ class NumberGrid {
 
         public for_each(func: (x: number, y: number, value: number) => void) {
                 for (let x = 0; x < this.width; x++) {
-                        for (let y = 0; y < this.width; y++) {
+                        for (let y = 0; y < this.height; y++) {
                                 func(x, y, this.values[x][y]);
                         }
                 }
@@ -74,7 +74,7 @@ class NumberGrid {
 
         public set_all(value: number, wrap: boolean) {
                 for (let x = 0; x < this.width; x++) {
-                        for (let y = 0; y < this.width; y++) {
+                        for (let y = 0; y < this.height; y++) {
                                 this.set(x, y, value, wrap);
                         }
                 }
