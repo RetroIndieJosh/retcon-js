@@ -1,5 +1,4 @@
 // TODO fix clear random / clear color not working
-// TODO blit only a section - create a new numbergrid of the target size if the target is smaller than the source
 
 class IdDataBase {
         public id: number = -1;

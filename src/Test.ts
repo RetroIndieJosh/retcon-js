@@ -1,5 +1,6 @@
 // RetConJS tests
 
+const TEST_LENGTH = 15;
 let move_speed = 1;
 
 function retconjs_test_decrease_move_speed() {
@@ -46,11 +47,8 @@ function retconjs_test_sprite(): Sprite {
 }
 
 function retconjs_test_sprite_move_horizontal(): void {
-        const TEST_LENGTH = 5;
-
         const sprite = retconjs_test_sprite();
 
-        console.info(`Moving sprite horizontally for ${TEST_LENGTH} seconds`);
         let move = 0;
         const sprite_move = setInterval(() => {
                 move += move_speed;
@@ -61,18 +59,19 @@ function retconjs_test_sprite_move_horizontal(): void {
                 if (move > 200) move = 200;
         }, 1000 / 60);
 
+        console.info(`Test ${sprite_move}: Moving sprite horizontally for ${TEST_LENGTH} seconds`);
+
+        // TODO remove duplication of this
         setTimeout(() => {
                 Video.get_instance().remove_sprite(sprite);
                 clearInterval(sprite_move);
+                console.info(`Test ${sprite_move} concluded`);
         }, TEST_LENGTH * 1000);
 }
 
 function retconjs_test_sprite_move_vertical(): void {
-        const TEST_LENGTH = 5;
-
         const sprite = retconjs_test_sprite();
 
-        console.info(`Moving sprite vertically for ${TEST_LENGTH} seconds`);
         let move = 0;
         const sprite_move = setInterval(() => {
                 move += move_speed;
@@ -83,18 +82,18 @@ function retconjs_test_sprite_move_vertical(): void {
                 if (move > 200) move = 200;
         }, 1000 / 60);
 
+        console.info(`Test ${sprite_move}: Moving sprite vertically for ${TEST_LENGTH} seconds`);
+
         setTimeout(() => {
                 Video.get_instance().remove_sprite(sprite);
                 clearInterval(sprite_move);
+                console.info(`Test ${sprite_move} concluded`);
         }, TEST_LENGTH * 1000);
 }
 
 function retconjs_test_sprite_move_random(): void {
-        const TEST_LENGTH = 5;
-
         const sprite = retconjs_test_sprite();
 
-        console.info(`Moving sprite randomly for ${TEST_LENGTH} seconds`);
         const MOVE_MULT = move_speed * 2 + 1;
         let move = 0;
         const sprite_move = setInterval(() => {
@@ -102,8 +101,11 @@ function retconjs_test_sprite_move_random(): void {
                 sprite.y += Math.floor(Math.random() * MOVE_MULT) - move_speed;
         }, 1000 / 60);
 
+        console.info(`Test ${sprite_move}: Moving sprite randomly for ${TEST_LENGTH} seconds`);
+
         setTimeout(() => {
                 Video.get_instance().remove_sprite(sprite);
                 clearInterval(sprite_move);
+                console.info(`Test ${sprite_move} concluded`);
         }, TEST_LENGTH * 1000);
 }

@@ -26,6 +26,7 @@ class Surface {
                 this.pixels = new NumberGrid(width, height, 0, 16);
         }
 
+        // TODO blit subsection with x, y, right, bottom and reuse that to optimize non-wrap blitting
         public blit(target_surface: Surface, left: number, top: number, wrap: boolean) {
                 if (this.pixels == undefined) return;
 

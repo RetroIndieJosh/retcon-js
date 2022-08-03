@@ -81,7 +81,12 @@ class NumberGrid {
         }
 
         public set(x: number, y: number, value: number, wrap: boolean) {
+                x = Math.floor(x);
+                y = Math.floor(y);
+
                 if (wrap) {
+                        // TODO horizontal crashes on second pass left
+                        // TODO vertical disappears on second pass up
                         // wrap horizontal
                         if (x < 0) {
                                 const div = Math.floor(x / this.width) + 1;
@@ -97,7 +102,7 @@ class NumberGrid {
                                 const div = Math.floor(y / this.height) + 1;
                                 y += this.height * div;
                         }
-                        else if (y >= this.width) {
+                        else if (y >= this.height) {
                                 const div = Math.floor(y / this.height);
                                 y -= this.height * div;
                         }
@@ -107,11 +112,9 @@ class NumberGrid {
                                 return;
                 }
 
-                x = Math.floor(x);
-                y = Math.floor(y);
                 value = Math.floor(value);
-                this.changed[x][y] = true;
                 this.values[x][y] = value;
+                this.changed[x][y] = true;
         }
 }
 
