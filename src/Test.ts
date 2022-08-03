@@ -12,12 +12,13 @@ function retconjs_test_increase_move_speed() {
 
 function retconjs_test_clear_black(): void {
         console.info("Clear to black");
-        Video.get_instance().set_clear_color("#000");
+        Video.get_instance().set_clear_color(0);
 }
 
 function retconjs_test_clear_random(): void {
         console.info("clear to random colors");
-        Video.get_instance().set_clear_color(color_random());
+        // TODO limit to number of colors in game palette
+        Video.get_instance().set_clear_color(Math.floor(Math.random() * 5));
 }
 
 
@@ -25,7 +26,7 @@ function retconjs_test_clear_sprites(): void {
         const video = Video.get_instance();
         while(video.sprite_count() > 0)
                 video.remove_sprite_at(0);
-        video.set_clear_color("#000");
+        video.set_clear_color(0);
 }
 
 function retconjs_test_pixels(): void {

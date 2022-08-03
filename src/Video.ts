@@ -8,7 +8,7 @@ class Video extends Surface
 
         private scale: number | undefined = undefined;
 
-        private clear_color: Color = "#000";
+        private clear_color: number = 0;
 
         private color_list: Array<Color> = new Array<Color>();
         private palette_list: Array<Palette> = new Array<Palette>();
@@ -31,7 +31,7 @@ class Video extends Surface
                         let instance: Video = Video.get_instance();
                         if (instance == undefined) return;
 
-                        instance.clear(instance.clear_color);
+                        instance.clear(0);
                         instance.background_list.forEach(background => background.blit(instance));
                         instance.sprite_list.forEach(sprite => sprite.blit(instance));
                         instance.render();
@@ -150,16 +150,15 @@ class Video extends Surface
         public render() {
                 if (this.scale == undefined) return;
 
-                for (let x = 0; x < this.get_width(); ++x) {
-                        for (let y = 0; y < this.get_height(); ++y) {
-                                this.ctx.fillStyle = this.get_pixel(x, y);
-                                this.ctx.fillRect(x * this.scale, y * this.scale, this.scale, this.scale);
-                        }
-                }
+                const scale = this.scale;
+                this.pixels.for_each((x, y, value) => {
+                        this.ctx.fillStyle = this.get_color(this.pixels.get(x, y));
+                        this.ctx.fillRect(x * scale, y * scale, scale, scale);
+                });
         }
 
-        public set_clear_color(color: Color, clear: boolean = true) {
-                this.clear_color = color;
+        public set_clear_color(color_id: number, clear: boolean = true) {
+                this.clear_color = color_id;
                 if(clear) this.clear(this.clear_color);
         }
 } 

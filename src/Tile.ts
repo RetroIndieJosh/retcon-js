@@ -23,13 +23,12 @@ class Tile {
                                 const palette_color_id = this.color_ids[x][y];
                                 if(palette_color_id == 0 && !opaque) {
                                         console.log("clear pixel");
-                                        surface.set_pixel(xx, yy, "rgba(0, 0, 0, 0)");
+                                        surface.set_pixel(xx, yy, 0);
                                         continue;
                                 }
 
                                 const color_id = palette.get_color_id(palette_color_id);
-                                const color = video.get_color(color_id);
-                                surface.set_pixel(xx, yy, color);
+                                surface.set_pixel(xx, yy, color_id);
                         }
                 }
         }
