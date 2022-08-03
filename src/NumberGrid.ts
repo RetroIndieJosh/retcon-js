@@ -1,4 +1,5 @@
-// TODO put in its own file
+const NUMBER_UNCHANGED = -1;
+
 class NumberGrid {
         private width: number;
         private height: number;
@@ -6,22 +7,21 @@ class NumberGrid {
         private min: number;
         private max: number;
 
+        private changed: Array<Array<boolean>>;
         private values: Array<Array<number>>;
 
-        private wrap: boolean;
-
-        constructor(width: number, height: number, min: number, max: number, wrap: boolean = false) {
+        constructor(width: number, height: number, min: number, max: number) {
                 this.width = Math.floor(width);
                 this.height = Math.floor(height);
 
                 this.min = Math.floor(min);
                 this.max = Math.floor(max);
 
-                this.wrap = wrap;
-
+                this.changed = new Array<Array<boolean>>(width);
                 this.values = new Array<Array<number>>(width);
                 for (let x = 0; x < width; ++x) {
                         this.values[x] = new Array<number>(height);
+                        this.changed[x] = new Array<boolean>(height);
                 }
                 this.randomize();
         }
@@ -32,7 +32,10 @@ class NumberGrid {
                                 func(x, y, this);
                         }
                 }
+        }
 
+        public clear_changed() {
+                this.apply_each((x, y, self) => this.changed[x][y] = false);
         }
 
         public for_each(func: (x: number, y: number, value: number) => void) {
@@ -46,7 +49,9 @@ class NumberGrid {
         public get(x: number, y: number) {
                 x = Math.floor(x);
                 y = Math.floor(y);
-                return this.values[x][y];
+                if(this.changed[x][y])
+                        return this.values[x][y];
+                return NUMBER_UNCHANGED;
         }
 
         public get_height(): number {
@@ -67,23 +72,35 @@ class NumberGrid {
                 return Math.floor(Math.random() * this.max) + this.min;
         }
 
-        public set_all(value: number) {
+        public set_all(value: number, wrap: boolean) {
                 for (let x = 0; x < this.width; x++) {
                         for (let y = 0; y < this.width; y++) {
-                                this.set(x, y, value);
+                                this.set(x, y, value, wrap);
                         }
                 }
         }
 
-        public set(x: number, y: number, value: number) {
-                if (this.wrap) {
+        public set(x: number, y: number, value: number, wrap: boolean) {
+                if (wrap) {
                         // wrap horizontal
-                        while (x < 0) x += this.width;
-                        while (x >= this.width) x -= this.width;
+                        if (x < 0) {
+                                const div = Math.floor(x / this.width) + 1;
+                                x += this.width * div;
+                        }
+                        else if (x >= this.width) {
+                                const div = Math.floor(x / this.width);
+                                x -= this.width * div;
+                        }
 
                         // wrap vertical
-                        while (y < 0) y += this.height;
-                        while (y >= this.height) y -= this.height;
+                        if (y < 0) {
+                                const div = Math.floor(y / this.height) + 1;
+                                y += this.height * div;
+                        }
+                        else if (y >= this.width) {
+                                const div = Math.floor(y / this.height);
+                                y -= this.height * div;
+                        }
                 } else {
                         // clip
                         if (x < 0 || x >= this.width || y < 0 || y >= this.height)
@@ -93,6 +110,7 @@ class NumberGrid {
                 x = Math.floor(x);
                 y = Math.floor(y);
                 value = Math.floor(value);
+                this.changed[x][y] = true;
                 this.values[x][y] = value;
         }
 }

@@ -152,7 +152,8 @@ class Video extends Surface
 
                 const scale = this.scale;
                 this.pixels.for_each((x, y, value) => {
-                        this.ctx.fillStyle = this.get_color(this.pixels.get(x, y));
+                        if (value == NUMBER_UNCHANGED) return;
+                        this.ctx.fillStyle = this.get_color(value);
                         this.ctx.fillRect(x * scale, y * scale, scale, scale);
                 });
         }

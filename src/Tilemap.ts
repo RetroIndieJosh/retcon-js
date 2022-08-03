@@ -48,9 +48,8 @@ class Tilemap {
         }
 
         public set_tile(x: number, y: number, tile_id: number) {
-                // wrap
-                x %= this.width;
-                y %= this.height;
+                x = Math.floor(x);
+                y = Math.floor(y);
 
                 this.tile_ids[x][y] = tile_id;
                 this.sync_tiles();
@@ -66,7 +65,7 @@ class Tilemap {
                                 const tile = video.get_tile(this.tile_ids[x][y]);
                                 //console.log(`Tile: ${tile} @ ${x}, ${y}`);
                                 // TODO  make sure we don't draw clear
-                                tile.blit(this.surface, palette, x * this.tile_size, y * this.tile_size, this.opaque);
+                                tile.blit(this.surface, palette, x * this.tile_size, y * this.tile_size, this.opaque, this.wrap);
                         }
                 }
         }

@@ -13,7 +13,7 @@ class Tile {
                 }
         }
 
-        public blit(surface: Surface, palette: Palette, left: number, top: number, opaque: boolean) {
+        public blit(surface: Surface, palette: Palette, left: number, top: number, opaque: boolean, wrap: boolean) {
                 const video = Video.get_instance();
                 for (let x = 0; x < this.size; x++) {
                         for (let y = 0; y < this.size; y++) {
@@ -23,12 +23,12 @@ class Tile {
                                 const palette_color_id = this.color_ids[x][y];
                                 if(palette_color_id == 0 && !opaque) {
                                         console.log("clear pixel");
-                                        surface.set_pixel(xx, yy, 0);
+                                        surface.set_pixel(xx, yy, 0, wrap);
                                         continue;
                                 }
 
                                 const color_id = palette.get_color_id(palette_color_id);
-                                surface.set_pixel(xx, yy, color_id);
+                                surface.set_pixel(xx, yy, color_id, wrap);
                         }
                 }
         }

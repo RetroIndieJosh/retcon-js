@@ -33,12 +33,12 @@ class Surface {
                         const xx = left + x;
                         const yy = top + y;
 
-                        target_surface.set_pixel(left + x, top + y, value);
+                        target_surface.set_pixel(left + x, top + y, value, wrap);
                 });
         }
 
         public clear(color_id: number) {
-                this.pixels.set_all(color_id);
+                this.pixels.set_all(color_id, false);
         }
 
         public draw() {
@@ -55,7 +55,7 @@ class Surface {
                 this.pixels.randomize();
         }
 
-        public set_pixel(x: number, y: number, color_id: number) {
-                this.pixels.set(x, y, color_id);
+        public set_pixel(x: number, y: number, color_id: number, wrap: boolean) {
+                this.pixels.set(x, y, color_id, wrap);
         }
 } 
