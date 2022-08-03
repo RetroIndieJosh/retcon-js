@@ -29,12 +29,17 @@ class Surface {
         public blit(target_surface: Surface, left: number, top: number, wrap: boolean) {
                 if (this.pixels == undefined) return;
 
-                this.pixels.for_each((x, y, value) => {
-                        const xx = left + x;
-                        const yy = top + y;
+                if (wrap) {
+                        this.pixels.for_each((x, y, value) => {
+                                const xx = left + x;
+                                const yy = top + y;
 
-                        target_surface.set_pixel(left + x, top + y, value, wrap);
-                });
+                                target_surface.set_pixel(left + x, top + y, value, true);
+                        });
+                }
+                else {
+                        target_surface.set_pixels(left, top, this.pixels, wrap);
+                }
         }
 
         public clear(color_id: number) {
@@ -55,7 +60,17 @@ class Surface {
                 this.pixels.randomize();
         }
 
-        public set_pixel(x: number, y: number, color_id: number, wrap: boolean) {
+        public set_pixel(x: number, y: number, color_id: number, wrap: boolean = false) {
                 this.pixels.set(x, y, color_id, wrap);
+        }
+
+        public set_pixels(left: number, top: number, pixels: NumberGrid, wrap: boolean) {
+                const width = Math.min(left + pixels.get_width(), this.pixels.get_width());
+                const height = Math.min(top + pixels.get_height(), this.pixels.get_height());
+                for (let x = 0; x < width; x++) {
+                        for (let y = 0; y < height; y++) {
+                                this.set_pixel(x + left, y + top, pixels.get(x, y));
+                        }
+                }
         }
 } 

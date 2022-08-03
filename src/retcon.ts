@@ -1,3 +1,6 @@
+// TODO fix clear random / clear color not working
+// TODO blit only a section - create a new numbergrid of the target size if the target is smaller than the source
+
 class IdDataBase {
         public id: number = -1;
 }
@@ -54,8 +57,8 @@ function retconjs_load_game(game_data: GameData, scale: number, debug: boolean) 
         });
 
         // load backgrounds
-        //const bg0 = new Tilemap(8, 256, 256, 1);
-        //video.add_background(bg0);
+        const bg0 = new Tilemap(8, 256, 256, 1);
+        video.add_background(bg0);
         //const bg1 = new Tilemap(8, 256, 256, 0);
         //video.add_background(bg1);
 
