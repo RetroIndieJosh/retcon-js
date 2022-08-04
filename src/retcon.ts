@@ -1,10 +1,6 @@
 // TODO fix clear random / clear color not working
 
-class IdDataBase {
-        public id: number = -1;
-}
-
-class SizedDataBase extends IdDataBase {
+class SizedDataBase {
         public width: number = -1;
         public height: number = -1;
 }
@@ -13,12 +9,6 @@ class TileDataBase extends SizedDataBase {
         public tiles: string = "";
 }
 
-class TileData extends IdDataBase {
-        public pixels: string = "";
-}
-
-class TilesetData extends TileDataBase { }
-
 class TilemapData extends TileDataBase {
         public palette: number = -1;
         public tileset: number = -1;
@@ -26,19 +16,13 @@ class TilemapData extends TileDataBase {
 
 class ActorData extends TileDataBase { }
 
-class PaletteData extends IdDataBase {
-        public color_count: number = -1;
-        public colors: string = "";
-
-}
-
 // TODO write separate software (Python?) compiler that converts .map, .set, .tile, and .pal files into json, then retcon reads that json file
 class GameData {
         public title: string = "";
         public colors: string = "";
-        public palettes: Array<PaletteData> = new Array<PaletteData>();
-        public tiles: Array<TileData> = new Array<TileData>();
-        public tilesets: Array<TilesetData> = new Array<TilesetData>();
+        public palettes: Array<string> = new Array<string>();
+        public tiles: Array<string> = new Array<string>();
+        public tilesets: Array<string> = new Array<string>();
         public tilemaps: Array<TilemapData> = new Array<TilemapData>();
 }
 
@@ -51,20 +35,20 @@ function retconjs_load_game(game_data: GameData, scale: number, debug: boolean) 
 
         // load palettes
         game_data.palettes.forEach(palette_data => {
-                const palette = new Palette(palette_data.colors);
-                Video.get_instance().add_palette(palette);
+                const palette = new Palette(palette_data);
+                video.add_palette(palette);
         });
 
-        // load tiles
-        video.add_tile(new Tile(8, 0));
-        video.add_tile(new Tile(8, 1));
+        // load tiles (TODO from game data)
+        game_data.tiles.forEach(tile_data => {
+                const tile = new Tile(tile_data);
+                video.add_tile(tile);
+        });
 
-        // load backgrounds
-        const bg0 = new Tilemap(8, 256, 256, 1);
-        video.add_background(bg0);
-        bg0.set_all(0);
-        //const bg1 = new Tilemap(8, 256, 256, 0);
-        //video.add_background(bg1);
+        // load tilemap background
+        const tiles = new Tilemap(8, 8, 8, 1);
+        video.add_background(tiles);
+        tiles.set_all(0);
 
         Video.start();
 

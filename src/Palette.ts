@@ -8,7 +8,7 @@ class Palette {
                         this.color_ids.push(Number(hex));
                 }
                 
-                console.log(`"Palette: ${this.color_ids}`)
+                console.log(`Palette: ${this.color_ids}`)
                 this.color_ids.forEach(color_id => { console.log(`=> ${Video.get_instance().get_color(color_id)}`); });
         }
 

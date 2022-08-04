@@ -2,15 +2,26 @@ class Tile {
         private size: number = -1;
         private color_ids: Array<Array<number>> = new Array<Array<number>>();
 
-        constructor(size: number, palette_id: number) {
-                this.size = size;
-                this.color_ids = new Array<Array<number>>(size);
-                for (let x = 0; x < size; x++) {
-                        this.color_ids[x] = new Array<number>(size);
-                        for (let y = 0; y < size; y++) {
-                                this.color_ids[x][y] = Math.floor(Math.random() * 16);
+        constructor(tile_data: string) {
+                this.size = Math.sqrt(tile_data.length);
+                if (!(this.size % 1 == 0)) {
+                        throw new Error(`RetConJS: non-square tile size ${tile_data.length}`);
+                }
+
+                this.color_ids = new Array<Array<number>>(this.size);
+                for (let x = 0; x < this.size; x++) {
+                        this.color_ids[x] = new Array<number>(this.size);
+                }
+
+                let index = 0;
+                for (let y = 0; y < this.size; y++) {
+                        for (let x = 0; x < this.size; x++) {
+                                this.color_ids[x][y] = Number("0x" + tile_data[index]);
+                                index++;
                         }
                 }
+
+                console.info(`Tile size ${this.size}: ${tile_data}`);
         }
 
         public blit(surface: Surface, palette: Palette, left: number, top: number, opaque: boolean, wrap: boolean) {

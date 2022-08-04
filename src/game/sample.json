@@ -1,54 +1,37 @@
 {
         "title": "Sample Game",
+        "comment": "All numbers are in hex",
         "tile_size": 8,
+        "colors-comment": "[color (3)] for each color",
         "colors": "000F000F000FFFF",
-        "comment": "for sprites, the first palette index is always 'clear' regardless of what color we put in",
-        "palettes": [
-                {
-                        "id": 0,
-                        "colors": "012"
-                },
-                {
-                        "id": 1,
-                        "colors": "034"
-                }
+        "palettes-comment": [
+                "for sprites, the first palette index is always 'clear' regardless of what color we put in",
+                "[color count (1)][color ID (1) for each color]"
         ],
+        "palettes": [
+                "0123",
+                "0122"
+        ],
+        "tiles-comment": "[color ID (1) for each pixel]",
         "tiles": [
-                {
-                        "id": 0,
-                        "pixels": "0000000000020000000220000002220000222200002222000001100000011000"
-                },
-                {
-                        "id": 1,
-                        "pixels": "2323232323232323232323232323232323232323232323232323232323232323"
-                },
-                {
-                        "id": 2,
-                        "pixels": "3434343434343434343434343434343434343434343434343434343434343434"
-                }
+                "0000000000020000000220000002220000222200002222000001100000011000",
+                "2323232323232323232323232323232323232323232323232323232323232323",
+                "3434343434343434343434343434343434343434343434343434343434343434"
         ],
         "tilesets": [
-                {
-                        "id": 0,
-                        "tiles": [0, 1]
-                }
+                "0001"
         ],
         "tilemaps": [
                 {
-                        "id": 0,
-                        "tileset": 0,
-                        "palette": 0,
-                        "width": 16,
-                        "height": 8,
-                        "tiles": "11111111111111111001100000111101100000000000110110001100000000011000000000011001100111000001100110111100000110011111111111111111"
+                        "comment": "[tileset (1)][palette (1)][width (2)][height (2)][tile ID (1) for each tile",
+                        "tiles": "000F0811111111111111111001100000111101100000000000110110001100000000011000000000011001100111000001100110111100000110011111111111111111"
+                },
+                {
+                        "tiles": "0001012"
                 }
         ],
-        "actors": [
-                {
-                        "id": 0,
-                        "width": 1,
-                        "height": 1,
-                        "tiles": "2"
-                }
+        "sprites-comment": "tilemap ID",
+        "sprites": [
+                "1"
         ]
 }
