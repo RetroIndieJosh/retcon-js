@@ -24,6 +24,28 @@ function retconjs_test_clear_random(): void {
         Video.get_instance().set_clear_color(Math.floor(Math.random() * 5));
 }
 
+function retconjs_test_metronome(): void {
+        metronome_init();
+        metronome_play();
+}
+
+function retconjs_test_music(): void {
+        const drums = new Audio("./music/replicator-drum.ogg");
+        drums.loop = true;
+
+        const acid = new Audio("./music/replicator-acid.ogg");
+        acid.loop = true;
+
+        const pad = new Audio("./music/replicator-pad.ogg");
+        pad.loop = true;
+
+        // TODO these loops only work if all the patterns are the same length (but awkward pause at the end)
+        drums.addEventListener("canplaythrough", (event) => {
+                drums.play();
+                pad.play();
+                acid.play();
+        });
+}
 
 function retconjs_test_clear_sprites(): void {
         const video = Video.get_instance();

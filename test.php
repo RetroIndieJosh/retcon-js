@@ -21,6 +21,8 @@
                         <button onclick="retconjs_test_clear_sprites();">Clear All Sprites</button>
                         <button onclick="retconjs_test_increase_move_speed();">Increase Move Speed</button>
                         <button onclick="retconjs_test_decrease_move_speed();">Decrease Move Speed</button>
+                        <button onclick="retconjs_test_music();">Test Music</button>
+                        <button onclick="retconjs_test_metronome();">Test Metronome</button>
                 </div>
         </div>
         <canvas id="retcon" width="1" height="1" class="test-canvas">

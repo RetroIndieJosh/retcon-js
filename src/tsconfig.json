@@ -22,7 +22,9 @@
                 "Tilemap.ts",
                 "Sprite.ts",
                 "retcon.ts",
-                "Test.ts"
+                "Test.ts",
+                "metronome/metronome.ts",
+                "metronome/metronomeworker.ts"
         ],
         "$schema": "https://json.schemastore.org/tsconfig",
         "display": "Recommended"

@@ -4,6 +4,7 @@ all:
 	npx tsc
 	cp js/*.js ..
 	cp js/*.map ..
+	cp -r js/metronome ..
 	cp -r game ..
 
 obfuscate:
@@ -25,3 +26,4 @@ clean:
 	rm -f ../*.js
 	rm -rf ../game
 	rm -f ../*.map
+	rm -rf ../metronome
