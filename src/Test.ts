@@ -60,13 +60,15 @@ function retconjs_test_sprite_move_horizontal(): void {
         }, 1000 / 60);
 
         console.info(`Test ${sprite_move}: Moving sprite horizontally for ${TEST_LENGTH} seconds`);
+        retconjs_set_timeout_sprite_test(sprite, sprite_move);
+}
 
-        // TODO remove duplication of this
+function retconjs_set_timeout_sprite_test(sprite: Sprite, test_id: number) {
         setTimeout(() => {
                 Video.get_instance().remove_sprite(sprite);
-                clearInterval(sprite_move);
-                console.info(`Test ${sprite_move} concluded`);
-        }, TEST_LENGTH * 1000);
+                clearInterval(test_id);
+                console.info(`Test ${test_id} concluded`);
+        });
 }
 
 function retconjs_test_sprite_move_vertical(): void {
@@ -83,12 +85,7 @@ function retconjs_test_sprite_move_vertical(): void {
         }, 1000 / 60);
 
         console.info(`Test ${sprite_move}: Moving sprite vertically for ${TEST_LENGTH} seconds`);
-
-        setTimeout(() => {
-                Video.get_instance().remove_sprite(sprite);
-                clearInterval(sprite_move);
-                console.info(`Test ${sprite_move} concluded`);
-        }, TEST_LENGTH * 1000);
+        retconjs_set_timeout_sprite_test(sprite, sprite_move);
 }
 
 function retconjs_test_sprite_move_random(): void {
@@ -102,10 +99,5 @@ function retconjs_test_sprite_move_random(): void {
         }, 1000 / 60);
 
         console.info(`Test ${sprite_move}: Moving sprite randomly for ${TEST_LENGTH} seconds`);
-
-        setTimeout(() => {
-                Video.get_instance().remove_sprite(sprite);
-                clearInterval(sprite_move);
-                console.info(`Test ${sprite_move} concluded`);
-        }, TEST_LENGTH * 1000);
+        retconjs_set_timeout_sprite_test(sprite, sprite_move);
 }

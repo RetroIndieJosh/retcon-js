@@ -1,8 +1,8 @@
 {
         "title": "Sample Game",
         "tile_size": 8,
-        "comment": "for sprites, the first palette index is always 'clear' regardless of what color we put in",
         "colors": "000F000F000FFFF",
+        "comment": "for sprites, the first palette index is always 'clear' regardless of what color we put in",
         "palettes": [
                 {
                         "id": 0,

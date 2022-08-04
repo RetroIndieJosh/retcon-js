@@ -15,6 +15,7 @@ class Video extends Surface
 
         private background_list: Array<Tilemap> = new Array<Tilemap>();
         private sprite_list: Array<Sprite> = new Array<Sprite>();
+        private tile_list: Array<Tile> = new Array<Tile>();
 
         public static get_instance(): Video {
                 if (Video.instance == undefined) {
@@ -72,12 +73,18 @@ class Video extends Surface
 
         // TODO 
         public add_background(background: Tilemap) {
+                // TODO prevent (allow?) duplication
                 this.background_list.push(background);
-
         }
 
         public add_palette(palette: Palette) {
+                // TODO prevent duplication
                 this.palette_list.push(palette);
+        }
+
+        public add_tile(tile: Tile) {
+                // TODO prevent duplication
+                this.tile_list.push(tile);
         }
 
         // returns the index of the added sprite, or -1 if it wasn't added (already in list)
@@ -101,26 +108,49 @@ class Video extends Surface
         }
 
         public get_color(color_id: number) {
+                if (this.color_list.length == 0) {
+                        throw console.error("RetConJS: No colors loaded - must have at least one!");
+                }
+
                 // TODO checking
-                if(color_id < 0 || color_id >= this.color_list.length)
-                        console.warn(`Illegal color index: ${color_id}`);
+                if (color_id < 0 || color_id >= this.color_list.length) {
+                        // TODO come up with some way to make these warnings faster so they don't lag the game
+                        //console.warn(`Illegal color index: ${color_id}`);
+                        return "#000";
+                }
+
                 return this.color_list[color_id];
         }
 
         public get_palette(palette_id: number): Palette {
-                if(palette_id < 0 || palette_id >= this.palette_list.length)
-                        console.warn(`Illegal palette index: ${palette_id}`);
+                if (this.palette_list.length == 0) {
+                        throw console.error("RetConJS: No palettes loaded - must have at least one!");
+                }
+
+                if (palette_id < 0 || palette_id >= this.palette_list.length) {
+                        // TODO come up with some way to make these warnings faster so they don't lag the game
+                        //console.warn(`Illegal palette index: ${palette_id}`);
+                        return this.palette_list[0];
+                }
+
                 // TODO checking
                 return this.palette_list[palette_id];
         }
 
         // TODO use tilesets
         public get_tile(tile_id: number) {
-                /*
-                if(tile_id < 0 || tile_id >= this.tile_list.length)
-                        console.warn(`Illegal tile index: ${tile_id}`);
-                        */
-                return new Tile(8, 0);
+                tile_id = Math.floor(tile_id);
+
+                if (this.tile_list.length == 0) {
+                        throw console.error("RetConJS: No tiles loaded - must have at least one!");
+                }
+
+                if (tile_id < 0 || tile_id >= this.tile_list.length) {
+                        // TODO come up with some way to make these warnings faster so they don't lag the game
+                        //console.warn(`Illegal tile index: ${tile_id}`);
+                        return this.tile_list[0];
+                }
+                return this.tile_list[tile_id];
         }
 
         // returns whether the sprite was removed
