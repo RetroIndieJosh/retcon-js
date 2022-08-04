@@ -1,5 +1,7 @@
 // RetConJS tests
 
+// TODO do game setup in here specifically for testing purposes
+
 const TEST_LENGTH = 15;
 let move_speed = 1;
 
@@ -36,7 +38,7 @@ function retconjs_test_pixels(): void {
 }
 
 function retconjs_test_sprite(): Sprite {
-        let sprite: Sprite = new Sprite(0, 0);
+        let sprite: Sprite = new Sprite(1, 0);
         sprite.x = Math.floor(Math.random() * 64);
         sprite.y = Math.floor(Math.random() * 64);
 
@@ -68,7 +70,7 @@ function retconjs_set_timeout_sprite_test(sprite: Sprite, test_id: number) {
                 Video.get_instance().remove_sprite(sprite);
                 clearInterval(test_id);
                 console.info(`Test ${test_id} concluded`);
-        });
+        }, 1000 * TEST_LENGTH);
 }
 
 function retconjs_test_sprite_move_vertical(): void {

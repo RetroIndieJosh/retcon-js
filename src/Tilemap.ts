@@ -32,12 +32,9 @@ class Tilemap {
                 for (let x = 0; x < width; x++) {
                         this.tile_dirty[x] = new Array<boolean>(height);
                         this.tile_ids[x] = new Array<number>(height);
-                        for (let y = 0; y < height; y++) {
-                                this.tile_dirty[x][y] = true;
-                                this.tile_ids[x][y] = Math.floor(Math.random() * 16);
-                        }
                 }
-                this.sync_tiles();
+
+                this.randomize();
         }
 
         public blit(target_surface: Surface) {
@@ -52,14 +49,27 @@ class Tilemap {
                 return this.width * this.tile_size;
         }
 
+        public randomize() {
+                for (let x = 0; x < this.width; x++) {
+                        for (let y = 0; y < this.height; y++) {
+                                this.tile_dirty[x][y] = true;
+                                this.tile_ids[x][y] = Math.floor(Math.random() * 16);
+                        }
+                }
+                this.sync_tiles();
+        }
+
         public set_all(tile_id: number) {
                 tile_id = Math.floor(tile_id);
 
                 for (let x = 0; x < this.width; x++) {
                         for (let y = 0; y < this.height; y++) {
                                 this.tile_ids[x][y] = tile_id;
+                                this.tile_dirty[x][y] = true;
                         }
                 }
+
+                this.sync_tiles();
         }
 
         public set_tile(x: number, y: number, tile_id: number) {
@@ -68,6 +78,7 @@ class Tilemap {
 
                 // TODO warn if tile size mismatches?
                 this.tile_ids[x][y] = tile_id;
+                this.tile_dirty[x][y] = true;
                 this.sync_tiles();
         }
 
@@ -79,7 +90,7 @@ class Tilemap {
                 for(let x = 0; x < this.width; x++) {
                         for(let y = 0; y < this.height; y++) {
                                 if (!this.tile_dirty[x][y]) continue;
-                                this.tile_dirty[x][y] = true;
+                                this.tile_dirty[x][y] = false;
 
                                 const tile = video.get_tile(this.tile_ids[x][y]);
                                 //console.log(`Tile: ${tile} @ ${x}, ${y}`);
