@@ -47,6 +47,10 @@ class Tilemap {
                 return this.width * this.tile_size;
         }
 
+        public has_tile_coordinate(x: number, y: number) {
+                return x >= 0 && x < this.width && y >= 0 && y < this.height;
+        }
+
         public randomize() {
                 for (let x = 0; x < this.width; x++) {
                         for (let y = 0; y < this.height; y++) {
