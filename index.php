@@ -7,7 +7,7 @@
         <title>retcon.js</title>
 </head>
 
-<body onload="retconjs_init(8);">
+<body onload="LowRezJam.init()">
         <canvas id="retcon" width="1" height="1">
                 Sorry, your browser must support canvas to play this game.
         </canvas>

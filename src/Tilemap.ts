@@ -33,8 +33,6 @@ class Tilemap {
                         this.tile_dirty[x] = new Array<boolean>(height);
                         this.tile_ids[x] = new Array<number>(height);
                 }
-
-                this.randomize();
         }
 
         public blit(target_surface: Surface) {
@@ -83,6 +81,8 @@ class Tilemap {
         }
 
         private sync_tiles() {
+                if(!Video.is_initialized()) return;
+
                 const video = Video.get_instance();
                 const palette = video.get_palette(this.palette_id);
                 //console.log(`Tile IDs: ${this.tile_ids}`);

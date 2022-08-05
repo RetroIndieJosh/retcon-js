@@ -1,0 +1,42 @@
+{
+        "title": "LOWREZJAM 2022 by Joshua McLean",
+        "comment": "All numbers are in hex",
+        "tile_size": 8,
+        "colors-comment": "[color (3)] for each color",
+        "colors": "000F000F000FFFF",
+        "palettes-comment": [
+                "for sprites, the first palette index is always 'clear' regardless of what color we put in",
+                "[color count (1)][color ID (1) for each color]"
+        ],
+        "palettes": [
+                "00",
+                "01",
+                "02",
+                "03",
+                "04"
+        ],
+        "tiles-comment": "[color ID (1) for each pixel]",
+        "tiles": [
+                "0000000000000000000000000000000000000000000000000000000000000000",
+                "0000000001111110011111100111111001111110011111100111111000000000",
+                "0000000000000000000000000001100000011000000000000000000000000000",
+                "0001100000111100011111101111111111111111011111100011110000011000",
+                "1111111111111111111111111111111111111111111111111111111111111111"
+        ],
+        "tilesets": [
+                "0001"
+        ],
+        "tilemaps": [
+                {
+                        "comment": "[tileset (1)][palette (1)][width (2)][height (2)][tile ID (1) for each tile",
+                        "tiles": "000F0811111111111111111001100000111101100000000000110110001100000000011000000000011001100111000001100110111100000110011111111111111111"
+                },
+                {
+                        "tiles": "0001012"
+                }
+        ],
+        "sprites-comment": "tilemap ID",
+        "sprites": [
+                "1"
+        ]
+}

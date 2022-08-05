@@ -17,6 +17,10 @@ class Video extends Surface
         private sprite_list: Array<Sprite> = new Array<Sprite>();
         private tile_list: Array<Tile> = new Array<Tile>();
 
+        public static is_initialized(): boolean {
+                return Video.instance != undefined;
+        }
+
         public static get_instance(): Video {
                 if (Video.instance == undefined) {
                         throw new Error("Tried to get video but it was not initialized");

@@ -25,7 +25,8 @@
                 "retcon.ts",
                 "Test.ts",
                 "metronome/metronome.ts",
-                "metronome/metronomeworker.ts"
+                "metronome/metronomeworker.ts",
+                "LowRezJam.ts"
         ],
         "$schema": "https://json.schemastore.org/tsconfig",
         "display": "Recommended"

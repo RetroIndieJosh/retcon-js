@@ -26,10 +26,9 @@ class GameData {
         public tilemaps: Array<TilemapData> = new Array<TilemapData>();
 }
 
-function retconjs_init(scale: number, debug: boolean = false): void {
+function retconjs_init(scale: number, game_path: string,  on_done: () => void, debug: boolean = false): void {
         Input.initialize();
-
-        fetch("./game/sample.json").then(res => res.json()).then(res => retconjs_load_game(res, scale, debug));
+        fetch(game_path).then(res => res.json()).then(res => retconjs_load_game(res, scale, debug)).then(_ => on_done());
 }
 
 function retconjs_load_game(game_data: GameData, scale: number, debug: boolean) {
@@ -48,9 +47,11 @@ function retconjs_load_game(game_data: GameData, scale: number, debug: boolean) 
         });
 
         // load tilemap background
+        /*
         const tiles = new Tilemap(8, 8, 8, 1);
         video.add_background(tiles);
         tiles.set_all(0);
+        */
 
         Video.start();
 

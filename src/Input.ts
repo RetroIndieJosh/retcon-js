@@ -24,6 +24,10 @@ class Input {
                 this.key_states = new Map<string, KeyState>();
         }
 
+        public static add_key_updater(func: (_: KeyboardEvent) => void ) {
+                document.addEventListener('keydown', func);
+        }
+
         public static clear() {
                 /*
                 console.log("Pressed this frame: ");
