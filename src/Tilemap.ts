@@ -47,6 +47,14 @@ class Tilemap {
                 return this.width * this.tile_size;
         }
 
+        public get_tile_height(): number {
+                return this.height;
+        }
+
+        public get_tile_width(): number {
+                return this.width;
+        }
+
         public has_tile_coordinate(x: number, y: number) {
                 return x >= 0 && x < this.width && y >= 0 && y < this.height;
         }
