@@ -28,14 +28,15 @@ class Video extends Surface
         public static start() {
                 if (Video.instance == undefined) return;
 
+                const video: Video = Video.get_instance();
                 setInterval(function () {
-                        let instance: Video = Video.get_instance();
-                        if (instance == undefined) return;
+                        video.clear(0);
+                        video.background_list.forEach(background => background.blit(video));
+                        video.sprite_list.forEach(sprite => sprite.blit(video));
+                        video.render();
 
-                        instance.clear(0);
-                        instance.background_list.forEach(background => background.blit(instance));
-                        instance.sprite_list.forEach(sprite => sprite.blit(instance));
-                        instance.render();
+                        // TODO this should probably not be handling input
+                        Input.clear();
                 }, 1000 / 60);
         }
 

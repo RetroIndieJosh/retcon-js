@@ -23,6 +23,7 @@
                         <button onclick="retconjs_test_decrease_move_speed();">Decrease Move Speed</button>
                         <button onclick="retconjs_test_music();">Test Music</button>
                         <button onclick="retconjs_test_metronome();">Test Metronome</button>
+                        <button onclick="retconjs_test_input();">Test Input</button>
                 </div>
         </div>
         <canvas id="retcon" width="1" height="1" class="test-canvas">

@@ -125,3 +125,8 @@ function retconjs_test_sprite_move_random(): void {
         console.info(`Test ${sprite_move}: Moving sprite randomly for ${TEST_LENGTH} seconds`);
         retconjs_set_timeout_sprite_test(sprite, sprite_move);
 }
+
+function retconjs_test_input(): void {
+        const input = new Input();
+        console.log("Awaiting input");
+}

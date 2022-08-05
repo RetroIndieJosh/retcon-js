@@ -21,6 +21,7 @@
                 "Tile.ts",
                 "Tilemap.ts",
                 "Sprite.ts",
+                "Input.ts",
                 "retcon.ts",
                 "Test.ts",
                 "metronome/metronome.ts",
