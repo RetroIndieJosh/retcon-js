@@ -6,11 +6,19 @@ class Coord {
                 this.x = x;
                 this.y = y;
         }
+
+        public equals(other_coord: Coord): boolean {
+                return this.x == other_coord.x && this.y == other_coord.y;
+        }
+
+        public floor(): Coord {
+                return new Coord(Math.floor(this.x), Math.floor(this.y));
+        }
 }
 
 class Actor {
         // tile position
-        public position: Coord = {x: -1, y: -1};
+        public position: Coord = new Coord(-1, -1);
         public tile_id: number = -1;
 
         public draw(tilemap: Tilemap): void {
@@ -25,8 +33,7 @@ class Actor {
         }
 
         public is_at(position: Coord) : boolean {
-                // TODO do an equals in the class
-                return this.position.x == position.x && this.position.y == position.y;
+                return this.position.floor().equals(position.floor());
         }
 
         public move(x_move: number, y_move: number, tilemap: Tilemap) {
@@ -97,10 +104,9 @@ class LowRezJam {
                 LowRezJam.instance = this;
         }
 
-        private clear_tile(x: number, y: number) {
-                x = Math.floor(x);
-                y = Math.floor(y);
-                LowRezJam.instance.tilemap.set_tile(x, y, 0);
+        private clear_tile(position: Coord) {
+                const position_floor = position.floor();
+                LowRezJam.instance.tilemap.set_tile(position_floor.x, position_floor.y, 0);
         }
 
         private get_unoccupied_tile(): Coord | null {
@@ -109,9 +115,9 @@ class LowRezJam {
 
                 let coord = new Coord(0, 0);
                 while(true) {
-                        coord.x = Math.floor(Math.random() * this.tilemap.get_tile_width());
-                        coord.y = Math.floor(Math.random() * this.tilemap.get_tile_height());
-                        if(!this.is_occupied(coord)) return coord;
+                        coord.x = Math.random() * this.tilemap.get_tile_width();
+                        coord.y = Math.random() * this.tilemap.get_tile_height();
+                        if(!this.is_occupied(coord)) return coord.floor();
                 }
         }
 
@@ -129,8 +135,9 @@ class LowRezJam {
 
                 const game = LowRezJam.instance;
 
-                game.clear_tile(game.player.position.x, game.player.position.y);
+                game.clear_tile(game.player.position);
 
+                // TODO send list of door tile positions as "list of solids" to prevent movement into them
                 if(Input.key_pressed_this_frame("ArrowLeft") || Input.key_pressed_this_frame("a"))
                         game.player.move(-1, 0, game.tilemap);
                 else if(Input.key_pressed_this_frame("ArrowRight") || Input.key_pressed_this_frame("d"))
