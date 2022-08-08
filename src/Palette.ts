@@ -7,9 +7,16 @@ class Palette {
                         const hex = `0x${ch}`;
                         this.color_ids.push(Number(hex));
                 }
-                
-                console.log(`Palette: ${this.color_ids}`)
-                this.color_ids.forEach(color_id => { console.log(`=> ${Video.get_color(color_id)}`); });
+        }
+
+        public log() {
+                console.info(`Palette with ${this.color_ids.length} colors`);
+                for (let i = 0; i < this.color_ids.length; i++)
+                        console.info(`    ${i} => ${this.color_ids[i]}`);
+        }
+
+        public color_count() {
+                return this.color_ids.length;
         }
 
         // convert an index in the list of palette colors to index in the Video colors

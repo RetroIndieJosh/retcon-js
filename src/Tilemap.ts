@@ -59,6 +59,19 @@ class Tilemap {
                 return x >= 0 && x < this.width && y >= 0 && y < this.height;
         }
 
+        public log() {
+                let msg = "";
+                for (let y = 0; y < this.height; y++) {
+                        for (let x = 0; x < this.width; x++) {
+                                msg += `${this.tile_ids[x][y]}`;
+                        }
+                        msg += "\n";
+                }
+
+                console.info(`Tilemap ${this.width}x${this.height} tiles at ${this.x}, ${this.y}`);
+                console.info(msg);
+        }
+
         public randomize() {
                 for (let x = 0; x < this.width; x++) {
                         for (let y = 0; y < this.height; y++) {

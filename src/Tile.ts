@@ -20,8 +20,19 @@ class Tile {
                                 index++;
                         }
                 }
+        }
 
-                console.info(`Tile size ${this.size}: ${tile_data}`);
+        public log() {
+                let msg = "";
+                for (let y = 0; y < this.size; y++) {
+                        for (let x = 0; x < this.size; x++) {
+                                msg += `${this.color_ids[x][y]} `;
+                        }
+                        msg += "\n";
+                }
+
+                console.info(`Tile size ${this.size}`);
+                console.info(msg);
         }
 
         public blit(surface: Surface, palette: Palette, left: number, top: number, opaque: boolean, wrap: boolean) {

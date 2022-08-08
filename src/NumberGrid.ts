@@ -126,11 +126,13 @@ class NumberGrid {
 
                 value = Math.floor(value);
 
+                // TODO should be after skip below to avoid rerender, but fixes issues with Video surface initial render
+                this.changed[x][y] = true;
+
                 // skip same color draws
                 if (this.values[x][y] == value) return;
 
                 this.values[x][y] = value;
-                this.changed[x][y] = true;
         }
 }
 

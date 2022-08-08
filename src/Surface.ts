@@ -56,12 +56,20 @@ class Surface {
                 return this.pixels.get(x, y);
         }
 
+        public get_height(): number {
+                return this.pixels.get_height();
+        }
+
+        public get_width(): number {
+                return this.pixels.get_width();
+        }
+
         public randomize_pixels() {
                 this.pixels.randomize();
         }
 
-        public render() {
-                this.pixels.for_each((x, y, color) => Video.put_pixel(x, y, color));
+        public render(only_changed = true) {
+                this.pixels.for_each((x, y, color) => Video.put_pixel(x, y, color, only_changed));
                 this.reset_changed();
         }
 

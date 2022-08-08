@@ -43,17 +43,23 @@ class Video
                 // load colors
                 const color_string_list = color_string.match(/.{1,3}/g);
                 color_string_list?.forEach(color_string => Video.color_list.push(`#${color_string}`));
-                console.log(`Colors: ${Video.color_list}`);
+                console.info("Colors:");
+                for (let i = 0; i < Video.color_list.length; i++) 
+                        console.info(`    #${i} => ${Video.color_list[i]}`);
 
                 Video.surface.randomize_pixels();
+
+                Video.initialized = true;
+        }
+
+        private static clear() {
+                Video.surface.clear(Video.clear_color);
+                Video.surface.render();
         }
 
         // TODO move to private, add to frame action list
         private static render() {
-                Video.surface.clear(Video.clear_color);
-                Video.surface.render();
-
-                // TODO these should always redraw because surface is cleared 
+                Video.clear();
                 Video.background_list.forEach(background => background.blit(Video.surface));
                 Video.sprite_list.forEach(sprite => sprite.blit(Video.surface));
                 Video.surface.render();
@@ -74,13 +80,20 @@ class Video
                 Video.background_list.push(background);
         }
 
+                // TODO prevent duplication
+                // TODO return index
         public static add_palette(palette: Palette) {
+                console.info(`Add palette #${Video.palette_list.length}`);
+                palette.log();
                 // TODO prevent duplication
                 Video.palette_list.push(palette);
         }
 
-        public static add_tile(tile: Tile) {
                 // TODO prevent duplication
+                // TODO return index
+        public static add_tile(tile: Tile) {
+                console.info(`Add tile #${Video.tile_list.length}`);
+                tile.log();
                 Video.tile_list.push(tile);
         }
 
@@ -91,8 +104,10 @@ class Video
                         return -1;
                 }
 
+                let id = Video.sprite_list.length;
                 Video.sprite_list.push(sprite);
-                return Video.sprite_list.length - 1;
+                sprite.log();
+                return id;
         }
 
         public static color_count(): number {
@@ -160,7 +175,20 @@ class Video
         }
 
         public static randomize(): void {
-                Video.surface.randomize_pixels();
+                //Video.surface.randomize_pixels();
+                for (let x = 0; x < Video.surface.get_width(); x++) {
+                        for (let y = 0; y < Video.surface.get_height(); y++) {
+                                //const color = Math.floor(Math.random() * Video.color_list.length;
+                                const palette = Video.get_palette(Math.floor(Math.random() * Video.palette_list.length));
+                                const color = Math.floor(Math.random() * palette.color_count());
+
+                                // TODO this works fine
+                                //Video.put_pixel(x, y, color);
+
+                                // TODO this works only if numbergrid marks same color draws as dirty
+                                Video.surface.set_pixel(x, y, color);
+                        }
+                }
         }
 
         // returns whether the sprite was removed
