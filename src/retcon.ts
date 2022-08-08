@@ -28,7 +28,12 @@ class GameData {
 
 function retconjs_init(scale: number, game_path: string,  on_done: () => void, debug: boolean = false): void {
         Input.initialize();
-        fetch(game_path).then(res => res.json()).then(res => retconjs_load_game(res, scale, debug)).then(_ => on_done());
+        fetch(game_path)
+                .then(res => res.json())
+                .then(res => retconjs_load_game(res, scale, debug))
+                .then(_ => {
+                        if (on_done != null) on_done()
+                });
 }
 
 function retconjs_load_game(game_data: GameData, scale: number, debug: boolean) {

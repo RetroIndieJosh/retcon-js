@@ -60,6 +60,11 @@ class Surface {
                 this.pixels.randomize();
         }
 
+        public render() {
+                this.pixels.for_each((x, y, color) => Video.put_pixel(x, y, color));
+                this.reset_changed();
+        }
+
         public reset_changed() {
                 // TODO rename to reset_changed
                 this.pixels.clear_changed();

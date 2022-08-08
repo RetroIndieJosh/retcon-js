@@ -48,14 +48,19 @@ class Video
                 Video.surface.randomize_pixels();
         }
 
-        public static start(): void {
-                // for initial draw we ignore unchanged pixels 
-                Video.render(false);
+        // TODO move to private, add to frame action list
+        private static render() {
+                Video.surface.clear(Video.clear_color);
+                Video.surface.render();
 
+                // TODO these should always redraw because surface is cleared 
+                Video.background_list.forEach(background => background.blit(Video.surface));
+                Video.sprite_list.forEach(sprite => sprite.blit(Video.surface));
+                Video.surface.render();
+        }
+
+        public static start(): void {
                 setInterval(function () {
-                        Video.surface.clear(0);
-                        Video.background_list.forEach(background => background.blit(Video.surface));
-                        Video.sprite_list.forEach(sprite => sprite.blit(Video.surface));
                         Video.render();
 
                         // TODO Video should probably not be handling input
@@ -140,6 +145,20 @@ class Video
                 return Video.tile_list[tile_id];
         }
 
+        public static put_pixel(x: number, y: number, color: number, only_changed = true) {
+                if (only_changed && color == NUMBER_UNCHANGED) return;
+
+                const scale = Video.scale;
+                if (scale == undefined) return;
+
+                x = Math.floor(x);
+                y = Math.floor(y);
+                color = Math.floor(color);
+
+                Video.ctx.fillStyle = Video.get_color(color);
+                Video.ctx.fillRect(x * scale, y * scale, scale, scale);
+        }
+
         public static randomize(): void {
                 Video.surface.randomize_pixels();
         }
@@ -166,27 +185,6 @@ class Video
                 return true;
         }
 
-        public static sprite_count() : number { return Video.sprite_list.length; }
-
-        public static render(ignore_unchanged = true) {
-                if (Video.scale == undefined) return;
-
-                const scale = Video.scale;
-                const pixels = Video.surface.copy_pixels();
-                let changed = 0;
-                pixels.for_each((x, y, value) => {
-                        if (value == NUMBER_UNCHANGED && ignore_unchanged) {
-                                return;
-                        }
-                        changed++;
-                        Video.ctx.fillStyle = Video.get_color(value);
-                        Video.ctx.fillRect(x * scale, y * scale, scale, scale);
-                });
-                console.log(`${changed} pixels changed`);
-
-                this.surface.reset_changed();
-        }
-
         public static set_clear_color(color_id: number, clear: boolean = true) {
                 Video.clear_color = color_id;
                 if(clear) Video.surface.clear(Video.clear_color);
@@ -195,4 +193,6 @@ class Video
         private static has_sprite(sprite: Sprite): boolean {
                 return Video.sprite_list.indexOf(sprite) >= 0;
         }
+
+        public static sprite_count() : number { return Video.sprite_list.length; }
 } 

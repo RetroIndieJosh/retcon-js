@@ -26,18 +26,12 @@ class NumberGrid {
                 this.randomize();
         }
 
-        public apply_each(func: (x: number, y: number, self: NumberGrid) => void) {
+        public clear_changed() {
                 for (let x = 0; x < this.width; x++) {
                         for (let y = 0; y < this.height; y++) {
-                                // TODO does this send a copy and not a reference?
-                                func(x, y, this);
+                                this.changed[x][y] = false;
                         }
                 }
-        }
-
-        public clear_changed() {
-                // TODO apply each doesn't work?
-                this.apply_each((x, y, self) => this.changed[x][y] = false);
         }
 
         public copy(): NumberGrid {
@@ -79,7 +73,11 @@ class NumberGrid {
         }
 
         public randomize(): void {
-                this.apply_each((x, y, self) => self.values[x][y] = self.random_value());
+                for (let x = 0; x < this.width; x++) {
+                        for (let y = 0; y < this.height; y++) {
+                                this.values[x][y] = this.random_value();
+                        }
+                }
         }
 
         public random_value() {
@@ -95,8 +93,6 @@ class NumberGrid {
         }
 
         public set(x: number, y: number, value: number, wrap: boolean) {
-                if (this.values[x][y] == value) return;
-
                 x = Math.floor(x);
                 y = Math.floor(y);
 
@@ -129,6 +125,10 @@ class NumberGrid {
                 }
 
                 value = Math.floor(value);
+
+                // skip same color draws
+                if (this.values[x][y] == value) return;
+
                 this.values[x][y] = value;
                 this.changed[x][y] = true;
         }
