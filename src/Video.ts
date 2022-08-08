@@ -19,10 +19,14 @@ class Video
 
         private static initialized = false;
 
+        private static frames_per_second_target = 60;
+
         public static is_initialized(): boolean {
                 return Video.initialized;
         }
 
+        // TODO separate loading colors so this isn't so loaded
+        // TODO also set canvas, width, height, scale separately ?
         public static initialize(canvas_id: string, width: number, height: number, scale: number, color_string: string): void {
                 Video.surface = new Surface(width, height);
 
@@ -52,6 +56,16 @@ class Video
                 Video.initialized = true;
         }
 
+        // TODO test
+        public static set_framerate(fps: number) {
+                if (Video.started) {
+                        console.warn("Cannot modify framerate while video is running!");
+                        return;
+                }
+
+                Video.frames_per_second_target = fps;
+        }
+
         private static clear() {
                 Video.surface.clear(Video.clear_color);
                 Video.surface.render();
@@ -65,13 +79,22 @@ class Video
                 Video.surface.render();
         }
 
+        private static started = false;
+
         public static start(): void {
+                if (Video.started) {
+                        console.warn("Tried to start video, but it's already running");
+                        return;
+                }
+
+                Video.started = true;
+
                 setInterval(function () {
                         Video.render();
 
                         // TODO Video should probably not be handling input
                         Input.clear();
-                }, 1000 / 60);
+                }, 1000 / Video.frames_per_second_target);
         }
 
         // TODO 

@@ -2,7 +2,6 @@
  
 ## Engine
 
-- set custom frames per second
 - `add_frame_event` instead of having input update in Video
   - frame management independent of video (refreshing is a frame event)
 - tile viewer
