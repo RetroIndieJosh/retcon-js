@@ -29,19 +29,32 @@ class NumberGrid {
         public apply_each(func: (x: number, y: number, self: NumberGrid) => void) {
                 for (let x = 0; x < this.width; x++) {
                         for (let y = 0; y < this.height; y++) {
+                                // TODO does this send a copy and not a reference?
                                 func(x, y, this);
                         }
                 }
         }
 
         public clear_changed() {
+                // TODO apply each doesn't work?
                 this.apply_each((x, y, self) => this.changed[x][y] = false);
+        }
+
+        public copy(): NumberGrid {
+                let copy_grid = new NumberGrid(this.width, this.height, this.min, this.max);
+                for (let x = 0; x < this.width; x++) {
+                        for (let y = 0; y < this.height; y++) {
+                                copy_grid.changed[x][y] = this.changed[x][y];
+                                copy_grid.values[x][y] = this.values[x][y];
+                        }
+                }
+                return copy_grid;
         }
 
         public for_each(func: (x: number, y: number, value: number) => void) {
                 for (let x = 0; x < this.width; x++) {
                         for (let y = 0; y < this.height; y++) {
-                                func(x, y, this.values[x][y]);
+                                func(x, y, this.get(x, y));
                         }
                 }
         }
@@ -49,6 +62,7 @@ class NumberGrid {
         public get(x: number, y: number) {
                 x = Math.floor(x);
                 y = Math.floor(y);
+                // TODO fix usage of changed ("dirty") - no idea what the issue is
                 if(this.changed[x][y])
                         return this.values[x][y];
                 return NUMBER_UNCHANGED;
@@ -81,6 +95,8 @@ class NumberGrid {
         }
 
         public set(x: number, y: number, value: number, wrap: boolean) {
+                if (this.values[x][y] == value) return;
+
                 x = Math.floor(x);
                 y = Math.floor(y);
 

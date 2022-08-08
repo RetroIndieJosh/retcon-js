@@ -1,3 +1,4 @@
+// TODO integrate in engine
 class Coord {
         public x: number = -1;
         public y: number = -1;
@@ -16,6 +17,7 @@ class Coord {
         }
 }
 
+// TODO integrate in engine
 class Actor {
         // tile position
         public position: Coord = new Coord(-1, -1);
@@ -48,6 +50,7 @@ class Actor {
         }
 }
 
+// TODO static?
 class LowRezJam {
         private static instance: LowRezJam;
 
@@ -55,6 +58,7 @@ class LowRezJam {
         private player: Actor;
         private tilemap: Tilemap;
 
+        // TODO game path
         public static init(): void {
                 retconjs_init(8, "game/lowrezjam.json", () => new LowRezJam());
         }
@@ -67,7 +71,7 @@ class LowRezJam {
 
                 this.tilemap = new Tilemap(8, 8, 8, 1);
                 this.tilemap.set_all(0);
-                Video.get_instance().add_background(this.tilemap);
+                Video.add_background(this.tilemap);
 
                 // initialize objects
 

@@ -25,7 +25,6 @@ class Tile {
         }
 
         public blit(surface: Surface, palette: Palette, left: number, top: number, opaque: boolean, wrap: boolean) {
-                const video = Video.get_instance();
                 for (let x = 0; x < this.size; x++) {
                         for (let y = 0; y < this.size; y++) {
                                 const xx = x + left;

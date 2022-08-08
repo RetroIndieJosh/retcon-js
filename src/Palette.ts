@@ -9,7 +9,7 @@ class Palette {
                 }
                 
                 console.log(`Palette: ${this.color_ids}`)
-                this.color_ids.forEach(color_id => { console.log(`=> ${Video.get_instance().get_color(color_id)}`); });
+                this.color_ids.forEach(color_id => { console.log(`=> ${Video.get_color(color_id)}`); });
         }
 
         // convert an index in the list of palette colors to index in the Video colors

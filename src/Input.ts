@@ -29,14 +29,6 @@ class Input {
         }
 
         public static clear() {
-                /*
-                console.log("Pressed this frame: ");
-                for (const entry of this.key_states.entries()) {
-                        if(entry[1].pressed_this_frame)
-                                console.log(`=> ${entry[0]}`);
-                }
-                */
-
                 this.key_states.forEach(key_state => key_state.pressed_this_frame = false);
         }
 

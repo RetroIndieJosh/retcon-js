@@ -95,8 +95,7 @@ class Tilemap {
         private sync_tiles() {
                 if(!Video.is_initialized()) return;
 
-                const video = Video.get_instance();
-                const palette = video.get_palette(this.palette_id);
+                const palette = Video.get_palette(this.palette_id);
                 //console.log(`Tile IDs: ${this.tile_ids}`);
                 //console.log(`Video: ${video} / Palette: ${palette} / Size: ${this.width}, ${this.height}`);
                 for(let x = 0; x < this.width; x++) {
@@ -104,7 +103,7 @@ class Tilemap {
                                 if (!this.tile_dirty[x][y]) continue;
                                 this.tile_dirty[x][y] = false;
 
-                                const tile = video.get_tile(this.tile_ids[x][y]);
+                                const tile = Video.get_tile(this.tile_ids[x][y]);
                                 //console.log(`Tile: ${tile} @ ${x}, ${y}`);
                                 // TODO  make sure we don't draw clear
                                 tile.blit(this.surface, palette, x * this.tile_size, y * this.tile_size, this.opaque, this.wrap);

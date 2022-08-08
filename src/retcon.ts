@@ -32,18 +32,18 @@ function retconjs_init(scale: number, game_path: string,  on_done: () => void, d
 }
 
 function retconjs_load_game(game_data: GameData, scale: number, debug: boolean) {
-        const video = new Video('retcon', 64, 64, scale, game_data.colors);
+        Video.initialize('retcon', 64, 64, scale, game_data.colors);
 
         // load palettes
         game_data.palettes.forEach(palette_data => {
                 const palette = new Palette(palette_data);
-                video.add_palette(palette);
+                Video.add_palette(palette);
         });
 
         // load tiles (TODO from game data)
         game_data.tiles.forEach(tile_data => {
                 const tile = new Tile(tile_data);
-                video.add_tile(tile);
+                Video.add_tile(tile);
         });
 
         // load tilemap background
@@ -58,7 +58,7 @@ function retconjs_load_game(game_data: GameData, scale: number, debug: boolean) 
         if(!debug) return;
 
         console.info(`Starting game ${game_data.title} with:\n`
-                + `${Video.get_instance().color_count()} colors\n`
+                + `${Video.color_count()} colors\n`
                 + `${game_data.palettes.length} palettes\n`
                 + `${game_data.tiles.length} tiles\n`
                 + `${game_data.tilesets.length} tilesets\n`
@@ -68,7 +68,7 @@ function retconjs_load_game(game_data: GameData, scale: number, debug: boolean) 
         setInterval(() => {
                 let sprite_count_element = document.getElementById("sprite-count");
                 if(sprite_count_element == null) return;
-                sprite_count_element.innerHTML = `${Video.get_instance().sprite_count()}`;
+                sprite_count_element.innerHTML = `${Video.sprite_count()}`;
 
                 let move_speed_element = document.getElementById("move-speed");
                 if(move_speed_element == null) return;

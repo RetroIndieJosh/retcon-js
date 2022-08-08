@@ -47,8 +47,8 @@ class Surface {
                 this.pixels.set_all(color_id, false);
         }
 
-        public draw() {
-                Video.get_instance().blit(this, 0, 0, false);
+        public copy_pixels(): NumberGrid {
+                return this.pixels.copy();
         }
 
         // TODO shouldn't need this
@@ -56,9 +56,13 @@ class Surface {
                 return this.pixels.get(x, y);
         }
 
-
         public randomize_pixels() {
                 this.pixels.randomize();
+        }
+
+        public reset_changed() {
+                // TODO rename to reset_changed
+                this.pixels.clear_changed();
         }
 
         public set_pixel(x: number, y: number, color_id: number, wrap: boolean = false) {

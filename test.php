@@ -7,7 +7,8 @@
         <title>retcon.js - tests</title>
 </head>
 
-<body onload="retconjs_init(5, true);">
+<!--TODO this should be test.json-->
+<body onload="retconjs_init(5, 'game/sample.json', true);">
         <h1 style="text-align:center;">RetConJS Testing</h1>
         <div class="menu-container">
                 <div class="button-container">

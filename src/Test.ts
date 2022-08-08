@@ -15,13 +15,13 @@ function retconjs_test_increase_move_speed() {
 
 function retconjs_test_clear_black(): void {
         console.info("Clear to black");
-        Video.get_instance().set_clear_color(0);
+        Video.set_clear_color(0);
 }
 
 function retconjs_test_clear_random(): void {
         console.info("clear to random colors");
         // TODO limit to number of colors in game palette
-        Video.get_instance().set_clear_color(Math.floor(Math.random() * 5));
+        Video.set_clear_color(Math.floor(Math.random() * 5));
 }
 
 function retconjs_test_metronome(): void {
@@ -48,7 +48,7 @@ function retconjs_test_music(): void {
 }
 
 function retconjs_test_clear_sprites(): void {
-        const video = Video.get_instance();
+        const video = Video;
         while(video.sprite_count() > 0)
                 video.remove_sprite_at(0);
         video.set_clear_color(0);
@@ -56,7 +56,7 @@ function retconjs_test_clear_sprites(): void {
 
 function retconjs_test_pixels(): void {
         console.info("clear to randomized pixels");
-        Video.get_instance().randomize_pixels();
+        Video.randomize();
 }
 
 function retconjs_test_sprite(): Sprite {
@@ -65,7 +65,7 @@ function retconjs_test_sprite(): Sprite {
         sprite.y = Math.floor(Math.random() * 64);
 
         console.info(`Add sprite at ${sprite.x}, ${sprite.y}`);
-        Video.get_instance().add_sprite(sprite);
+        Video.add_sprite(sprite);
 
         return sprite;
 }
@@ -89,7 +89,7 @@ function retconjs_test_sprite_move_horizontal(): void {
 
 function retconjs_set_timeout_sprite_test(sprite: Sprite, test_id: number) {
         setTimeout(() => {
-                Video.get_instance().remove_sprite(sprite);
+                Video.remove_sprite(sprite);
                 clearInterval(test_id);
                 console.info(`Test ${test_id} concluded`);
         }, 1000 * TEST_LENGTH);
