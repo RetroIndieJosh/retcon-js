@@ -134,3 +134,45 @@ class NumberGrid {
         }
 }
 
+function rcj_test_numbergrid(): void {
+        const size = 256;
+        const tile_count = 8;
+        
+        let grid = new NumberGrid(Coord.one().scale_square(size), 0, tile_count);
+
+        for (let i = 0; i < tile_count; i++) {
+                grid.set_all(i, false);
+                for (let pos = Coord.zero(); pos.x < size; pos.x++) {
+                        for (pos.y = 0; pos.y < size; pos.y++) {
+                                rcj_assert_equals(grid.get(pos), i);
+                        }
+                }
+        }
+
+        // TODO test set single value
+        grid.set_all(0, false);
+        for (let i = 0; i < size; i++) {
+                const pos = Coord.random(new Coord(0, 0), new Coord(size, size));
+                grid.set(pos, 1, false);
+                rcj_assert_equals(1, grid.get(pos));
+        }
+
+        // test wrap
+        grid.set_all(0, false);
+        for (let pos = new Coord(size, size); pos.x < size * 2; pos.x++) {
+                for (pos.y = size; pos.y < size * 2; pos.y++) {
+                        grid.set(pos, 1, true);
+                }
+        }
+        for (let pos = Coord.zero(); pos.x < size; pos.x++) {
+                for (pos.y = 0; pos.y < size; pos.y++) {
+                        rcj_assert_equals(grid.get(pos), 1);
+                }
+        }
+
+        // TODO test clip (make sure to uncomment it at L128)
+        // TODO test copy
+        // TODO test for_each
+
+        console.log("NumberGrid test complete");
+}

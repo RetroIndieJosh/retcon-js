@@ -11,6 +11,11 @@ class Coord {
         public static right() { return new Coord(1, 0); }
         public static up() { return new Coord(0, -1); }
 
+        // new Coord in range [min, max)
+        public static random(min: Coord, max: Coord): Coord {
+                return new Coord(Math.random() * max.x + min.x, Math.random() * max.y + min.y)
+        }
+
         constructor(x: number, y: number) {
                 this.x = x;
                 this.y = y;
@@ -68,11 +73,7 @@ class Coord {
         }
 }
 
-let fail_count = 0;
-
 function rcj_test_coords() {
-        fail_count = 0;
-
         rcj_test_coord(Coord.zero(), 0, 0);
         rcj_test_coord(Coord.one(), 1, 1);
         rcj_test_coord(Coord.zero().add(Coord.one()), 1, 1);
@@ -111,8 +112,6 @@ function rcj_test_coords() {
         rcj_assert_true(pos.add(pos2).equals(pos2.add(pos)));
 
         console.log("Coord test done");
-        if (fail_count == 0) console.log("Success!");
-        else console.log(`${fail_count} failure(s)`);
 }
 
 function rcj_test_coord(pos: Coord, x: number, y: number): number {
@@ -120,20 +119,4 @@ function rcj_test_coord(pos: Coord, x: number, y: number): number {
         if (!rcj_assert_equals(x, pos.x)) fail_count++;
         if (!rcj_assert_equals(y, pos.y)) fail_count++;
         return fail_count;
-}
-
-function rcj_assert_false(actual: boolean): boolean {
-        return rcj_assert_equals(false, actual);
-}
-
-function rcj_assert_true(actual: boolean): boolean {
-        return rcj_assert_equals(true, actual);
-}
-
-function rcj_assert_equals<T>(expected: T, actual: T): boolean {
-        if (expected == actual) return true;
-
-        console.error(`Assertion failed: Expected value  ${expected}, actual ${actual}`);
-        fail_count++;
-        return false;
 }

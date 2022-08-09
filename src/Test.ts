@@ -5,6 +5,34 @@
 const TEST_LENGTH = 15;
 let move_speed = 1;
 
+let fail_count = 0;
+
+function rcj_assert_false(actual: boolean): boolean {
+        return rcj_assert_equals(false, actual);
+}
+
+function rcj_assert_true(actual: boolean): boolean {
+        return rcj_assert_equals(true, actual);
+}
+
+function rcj_assert_equals<T>(expected: T, actual: T): boolean {
+        if (expected == actual) return true;
+
+        console.error(`Assertion failed: Expected value  ${expected}, actual ${actual}`);
+        fail_count++;
+        return false;
+}
+
+function rcj_unit_tests() {
+        fail_count = 0;
+
+        rcj_test_coords();
+        rcj_test_numbergrid();
+
+        if (fail_count == 0) console.log("Success!");
+        else console.log(`${fail_count} failure(s)`);
+}
+
 function retconjs_test_decrease_move_speed() {
         move_speed -= 1;
 }
