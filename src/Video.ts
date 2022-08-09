@@ -18,6 +18,7 @@ class Video
         private static surface: Surface;
 
         private static initialized = false;
+        private static started = false;
 
         private static frames_per_second_target = 60;
 
@@ -56,16 +57,6 @@ class Video
                 Video.initialized = true;
         }
 
-        // TODO test
-        public static set_framerate(fps: number) {
-                if (Video.started) {
-                        console.warn("Cannot modify framerate while video is running!");
-                        return;
-                }
-
-                Video.frames_per_second_target = fps;
-        }
-
         private static clear() {
                 Video.surface.clear(Video.clear_color);
                 Video.surface.render();
@@ -79,7 +70,16 @@ class Video
                 Video.surface.render();
         }
 
-        private static started = false;
+        // TODO test
+        public static set_framerate(fps: number) {
+                if (Video.started) {
+                        console.warn("Cannot modify framerate while video is running!");
+                        return;
+                }
+
+                Video.frames_per_second_target = fps;
+        }
+
 
         public static start(): void {
                 if (Video.started) {
