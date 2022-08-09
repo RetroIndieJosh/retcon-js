@@ -83,10 +83,10 @@ class NumberGrid {
                 return Math.floor(Math.random() * this.max) + this.min;
         }
 
-        public set_all(value: number, wrap: boolean) {
+        public set_all(value: number) {
                 for (let pos = new Coord(0, 0); pos.x < this.size.x; pos.x++) {
                         for (pos.y = 0; pos.y < this.size.y; pos.y++) {
-                                this.set(pos, value, wrap);
+                                this.set(pos, value, false);
                         }
                 }
         }
@@ -118,9 +118,9 @@ class NumberGrid {
                         }
                 } else {
                         // clip
-                        // TODO this is broken
-                        //if (!pos.is_in(Coord.zero, this.size))
-                                //return;
+                        // TODO this was broken (might be fixed)
+                        if (!pos.is_in(Coord.zero(), this.size))
+                                return;
                 }
 
                 value = Math.floor(value);
@@ -140,8 +140,9 @@ function rcj_test_numbergrid(): void {
         
         let grid = new NumberGrid(Coord.one().scale_square(size), 0, tile_count);
 
+        // test empty grid
         for (let i = 0; i < tile_count; i++) {
-                grid.set_all(i, false);
+                grid.set_all(i);
                 for (let pos = Coord.zero(); pos.x < size; pos.x++) {
                         for (pos.y = 0; pos.y < size; pos.y++) {
                                 rcj_assert_equals(grid.get(pos), i);
@@ -149,8 +150,8 @@ function rcj_test_numbergrid(): void {
                 }
         }
 
-        // TODO test set single value
-        grid.set_all(0, false);
+        // test set single value
+        grid.set_all(0);
         for (let i = 0; i < size; i++) {
                 const pos = Coord.random(new Coord(0, 0), new Coord(size, size));
                 grid.set(pos, 1, false);
@@ -158,21 +159,60 @@ function rcj_test_numbergrid(): void {
         }
 
         // test wrap
-        grid.set_all(0, false);
+        grid.set_all(0);
         for (let pos = new Coord(size, size); pos.x < size * 2; pos.x++) {
                 for (pos.y = size; pos.y < size * 2; pos.y++) {
                         grid.set(pos, 1, true);
                 }
         }
+        // since we used wrap, the entire grid should be filled
         for (let pos = Coord.zero(); pos.x < size; pos.x++) {
                 for (pos.y = 0; pos.y < size; pos.y++) {
                         rcj_assert_equals(grid.get(pos), 1);
                 }
         }
 
-        // TODO test clip (make sure to uncomment it at L128)
-        // TODO test copy
-        // TODO test for_each
+        // test clip
+        grid.set_all(0);
+        for (let pos = new Coord(size, size); pos.x < size * 2; pos.x++) {
+                for (pos.y = size; pos.y < size * 2; pos.y++) {
+                        grid.set(pos, 1, false);
+                }
+        }
+        // since we used clip, nothing in the grid should have changed
+        for (let pos = Coord.zero(); pos.x < size; pos.x++) {
+                for (pos.y = 0; pos.y < size; pos.y++) {
+                        rcj_assert_equals(grid.get(pos), 0);
+                }
+        }
+
+        // test copy
+        grid.randomize();
+        const grid2 = grid.copy();
+        for (let pos = Coord.zero(); pos.x < size; pos.x++) {
+                for (pos.y = 0; pos.y < size; pos.y++) {
+                        rcj_assert_equals(grid.get(pos), grid2.get(pos));
+                }
+        }
+
+        // test for_each
+        let count = 0;
+        grid.set_all(0);
+        let copy = grid.copy();
+        grid.set_all(1);
+
+        // this should copy all values from grid to copy without missing any
+        grid.for_each((pos, value) => {
+                copy.set(pos, value, false);
+                count++;
+        });
+
+        // check all values flagged in the copy
+        for (let pos = Coord.zero(); pos.x < size; pos.x++) {
+                for (pos.y = 0; pos.y < size; pos.y++) {
+                        rcj_assert_equals(grid.get(pos), copy.get(pos));
+                }
+        }
 
         console.log("NumberGrid test complete");
 }

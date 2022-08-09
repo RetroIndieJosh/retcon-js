@@ -21,7 +21,7 @@ class Surface {
         }
 
         public clear(color_id: number) {
-                this.pixels.set_all(color_id, false);
+                this.pixels.set_all(color_id);
         }
 
         public copy_pixels(): NumberGrid {
