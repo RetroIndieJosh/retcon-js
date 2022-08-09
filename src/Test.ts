@@ -28,6 +28,7 @@ function rcj_unit_tests() {
 
         rcj_test_coords();
         rcj_test_numbergrid();
+        rcj_test_surface();
 
         if (fail_count == 0) console.log("Success!");
         else console.log(`${fail_count} failure(s)`);

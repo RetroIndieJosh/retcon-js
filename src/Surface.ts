@@ -32,6 +32,10 @@ class Surface {
                 return this.pixels.get_height();
         }
 
+        public get_pixel(pos: Coord): number {
+                return this.pixels.get(pos);
+        }
+
         public get_size(): Coord {
                 return this.pixels.get_size();
         }
@@ -70,3 +74,14 @@ class Surface {
                 }
         }
 } 
+
+function rcj_test_surface(): void {
+        // TODO test creation
+        // TODO test set_pixel
+        // TODO test set_pixels
+        // TODO test reset_changed
+        // TODO test render
+        // TODO test clear
+        // TODO test blit
+        console.log("Surface test complete");
+}

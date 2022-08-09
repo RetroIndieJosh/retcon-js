@@ -111,7 +111,7 @@ function rcj_test_coords() {
 
         rcj_assert_true(pos.add(pos2).equals(pos2.add(pos)));
 
-        console.log("Coord test done");
+        console.log("Coord test complete");
 }
 
 function rcj_test_coord(pos: Coord, x: number, y: number): number {
