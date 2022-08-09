@@ -1,52 +1,27 @@
 // TODO integrate in engine
-class Coord {
-        public x: number = -1;
-        public y: number = -1;
-
-        constructor(x: number, y: number) {
-                this.x = x;
-                this.y = y;
-        }
-
-        public equals(other_coord: Coord): boolean {
-                return this.x == other_coord.x && this.y == other_coord.y;
-        }
-
-        public floor(): Coord {
-                return new Coord(Math.floor(this.x), Math.floor(this.y));
-        }
-}
-
-// TODO integrate in engine
 class Actor {
         // tile position
         public position: Coord = new Coord(-1, -1);
         public tile_id: number = -1;
 
         public draw(tilemap: Tilemap): void {
-                const x = Math.floor(this.position.x);
-                const y = Math.floor(this.position.y);
                 const tile_id = Math.floor(this.tile_id);
+                const position = this.position.floor();
 
-                if(!tilemap.has_tile_coordinate(x, y))
-                        return;
-
-                tilemap.set_tile(x, y, tile_id);
+                tilemap.set_tile(position, tile_id);
         }
 
         public is_at(position: Coord) : boolean {
                 return this.position.floor().equals(position.floor());
         }
 
-        public move(x_move: number, y_move: number, tilemap: Tilemap) {
-                const new_x = this.position.x + x_move;
-                const new_y = this.position.y + y_move;
+        public move(move: Coord, tilemap: Tilemap) {
+                const new_position = this.position.add(move);
 
-                if(!tilemap.has_tile_coordinate(new_x, new_y))
+                if(!tilemap.has_tile_coordinate(new_position))
                         return;
 
-                this.position.x += x_move;
-                this.position.y += y_move;
+                this.position = this.position.add(move);
         }
 }
 
@@ -69,7 +44,7 @@ class LowRezJam {
 
                 Input.add_key_updater(this.update);
 
-                this.tilemap = new Tilemap(8, 8, 8, 1);
+                this.tilemap = new Tilemap(8, Coord.one().scale_square(8), 0);
                 this.tilemap.set_all(0);
                 Video.add_background(this.tilemap);
 
@@ -109,8 +84,7 @@ class LowRezJam {
         }
 
         private clear_tile(position: Coord) {
-                const position_floor = position.floor();
-                LowRezJam.instance.tilemap.set_tile(position_floor.x, position_floor.y, 0);
+                LowRezJam.instance.tilemap.set_tile(position.floor(), 0);
         }
 
         private get_unoccupied_tile(): Coord | null {
@@ -143,14 +117,14 @@ class LowRezJam {
 
                 // TODO send list of door tile positions as "list of solids" to prevent movement into them
                 if(Input.key_pressed_this_frame("ArrowLeft") || Input.key_pressed_this_frame("a"))
-                        game.player.move(-1, 0, game.tilemap);
+                        game.player.move(Coord.left(), game.tilemap);
                 else if(Input.key_pressed_this_frame("ArrowRight") || Input.key_pressed_this_frame("d"))
-                        game.player.move(1, 0, game.tilemap);
+                        game.player.move(Coord.right(), game.tilemap);
 
                 if(Input.key_pressed_this_frame("ArrowUp") || Input.key_pressed_this_frame("w"))
-                        game.player.move(0, -1, game.tilemap);
+                        game.player.move(Coord.up(), game.tilemap);
                 else if(Input.key_pressed_this_frame("ArrowDown") || Input.key_pressed_this_frame("s"))
-                        game.player.move(0, 1, game.tilemap);
+                        game.player.move(Coord.down(), game.tilemap);
 
                 game.player.draw(game.tilemap);
         }

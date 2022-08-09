@@ -13,20 +13,29 @@ class Tile {
                         this.color_ids[x] = new Array<number>(this.size);
                 }
 
+                console.info(`load tile ${tile_data}`);
+
                 let index = 0;
-                for (let y = 0; y < this.size; y++) {
-                        for (let x = 0; x < this.size; x++) {
-                                this.color_ids[x][y] = Number("0x" + tile_data[index]);
+                let pos = new Coord(0, 0);
+                let msg = "";
+                for (; pos.y < this.size; pos.y++) {
+                        for (pos.x = 0; pos.x < this.size; pos.x++) {
+                                const hex = `0x${tile_data[index]}`;
+                                this.color_ids[pos.x][pos.y] = Number(hex);
+                                msg += `(${pos.x},${pos.y})/${index}=${hex}|${this.color_ids[pos.x][pos.y]} `;
                                 index++;
                         }
+                        msg += "\n";
                 }
+                console.info(msg);
         }
 
         public log() {
                 let msg = "";
-                for (let y = 0; y < this.size; y++) {
-                        for (let x = 0; x < this.size; x++) {
-                                msg += `${this.color_ids[x][y]} `;
+                let pos = new Coord(0, 0);
+                for (; pos.y < this.size; pos.y++) {
+                        for (pos.x = 0; pos.x < this.size; pos.x++) {
+                                msg += `${this.color_ids[pos.x][pos.y]} `;
                         }
                         msg += "\n";
                 }
@@ -35,21 +44,21 @@ class Tile {
                 console.info(msg);
         }
 
-        public blit(surface: Surface, palette: Palette, left: number, top: number, opaque: boolean, wrap: boolean) {
-                for (let x = 0; x < this.size; x++) {
-                        for (let y = 0; y < this.size; y++) {
-                                const xx = x + left;
-                                const yy = y + top;
+        public blit(surface: Surface, palette: Palette, top_left: Coord, opaque: boolean, wrap: boolean) {
+                let pos = new Coord(0, 0);
+                for (; pos.y < this.size; pos.y++) {
+                        for (pos.x = 0; pos.x < this.size; pos.x++) {
+                                const pos2 = top_left.add(pos);
 
-                                const palette_color_id = this.color_ids[x][y];
+                                const palette_color_id = this.color_ids[pos2.x][pos2.y];
                                 if(palette_color_id == 0 && !opaque) {
                                         console.log("clear pixel");
-                                        surface.set_pixel(xx, yy, 0, wrap);
+                                        surface.set_pixel(pos2, 0, wrap);
                                         continue;
                                 }
 
                                 const color_id = palette.get_color_id(palette_color_id);
-                                surface.set_pixel(xx, yy, color_id, wrap);
+                                surface.set_pixel(pos2, color_id, wrap);
                         }
                 }
         }

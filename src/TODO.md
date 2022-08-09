@@ -3,6 +3,9 @@
 ## Engine
 
 - change all backend stuff to use Coord type
+- unit tests for Coord and NumberGrid
+- change tile_ids in Tile and TileMap to NumberGrid (check dirty=>changed works)
+- ToString or Log for Coord type
 - `add_frame_event` instead of having input update in Video
   - frame management independent of video (refreshing is a frame event)
 - use text for the viewers to draw the corresponding index
@@ -35,9 +38,12 @@
 
 ## Wishlist - Engine
 
+- organize files into subdirectories (do they flatten on compile?)
 - `game.json` maps to color, palette, tile, tilemap (map), sprite, actor, etc. files
   - python tool to compile `game.json` and all included files into a binary `game.rcg` (rcg = RetCon Game)
 - tile viewer
 - sprite viewer
 - palette viewer
 - tilemap viewer
+- music looping with metronome to avoid dead air
+- audio layering system with metronome to keep in sync

@@ -37,7 +37,7 @@ function retconjs_init(scale: number, game_path: string,  on_done: () => void, d
 }
 
 function retconjs_load_game(game_data: GameData, scale: number, debug: boolean) {
-        Video.initialize('retcon', 64, 64, scale, game_data.colors);
+        Video.initialize('retcon', Coord.one().scale_square(64), scale, game_data.colors);
 
         // load palettes
         game_data.palettes.forEach(palette_data => {

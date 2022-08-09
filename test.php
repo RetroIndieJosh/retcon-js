@@ -12,6 +12,7 @@
         <h1 style="text-align:center;">RetConJS Testing</h1>
         <div class="menu-container">
                 <div class="button-container">
+                        <button onclick="rcj_test_coords();">Test Coord</button>
                         <button onclick="retconjs_test_clear_black();">Clear to Black</button>
                         <button onclick="retconjs_test_clear_random();">Clear to Random</button>
                         <button onclick="retconjs_test_pixels();">Random Pixels</button>

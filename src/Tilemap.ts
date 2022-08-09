@@ -1,82 +1,87 @@
 class Tilemap {
         private tile_size: number;
 
-        public x: number = 0;
-        public y: number = 0;
+        public pos = Coord.zero();
 
-        protected opaque: boolean = true;
-        protected wrap: boolean = false;
+        protected opaque = true;
+        protected wrap = false;
 
         // width and height of the map in tiles
-        private width: number;
-        private height: number;
+        private size = Coord.one();
 
         private surface: Surface;
 
-        private tile_ids: Array<Array<number>>;
-        private tile_dirty: Array<Array<boolean>>;
+        private tile_ids: NumberGrid;
         private palette_id: number;
 
-        constructor(tile_size: number, width: number, height: number, palette_id: number) {
+        constructor(tile_size: number, size: Coord, palette_id: number) {
                 this.tile_size = tile_size;
-
-                this.width = width;
-                this.height = height;
-
+                this.size = size;
                 this.palette_id = palette_id;
 
-                this.surface = new Surface(width * tile_size, height * tile_size);
+                console.info(`Create tile ${this.size.x}x${this.size.y} tiles of `
+                        + `${this.tile_size} pixels squared with palette ${this.palette_id}`);
 
-                this.tile_ids = new Array<Array<number>>(width);
-                this.tile_dirty = new Array<Array<boolean>>(width);
-                for (let x = 0; x < width; x++) {
-                        this.tile_dirty[x] = new Array<boolean>(height);
-                        this.tile_ids[x] = new Array<number>(height);
-                }
+                this.surface = new Surface(this.size.scale_square(tile_size));
+
+                // TODO a way to set up 2D arrays without needing to write this loop every time
+                // TODO Video.get_tile_count for max
+                this.tile_ids = new NumberGrid(this.size, 0, 2);
         }
 
         public blit(target_surface: Surface) {
-                this.surface.blit(target_surface, this.x, this.y, this.wrap);
+                this.surface.blit(target_surface, this.pos, this.wrap);
         }
 
         public get_pixel_height(): number {
-                return this.height * this.tile_size;
+                return this.size.y * this.tile_size;
+        }
+
+        public get_pixel_size(): Coord {
+                return this.size;
         }
 
         public get_pixel_width(): number {
-                return this.width * this.tile_size;
+                return this.size.x * this.tile_size;
         }
 
         public get_tile_height(): number {
-                return this.height;
+                return this.size.y;
+        }
+
+        // number of tiles (x,y) in the TileMap, NOT size of tiles!
+        public get_tile_size(): Coord {
+                return this.size;
         }
 
         public get_tile_width(): number {
-                return this.width;
+                return this.size.x;
         }
 
-        public has_tile_coordinate(x: number, y: number) {
-                return x >= 0 && x < this.width && y >= 0 && y < this.height;
+        public has_tile_coordinate(pos: Coord) {
+                return pos.is_in(this.pos, this.size);
         }
 
         public log() {
                 let msg = "";
-                for (let y = 0; y < this.height; y++) {
-                        for (let x = 0; x < this.width; x++) {
-                                msg += `${this.tile_ids[x][y]}`;
+                let pos = new Coord(0, 0);
+                for (; pos.y < this.size.y; pos.y++) {
+                        for (pos.x = 0; pos.x < this.size.x; pos.x++) {
+                                msg += `${this.tile_ids.get(pos)}`;
                         }
                         msg += "\n";
                 }
 
-                console.info(`Tilemap ${this.width}x${this.height} tiles at ${this.x}, ${this.y}`);
+                console.info(`Tilemap ${this.size.x}x${this.size.y} tiles at ${this.pos.x}, ${this.pos.y}`);
                 console.info(msg);
         }
 
         public randomize() {
-                for (let x = 0; x < this.width; x++) {
-                        for (let y = 0; y < this.height; y++) {
-                                this.tile_dirty[x][y] = true;
-                                this.tile_ids[x][y] = Math.floor(Math.random() * 16);
+                let pos = new Coord(0, 0);
+                for (; pos.y < this.size.y; pos.y++) {
+                        for (pos.x = 0; pos.x < this.size.x; pos.x++) {
+                                // TODO use Video.get_tile_count
+                                this.tile_ids.set(pos, Math.floor(Math.random() * 16), false);
                         }
                 }
                 this.sync_tiles();
@@ -85,23 +90,21 @@ class Tilemap {
         public set_all(tile_id: number) {
                 tile_id = Math.floor(tile_id);
 
-                for (let x = 0; x < this.width; x++) {
-                        for (let y = 0; y < this.height; y++) {
-                                this.tile_ids[x][y] = tile_id;
-                                this.tile_dirty[x][y] = true;
+                let pos = new Coord(0, 0);
+                for (; pos.y < this.size.y; pos.y++) {
+                        for (pos.x = 0; pos.x < this.size.x; pos.x++) {
+                                this.tile_ids.set(pos, tile_id, false);
                         }
                 }
 
                 this.sync_tiles();
         }
 
-        public set_tile(x: number, y: number, tile_id: number) {
-                x = Math.floor(x);
-                y = Math.floor(y);
+        public set_tile(pos: Coord, tile_id: number) {
+                pos = pos.floor();
 
                 // TODO warn if tile size mismatches?
-                this.tile_ids[x][y] = tile_id;
-                this.tile_dirty[x][y] = true;
+                this.tile_ids.set(pos, tile_id, false);
                 this.sync_tiles();
         }
 
@@ -111,15 +114,13 @@ class Tilemap {
                 const palette = Video.get_palette(this.palette_id);
                 //console.log(`Tile IDs: ${this.tile_ids}`);
                 //console.log(`Video: ${video} / Palette: ${palette} / Size: ${this.width}, ${this.height}`);
-                for(let x = 0; x < this.width; x++) {
-                        for(let y = 0; y < this.height; y++) {
-                                if (!this.tile_dirty[x][y]) continue;
-                                this.tile_dirty[x][y] = false;
-
-                                const tile = Video.get_tile(this.tile_ids[x][y]);
+                for (let pos = new Coord(0, 0); pos.y < this.size.y; pos.y++) {
+                        for (pos.x = 0; pos.x < this.size.x; pos.x++) {
+                                const tile = Video.get_tile(this.tile_ids.get(pos));
+                                // TODO check for UNCHANGED
                                 //console.log(`Tile: ${tile} @ ${x}, ${y}`);
-                                // TODO  make sure we don't draw clear
-                                tile.blit(this.surface, palette, x * this.tile_size, y * this.tile_size, this.opaque, this.wrap);
+                                // TODO  make sure we don't draw clear (NumberGrid should help?)
+                                tile.blit(this.surface, palette, this.pos.scale_square(this.tile_size), this.opaque, this.wrap);
                         }
                 }
         }

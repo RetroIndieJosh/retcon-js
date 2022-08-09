@@ -28,8 +28,8 @@ class Video
 
         // TODO separate loading colors so this isn't so loaded
         // TODO also set canvas, width, height, scale separately ?
-        public static initialize(canvas_id: string, width: number, height: number, scale: number, color_string: string): void {
-                Video.surface = new Surface(width, height);
+        public static initialize(canvas_id: string, size: Coord, scale: number, color_string: string): void {
+                Video.surface = new Surface(size);
 
                 Video.canvas = document.getElementById(canvas_id) as HTMLCanvasElement;
                 if (Video.canvas == null) {
@@ -42,8 +42,8 @@ class Video
                 }
 
                 Video.scale = scale;
-                Video.canvas.width = width * scale;
-                Video.canvas.height = height * scale;
+                Video.canvas.width = size.x * scale;
+                Video.canvas.height = size.y * scale;
 
                 // load colors
                 const color_string_list = color_string.match(/.{1,3}/g);
@@ -51,8 +51,6 @@ class Video
                 console.info("Colors:");
                 for (let i = 0; i < Video.color_list.length; i++) 
                         console.info(`    #${i} => ${Video.color_list[i]}`);
-
-                Video.surface.randomize_pixels();
 
                 Video.initialized = true;
         }
@@ -87,14 +85,15 @@ class Video
                         return;
                 }
 
-                Video.started = true;
-
                 setInterval(function () {
                         Video.render();
 
                         // TODO Video should probably not be handling input
                         Input.clear();
                 }, 1000 / Video.frames_per_second_target);
+
+                Video.randomize();
+                Video.started = true;
         }
 
         // TODO 
@@ -183,24 +182,23 @@ class Video
                 return Video.tile_list[tile_id];
         }
 
-        public static put_pixel(x: number, y: number, color: number, only_changed = true) {
+        public static put_pixel(pos: Coord, color: number, only_changed = true) {
                 if (only_changed && color == NUMBER_UNCHANGED) return;
 
                 const scale = Video.scale;
                 if (scale == undefined) return;
 
-                x = Math.floor(x);
-                y = Math.floor(y);
                 color = Math.floor(color);
-
                 Video.ctx.fillStyle = Video.get_color(color);
-                Video.ctx.fillRect(x * scale, y * scale, scale, scale);
+
+                pos = pos.floor().scale_square(scale);
+                Video.ctx.fillRect(pos.x, pos.y, scale, scale);
         }
 
         public static randomize(): void {
-                //Video.surface.randomize_pixels();
-                for (let x = 0; x < Video.surface.get_width(); x++) {
-                        for (let y = 0; y < Video.surface.get_height(); y++) {
+                let pos = Coord.zero();
+                for (; pos.x < Video.surface.get_width(); pos.x++) {
+                        for (pos.y = 0; pos.y < Video.surface.get_height(); pos.y++) {
                                 //const color = Math.floor(Math.random() * Video.color_list.length;
                                 const palette = Video.get_palette(Math.floor(Math.random() * Video.palette_list.length));
                                 const color = Math.floor(Math.random() * palette.color_count());
@@ -209,7 +207,7 @@ class Video
                                 //Video.put_pixel(x, y, color);
 
                                 // TODO this works only if numbergrid marks same color draws as dirty
-                                Video.surface.set_pixel(x, y, color);
+                                Video.surface.set_pixel(pos, color);
                         }
                 }
         }

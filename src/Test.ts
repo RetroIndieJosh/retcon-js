@@ -14,12 +14,12 @@ function retconjs_test_increase_move_speed() {
 }
 
 function retconjs_test_clear_black(): void {
-        console.info("Clear to black");
+        console.info("clear to black background");
         Video.set_clear_color(0);
 }
 
 function retconjs_test_clear_random(): void {
-        console.info("clear to random colors");
+        console.info("clear to random background color");
         // TODO limit to number of colors in game palette
         Video.set_clear_color(Math.floor(Math.random() * 5));
 }
@@ -60,11 +60,11 @@ function retconjs_test_pixels(): void {
 }
 
 function retconjs_test_sprite(): Sprite {
-        let sprite: Sprite = new Sprite(1, 0);
-        sprite.x = Math.floor(Math.random() * 64);
-        sprite.y = Math.floor(Math.random() * 64);
+        let sprite = new Sprite(1, 0);
+        //sprite.pos.x = Math.floor(Math.random() * 64);
+        //sprite.pos.y = Math.floor(Math.random() * 64);
 
-        console.info(`Add sprite at ${sprite.x}, ${sprite.y}`);
+        console.info(`Add sprite at ${sprite.pos.x}, ${sprite.pos.y}`);
         Video.add_sprite(sprite);
 
         return sprite;
@@ -77,8 +77,8 @@ function retconjs_test_sprite_move_horizontal(): void {
         const sprite_move = setInterval(() => {
                 move += move_speed;
 
-                if(move < 100) sprite.x += move_speed;
-                else sprite.x -= move_speed;
+                if(move < 100) sprite.pos.x += move_speed;
+                else sprite.pos.x -= move_speed;
                 
                 if (move > 200) move = 200;
         }, 1000 / 60);
@@ -102,8 +102,8 @@ function retconjs_test_sprite_move_vertical(): void {
         const sprite_move = setInterval(() => {
                 move += move_speed;
 
-                if(move < 100) sprite.y += move_speed;
-                else sprite.y -= move_speed;
+                if(move < 100) sprite.pos.y += move_speed;
+                else sprite.pos.y -= move_speed;
                 
                 if (move > 200) move = 200;
         }, 1000 / 60);
@@ -118,8 +118,8 @@ function retconjs_test_sprite_move_random(): void {
         const MOVE_MULT = move_speed * 2 + 1;
         let move = 0;
         const sprite_move = setInterval(() => {
-                sprite.x += Math.floor(Math.random() * MOVE_MULT) - move_speed;
-                sprite.y += Math.floor(Math.random() * MOVE_MULT) - move_speed;
+                sprite.pos.x += Math.floor(Math.random() * MOVE_MULT) - move_speed;
+                sprite.pos.y += Math.floor(Math.random() * MOVE_MULT) - move_speed;
         }, 1000 / 60);
 
         console.info(`Test ${sprite_move}: Moving sprite randomly for ${TEST_LENGTH} seconds`);
