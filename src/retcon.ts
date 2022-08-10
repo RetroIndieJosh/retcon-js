@@ -37,7 +37,7 @@ function retconjs_init(scale: number, game_path: string,  on_done: () => void, d
 }
 
 function retconjs_load_game(game_data: GameData, scale: number, debug: boolean) {
-        Video.initialize('retcon', Coord.one().scale_square(64), scale, game_data.colors);
+        Video.initialize('retcon', Coord.one.scale_square(64), scale, game_data.colors);
 
         // load palettes
         game_data.palettes.forEach(palette_data => {
@@ -73,7 +73,7 @@ function retconjs_load_game(game_data: GameData, scale: number, debug: boolean) 
         setInterval(() => {
                 let sprite_count_element = document.getElementById("sprite-count");
                 if(sprite_count_element == null) return;
-                sprite_count_element.innerHTML = `${Video.sprite_count()}`;
+                sprite_count_element.innerHTML = `${Video.sprite_count}`;
 
                 let move_speed_element = document.getElementById("move-speed");
                 if(move_speed_element == null) return;

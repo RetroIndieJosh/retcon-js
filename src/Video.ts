@@ -191,13 +191,12 @@ class Video
                 color = Math.floor(color);
                 Video.ctx.fillStyle = Video.get_color(color);
 
-                pos = pos.floor().scale_square(scale);
+                pos = pos.floor.scale_square(scale);
                 Video.ctx.fillRect(pos.x, pos.y, scale, scale);
         }
 
         public static randomize(): void {
-                let pos = Coord.zero();
-                for (; pos.x < Video.surface.get_width(); pos.x++) {
+                for (let pos = Coord.zero; pos.x < Video.surface.get_width(); pos.x++) {
                         for (pos.y = 0; pos.y < Video.surface.get_height(); pos.y++) {
                                 //const color = Math.floor(Math.random() * Video.color_list.length;
                                 const palette = Video.get_palette(Math.floor(Math.random() * Video.palette_list.length));
@@ -243,5 +242,6 @@ class Video
                 return Video.sprite_list.indexOf(sprite) >= 0;
         }
 
-        public static sprite_count() : number { return Video.sprite_list.length; }
+        public static get sprite_count() { return Video.sprite_list.length; }
+        public static get tile_count() { return Video.tile_list.length; }
 } 

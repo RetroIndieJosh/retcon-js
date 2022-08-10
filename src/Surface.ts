@@ -112,7 +112,7 @@ function rcj_test_surface(): void {
 
                 const surf2 = new Surface(new Coord(width, height));
 
-                surf.set_pixels(Coord.zero(), surf2.get_pixels(), false);
+                surf.set_pixels(Coord.zero, surf2.get_pixels(), false);
                 for (let pos = new Coord(0, 0); pos.y < height; pos.y++) {
                         for (pos.x = 0; pos.x < width; pos.x++) {
                                 rcj_assert_equals(surf.get_pixel(pos), surf.get_pixel(pos));
@@ -125,7 +125,7 @@ function rcj_test_surface(): void {
 
                 const surf_small = new Surface(new Coord(width / 2, height / 2));
 
-                surf.set_pixels(Coord.zero(), surf_small.get_pixels(), false);
+                surf.set_pixels(Coord.zero, surf_small.get_pixels(), false);
                 for (let pos = new Coord(0, 0); pos.y < height / 2; pos.y++) {
                         for (pos.x = 0; pos.x < width / 2; pos.x++) {
                                 rcj_assert_equals(surf_small.get_pixel(pos), surf.get_pixel(pos));
@@ -138,7 +138,7 @@ function rcj_test_surface(): void {
 
                 const surf_large = new Surface(new Coord(width * 2, height * 2));
 
-                surf.set_pixels(Coord.zero(), surf_large.get_pixels(), false);
+                surf.set_pixels(Coord.zero, surf_large.get_pixels(), false);
                 for (let pos = new Coord(0, 0); pos.y < height; pos.y++) {
                         for (pos.x = 0; pos.x < width; pos.x++) {
                                 rcj_assert_equals(surf_large.get_pixel(pos), surf.get_pixel(pos));
@@ -161,7 +161,7 @@ function rcj_test_surface(): void {
 
                 let surf2 = new Surface(new Coord(width, height));
 
-                surf2.blit(surf, Coord.zero(), false);
+                surf2.blit(surf, Coord.zero, false);
                 for (let pos = new Coord(0, 0); pos.y < height; pos.y++) {
                         for (pos.x = 0; pos.x < width; pos.x++) {
                                 rcj_assert_equals(surf2.get_pixel(pos), surf.get_pixel(pos));
@@ -175,7 +175,7 @@ function rcj_test_surface(): void {
 
                 const surf_small = new Surface(new Coord(width / 2, height / 2));
 
-                surf.blit(surf_small, Coord.zero(), false);
+                surf.blit(surf_small, Coord.zero, false);
                 for (let pos = new Coord(0, 0); pos.y < height / 2; pos.y++) {
                         for (pos.x = 0; pos.x < width / 2; pos.x++) {
                                 rcj_assert_equals(surf_small.get_pixel(pos), surf.get_pixel(pos));
@@ -187,7 +187,7 @@ function rcj_test_surface(): void {
                 console.debug("Test Surface: blit larger (clip)");
                 const surf_large = new Surface(new Coord(width * 2, height * 2));
 
-                surf.blit(surf_large, Coord.zero(), false);
+                surf.blit(surf_large, Coord.zero, false);
                 for (let pos = new Coord(0, 0); pos.y < height; pos.y++) {
                         for (pos.x = 0; pos.x < width; pos.x++) {
                                 rcj_assert_equals(surf_large.get_pixel(pos), surf.get_pixel(pos));

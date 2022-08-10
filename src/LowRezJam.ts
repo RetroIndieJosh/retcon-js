@@ -6,13 +6,13 @@ class Actor {
 
         public draw(tilemap: Tilemap): void {
                 const tile_id = Math.floor(this.tile_id);
-                const position = this.position.floor();
+                const position = this.position.floor;
 
                 tilemap.set_tile(position, tile_id);
         }
 
         public is_at(position: Coord) : boolean {
-                return this.position.floor().equals(position.floor());
+                return this.position.floor.equals(position.floor);
         }
 
         public move(move: Coord, tilemap: Tilemap) {
@@ -44,7 +44,7 @@ class LowRezJam {
 
                 Input.add_key_updater(this.update);
 
-                this.tilemap = new Tilemap(8, Coord.one().scale_square(8), 0);
+                this.tilemap = new Tilemap(8, Coord.one.scale_square(8), 0);
                 this.tilemap.set_all(0);
                 Video.add_background(this.tilemap);
 
@@ -84,7 +84,7 @@ class LowRezJam {
         }
 
         private clear_tile(position: Coord) {
-                LowRezJam.instance.tilemap.set_tile(position.floor(), 0);
+                LowRezJam.instance.tilemap.set_tile(position.floor, 0);
         }
 
         private get_unoccupied_tile(): Coord | null {
@@ -95,7 +95,7 @@ class LowRezJam {
                 while(true) {
                         coord.x = Math.random() * this.tilemap.get_tile_width();
                         coord.y = Math.random() * this.tilemap.get_tile_height();
-                        if(!this.is_occupied(coord)) return coord.floor();
+                        if(!this.is_occupied(coord)) return coord.floor;
                 }
         }
 
@@ -117,14 +117,14 @@ class LowRezJam {
 
                 // TODO send list of door tile positions as "list of solids" to prevent movement into them
                 if(Input.key_pressed_this_frame("ArrowLeft") || Input.key_pressed_this_frame("a"))
-                        game.player.move(Coord.left(), game.tilemap);
+                        game.player.move(Coord.left, game.tilemap);
                 else if(Input.key_pressed_this_frame("ArrowRight") || Input.key_pressed_this_frame("d"))
-                        game.player.move(Coord.right(), game.tilemap);
+                        game.player.move(Coord.right, game.tilemap);
 
                 if(Input.key_pressed_this_frame("ArrowUp") || Input.key_pressed_this_frame("w"))
-                        game.player.move(Coord.up(), game.tilemap);
+                        game.player.move(Coord.up, game.tilemap);
                 else if(Input.key_pressed_this_frame("ArrowDown") || Input.key_pressed_this_frame("s"))
-                        game.player.move(Coord.down(), game.tilemap);
+                        game.player.move(Coord.down, game.tilemap);
 
                 game.player.draw(game.tilemap);
         }

@@ -1,6 +1,6 @@
 class Tile {
         private size: number = -1;
-        private color_ids: Array<Array<number>> = new Array<Array<number>>();
+        private color_ids: NumberGrid;
 
         constructor(tile_data: string) {
                 if (tile_data == "")
@@ -10,10 +10,7 @@ class Tile {
                 if (!(this.size % 1 == 0))
                         throw new Error(`RetConJS: non-square tile size ${tile_data.length}`);
 
-                this.color_ids = new Array<Array<number>>(this.size);
-                for (let x = 0; x < this.size; x++) {
-                        this.color_ids[x] = new Array<number>(this.size);
-                }
+                this.color_ids = new NumberGrid(new Coord(this.size, this.size), 0, Video.tile_count);
 
                 console.info(`load tile ${tile_data}`);
 
@@ -23,8 +20,8 @@ class Tile {
                 for (; pos.y < this.size; pos.y++) {
                         for (pos.x = 0; pos.x < this.size; pos.x++) {
                                 const hex = `0x${tile_data[index]}`;
-                                this.color_ids[pos.x][pos.y] = Number(hex);
-                                msg += `(${pos.x},${pos.y})/${index}=${hex}|${this.color_ids[pos.x][pos.y]} `;
+                                this.color_ids.set(pos, Number(hex));
+                                msg += `(${pos.x},${pos.y})/${index}=${hex}|${this.color_ids.get(pos)}) `;
                                 index++;
                         }
                         msg += "\n";
@@ -37,7 +34,7 @@ class Tile {
                 let pos = new Coord(0, 0);
                 for (; pos.y < this.size; pos.y++) {
                         for (pos.x = 0; pos.x < this.size; pos.x++) {
-                                msg += `${this.color_ids[pos.x][pos.y]} `;
+                                msg += `${this.color_ids.get(pos)} `;
                         }
                         msg += "\n";
                 }
@@ -52,7 +49,7 @@ class Tile {
                         for (pos.x = 0; pos.x < this.size; pos.x++) {
                                 const pos2 = top_left.add(pos);
 
-                                const palette_color_id = this.color_ids[pos2.x][pos2.y];
+                                const palette_color_id = this.color_ids.get(pos);
                                 if(palette_color_id == 0 && !opaque) {
                                         console.log("clear pixel");
                                         surface.set_pixel(pos2, 0, wrap);
@@ -69,8 +66,8 @@ class Tile {
                 return this.size;
         }
 
-        public set_pixel(x: number, y: number, palette_color_id: number) {
-                this.color_ids[x][y] = palette_color_id;
+        public set_pixel(pos: Coord, palette_color_id: number) {
+                this.color_ids.set(pos, palette_color_id);
         }
 }
 

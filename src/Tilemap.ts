@@ -1,13 +1,13 @@
 class Tilemap {
         private tile_size: number;
 
-        public pos = Coord.zero();
+        public pos = Coord.zero;
 
         protected opaque = true;
         protected wrap = false;
 
         // width and height of the map in tiles
-        private size = Coord.one();
+        private size = Coord.one;
 
         private surface: Surface;
 
@@ -101,7 +101,7 @@ class Tilemap {
         }
 
         public set_tile(pos: Coord, tile_id: number) {
-                pos = pos.floor();
+                pos = pos.floor;
 
                 // TODO warn if tile size mismatches?
                 this.tile_ids.set(pos, tile_id, false);

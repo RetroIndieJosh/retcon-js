@@ -86,7 +86,7 @@ function retconjs_test_music(): void {
 
 function retconjs_test_clear_sprites(): void {
         const video = Video;
-        while(video.sprite_count() > 0)
+        while(video.sprite_count > 0)
                 video.remove_sprite_at(0);
         video.set_clear_color(0);
 }

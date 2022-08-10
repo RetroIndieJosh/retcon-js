@@ -2,14 +2,17 @@ class Coord {
         public x: number;
         public y: number;
 
-        public static neg_one() { return new Coord(-1, -1); }
-        public static one() { return new Coord(1, 1); }
-        public static zero() { return new Coord(0, 0); }
+        public static get neg_one() { return new Coord(-1, -1); }
+        public static get one() { return new Coord(1, 1); }
+        public static get zero() { return new Coord(0, 0); }
 
-        public static down() { return new Coord(0, 1); }
-        public static left() { return new Coord(-1, 0); }
-        public static right() { return new Coord(1, 0); }
-        public static up() { return new Coord(0, -1); }
+        public static get down() { return new Coord(0, 1); }
+        public static get left() { return new Coord(-1, 0); }
+        public static get right() { return new Coord(1, 0); }
+        public static get up() { return new Coord(0, -1); }
+
+        public get ceil() { return new Coord(Math.ceil(this.x), Math.ceil(this.y)); }
+        public get floor() { return new Coord(Math.floor(this.x), Math.floor(this.y)); }
 
         // new Coord in range [min, max)
         public static random(min: Coord, max: Coord): Coord {
@@ -27,10 +30,6 @@ class Coord {
 
         public equals(other_coord: Coord): boolean {
                 return this.x == other_coord.x && this.y == other_coord.y;
-        }
-
-        public floor(): Coord {
-                return new Coord(Math.floor(this.x), Math.floor(this.y));
         }
 
         // includes point at top_left but not point at top_left + size (like array)
@@ -79,12 +78,12 @@ function rcj_test_coord() {
         // TODO make a new grid for each test and use {} to separate
 
         console.debug("Test Coord: 'constant' coordinates");
-        rcj_assert_coord(Coord.zero(), 0, 0);
-        rcj_assert_coord(Coord.one(), 1, 1);
-        rcj_assert_coord(Coord.zero().add(Coord.one()), 1, 1);
-        rcj_assert_coord(Coord.zero().subtract(Coord.one()), -1, -1);
-        rcj_assert_coord(Coord.left().add(Coord.right()), 0, 0);
-        rcj_assert_coord(Coord.up().add(Coord.down()), 0, 0);
+        rcj_assert_coord(Coord.zero, 0, 0);
+        rcj_assert_coord(Coord.one, 1, 1);
+        rcj_assert_coord(Coord.zero.add(Coord.one), 1, 1);
+        rcj_assert_coord(Coord.zero.subtract(Coord.one), -1, -1);
+        rcj_assert_coord(Coord.left.add(Coord.right), 0, 0);
+        rcj_assert_coord(Coord.up.add(Coord.down), 0, 0);
 
         const scale = -3;
 
@@ -105,10 +104,10 @@ function rcj_test_coord() {
         rcj_assert_coord(pos2, x2, y2);
 
         console.debug("Test Coord: containment")
-        rcj_assert_true(pos.is_in(Coord.zero(), new Coord(10, 10)));
-        rcj_assert_false(pos.is_in(Coord.zero(), pos));
-        rcj_assert_true(pos2.is_in(Coord.zero(), new Coord(10, -20)));
-        rcj_assert_false(pos2.is_in(Coord.zero(), pos2));
+        rcj_assert_true(pos.is_in(Coord.zero, new Coord(10, 10)));
+        rcj_assert_false(pos.is_in(Coord.zero, pos));
+        rcj_assert_true(pos2.is_in(Coord.zero, new Coord(10, -20)));
+        rcj_assert_false(pos2.is_in(Coord.zero, pos2));
 
         console.debug("Test Coord: scaling")
         rcj_assert_true(pos.scale(new Coord(scale, scale)).equals(pos.scale_square(scale)));

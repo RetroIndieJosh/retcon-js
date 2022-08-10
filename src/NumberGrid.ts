@@ -10,7 +10,7 @@ class NumberGrid {
         private values: Array<Array<number>>;
 
         constructor(size: Coord, min: number, max: number) {
-                this.size = size.floor();
+                this.size = size.floor;
 
                 this.min = Math.floor(min);
                 this.max = Math.floor(max);
@@ -53,7 +53,7 @@ class NumberGrid {
         }
 
         public get(pos: Coord) {
-                pos = pos.floor();
+                pos = pos.floor;
                 if(this.changed[pos.x][pos.y])
                         return this.values[pos.x][pos.y];
                 return NUMBER_UNCHANGED;
@@ -91,8 +91,8 @@ class NumberGrid {
                 }
         }
 
-        public set(pos: Coord, value: number, wrap: boolean) {
-                pos = pos.floor();
+        public set(pos: Coord, value: number, wrap = false) {
+                pos = pos.floor;
 
                 if (wrap) {
                         // TODO horizontal crashes on second pass left
@@ -118,8 +118,7 @@ class NumberGrid {
                         }
                 } else {
                         // clip
-                        // TODO this was broken (might be fixed)
-                        if (!pos.is_in(Coord.zero(), this.size))
+                        if (!pos.is_in(Coord.zero, this.size))
                                 return;
                 }
 
@@ -141,12 +140,12 @@ function rcj_test_numbergrid(): void {
         const tile_count = 8;
         
         // TODO make a new grid for each test and use {} to separate
-        let grid = new NumberGrid(Coord.one().scale_square(size), 0, tile_count);
+        let grid = new NumberGrid(Coord.one.scale_square(size), 0, tile_count);
 
         console.debug("Test NumberGrid: set all")
         for (let i = 0; i < tile_count; i++) {
                 grid.set_all(i);
-                for (let pos = Coord.zero(); pos.x < size; pos.x++) {
+                for (let pos = Coord.zero; pos.x < size; pos.x++) {
                         for (pos.y = 0; pos.y < size; pos.y++) {
                                 rcj_assert_equals(grid.get(pos), i);
                         }
@@ -169,7 +168,7 @@ function rcj_test_numbergrid(): void {
                 }
         }
         // since we used wrap, the entire grid should be filled
-        for (let pos = Coord.zero(); pos.x < size; pos.x++) {
+        for (let pos = Coord.zero; pos.x < size; pos.x++) {
                 for (pos.y = 0; pos.y < size; pos.y++) {
                         rcj_assert_equals(grid.get(pos), 1);
                 }
@@ -183,7 +182,7 @@ function rcj_test_numbergrid(): void {
                 }
         }
         // since we used clip, nothing in the grid should have changed
-        for (let pos = Coord.zero(); pos.x < size; pos.x++) {
+        for (let pos = Coord.zero; pos.x < size; pos.x++) {
                 for (pos.y = 0; pos.y < size; pos.y++) {
                         rcj_assert_equals(grid.get(pos), 0);
                 }
@@ -192,7 +191,7 @@ function rcj_test_numbergrid(): void {
         console.debug("Test NumberGrid: copy")
         grid.randomize();
         const grid2 = grid.copy();
-        for (let pos = Coord.zero(); pos.x < size; pos.x++) {
+        for (let pos = Coord.zero; pos.x < size; pos.x++) {
                 for (pos.y = 0; pos.y < size; pos.y++) {
                         rcj_assert_equals(grid.get(pos), grid2.get(pos));
                 }
@@ -209,7 +208,7 @@ function rcj_test_numbergrid(): void {
                 count++;
         });
         // check all values flagged in the copy
-        for (let pos = Coord.zero(); pos.x < size; pos.x++) {
+        for (let pos = Coord.zero; pos.x < size; pos.x++) {
                 for (pos.y = 0; pos.y < size; pos.y++) {
                         rcj_assert_equals(grid.get(pos), copy.get(pos));
                 }
