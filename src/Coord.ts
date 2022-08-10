@@ -74,6 +74,7 @@ class Coord {
 }
 
 function rcj_test_coords() {
+        console.debug("Test Coord: 'constant' coordinates");
         rcj_test_coord(Coord.zero(), 0, 0);
         rcj_test_coord(Coord.one(), 1, 1);
         rcj_test_coord(Coord.zero().add(Coord.one()), 1, 1);
@@ -86,32 +87,42 @@ function rcj_test_coords() {
         const x = 8;
         const y = 5;
         let pos = new Coord(x, y);
-        console.assert(pos.equals(pos));
-        rcj_test_coord(pos, x, y);
-        rcj_assert_true(pos.is_in(Coord.zero(), new Coord(10, 10)));
-        rcj_assert_false(pos.is_in(Coord.zero(), pos));
-        rcj_assert_true(pos.scale(new Coord(scale, scale)).equals(pos.scale_square(scale)));
-        rcj_test_coord(pos.scale_square(2), x * 2, y * 2);
 
         const x2 = 3;
         const y2 = -17;
         let pos2 = new Coord(x2, y2);
+
+        console.debug("Test Coord: self equality")
+        rcj_assert_true(pos.equals(pos));
         rcj_assert_true(pos2.equals(pos2));
+
+        console.debug("Test Coord: set correctly")
+        rcj_test_coord(pos, x, y);
         rcj_test_coord(pos2, x2, y2);
-        // TODO this is probably a problem since we only count positive
+
+        console.debug("Test Coord: containment")
+        rcj_assert_true(pos.is_in(Coord.zero(), new Coord(10, 10)));
+        rcj_assert_false(pos.is_in(Coord.zero(), pos));
         rcj_assert_true(pos2.is_in(Coord.zero(), new Coord(10, -20)));
         rcj_assert_false(pos2.is_in(Coord.zero(), pos2));
+
+        console.debug("Test Coord: scaling")
+        rcj_assert_true(pos.scale(new Coord(scale, scale)).equals(pos.scale_square(scale)));
+        rcj_test_coord(pos.scale_square(2), x * 2, y * 2);
         rcj_test_coord(pos2.scale_square(2), x2 * 2, y2 * 2);
-
-        rcj_test_coord(pos.add(pos2), x + x2, y + y2);
-        rcj_test_coord(pos2.add(pos), x + x2, y + y2);
-
         rcj_test_coord(pos.scale(pos2), x * x2, y * y2);
         rcj_test_coord(pos2.scale(pos), x * x2, y * y2);
 
+        console.debug("Test Coord: addition")
+        rcj_test_coord(pos.add(pos2), x + x2, y + y2);
+        rcj_test_coord(pos2.add(pos), x + x2, y + y2);
         rcj_assert_true(pos.add(pos2).equals(pos2.add(pos)));
 
-        console.log("Coord test complete");
+        console.debug("Test Coord: subtraction")
+        rcj_test_coord(pos.subtract(pos2), x - x2, y - y2);
+        rcj_test_coord(pos2.subtract(pos), x2 - x, y2 - y);
+
+        console.debug("Coord test complete");
 }
 
 function rcj_test_coord(pos: Coord, x: number, y: number): number {

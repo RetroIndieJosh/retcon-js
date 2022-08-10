@@ -140,7 +140,7 @@ function rcj_test_numbergrid(): void {
         
         let grid = new NumberGrid(Coord.one().scale_square(size), 0, tile_count);
 
-        // test empty grid
+        console.debug("Test NumberGrid: set all")
         for (let i = 0; i < tile_count; i++) {
                 grid.set_all(i);
                 for (let pos = Coord.zero(); pos.x < size; pos.x++) {
@@ -150,7 +150,7 @@ function rcj_test_numbergrid(): void {
                 }
         }
 
-        // test set single value
+        console.debug("Test NumberGrid: set single value")
         grid.set_all(0);
         for (let i = 0; i < size; i++) {
                 const pos = Coord.random(new Coord(0, 0), new Coord(size, size));
@@ -158,7 +158,7 @@ function rcj_test_numbergrid(): void {
                 rcj_assert_equals(1, grid.get(pos));
         }
 
-        // test wrap
+        console.debug("Test NumberGrid: set with wrap")
         grid.set_all(0);
         for (let pos = new Coord(size, size); pos.x < size * 2; pos.x++) {
                 for (pos.y = size; pos.y < size * 2; pos.y++) {
@@ -172,7 +172,7 @@ function rcj_test_numbergrid(): void {
                 }
         }
 
-        // test clip
+        console.debug("Test NumberGrid: set with clip")
         grid.set_all(0);
         for (let pos = new Coord(size, size); pos.x < size * 2; pos.x++) {
                 for (pos.y = size; pos.y < size * 2; pos.y++) {
@@ -186,7 +186,7 @@ function rcj_test_numbergrid(): void {
                 }
         }
 
-        // test copy
+        console.debug("Test NumberGrid: copy")
         grid.randomize();
         const grid2 = grid.copy();
         for (let pos = Coord.zero(); pos.x < size; pos.x++) {
@@ -195,18 +195,16 @@ function rcj_test_numbergrid(): void {
                 }
         }
 
-        // test for_each
+        console.debug("Test NumberGrid: for_each")
         let count = 0;
         grid.set_all(0);
         let copy = grid.copy();
         grid.set_all(1);
-
         // this should copy all values from grid to copy without missing any
         grid.for_each((pos, value) => {
                 copy.set(pos, value, false);
                 count++;
         });
-
         // check all values flagged in the copy
         for (let pos = Coord.zero(); pos.x < size; pos.x++) {
                 for (pos.y = 0; pos.y < size; pos.y++) {
@@ -214,5 +212,5 @@ function rcj_test_numbergrid(): void {
                 }
         }
 
-        console.log("NumberGrid test complete");
+        console.debug("NumberGrid test complete");
 }

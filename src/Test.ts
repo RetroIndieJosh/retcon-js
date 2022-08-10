@@ -30,8 +30,8 @@ function rcj_unit_tests() {
         rcj_test_numbergrid();
         rcj_test_surface();
 
-        if (fail_count == 0) console.log("Success!");
-        else console.log(`${fail_count} failure(s)`);
+        if (fail_count == 0) console.log("All tests succeeded!");
+        else console.log(`${fail_count} failed test(s)`);
 }
 
 function retconjs_test_decrease_move_speed() {
