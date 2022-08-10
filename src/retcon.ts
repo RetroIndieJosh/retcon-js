@@ -63,7 +63,7 @@ function retconjs_load_game(game_data: GameData, scale: number, debug: boolean) 
         if(!debug) return;
 
         console.info(`Starting game ${game_data.title} with:\n`
-                + `${Video.color_count()} colors\n`
+                + `${Video.color_count} colors\n`
                 + `${game_data.palettes.length} palettes\n`
                 + `${game_data.tiles.length} tiles\n`
                 + `${game_data.tilesets.length} tilesets\n`

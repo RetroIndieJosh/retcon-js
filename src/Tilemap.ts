@@ -106,7 +106,7 @@ class Tilemap {
         }
 
         private sync_tiles() {
-                if(!Video.is_initialized()) return;
+                if(!Video.is_initialized) return;
 
                 const palette = Video.get_palette(this.palette_id);
                 //console.log(`Tile IDs: ${this.tile_ids}`);

@@ -22,7 +22,11 @@ class Video
 
         private static frames_per_second_target = 60;
 
-        public static is_initialized(): boolean {
+        public static get color_count() { return Video.color_list.length; }
+        public static get sprite_count() { return Video.sprite_list.length; }
+        public static get tile_count() { return Video.tile_list.length; }
+
+        public static get is_initialized(): boolean {
                 return Video.initialized;
         }
 
@@ -132,10 +136,6 @@ class Video
                 return id;
         }
 
-        public static color_count(): number {
-                return Video.color_list.length;
-        }
-
         public static get_color(color_id: number) {
                 if (Video.color_list.length == 0) {
                         throw console.error("RetConJS: No colors loaded - must have at least one!");
@@ -242,6 +242,7 @@ class Video
                 return Video.sprite_list.indexOf(sprite) >= 0;
         }
 
-        public static get sprite_count() { return Video.sprite_list.length; }
-        public static get tile_count() { return Video.tile_list.length; }
+        public static test_pixel(value: number, pos: Coord): boolean { 
+                return this.surface.get_pixel(pos) == value; 
+        }
 } 

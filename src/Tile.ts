@@ -10,23 +10,25 @@ class Tile {
                 if (!(this.size % 1 == 0))
                         throw new Error(`RetConJS: non-square tile size ${tile_data.length}`);
 
-                this.color_ids = new NumberGrid(new Coord(this.size, this.size), 0, Video.tile_count);
+                this.color_ids = new NumberGrid(new Coord(this.size, this.size), 0, Video.color_count);
 
-                console.info(`load tile ${tile_data}`);
+                // TODO move msg and console info stuff to log(debug = true)
+
+                //console.info(`load tile ${tile_data}`);
 
                 let index = 0;
                 let pos = new Coord(0, 0);
-                let msg = "";
+                //let msg = "";
                 for (; pos.y < this.size; pos.y++) {
                         for (pos.x = 0; pos.x < this.size; pos.x++) {
                                 const hex = `0x${tile_data[index]}`;
                                 this.color_ids.set(pos, Number(hex));
-                                msg += `(${pos.x},${pos.y})/${index}=${hex}|${this.color_ids.get(pos)}) `;
+                                //msg += `(${pos.x},${pos.y})/${index}=${hex}|${this.color_ids.get(pos)}) `;
                                 index++;
                         }
-                        msg += "\n";
+                        //msg += "\n";
                 }
-                console.info(msg);
+                //console.info(msg);
         }
 
         public log() {
@@ -43,7 +45,7 @@ class Tile {
                 console.info(msg);
         }
 
-        public blit(surface: Surface, palette: Palette, top_left: Coord, opaque: boolean, wrap: boolean) {
+        public blit(surface: Surface, palette: Palette, top_left: Coord, opaque = true , wrap = false) {
                 let pos = new Coord(0, 0);
                 for (; pos.y < this.size; pos.y++) {
                         for (pos.x = 0; pos.x < this.size; pos.x++) {
@@ -60,6 +62,10 @@ class Tile {
                                 surface.set_pixel(pos2, color_id, wrap);
                         }
                 }
+        }
+
+        public get_pixel(pos: Coord): number {
+                return this.color_ids.get(pos);
         }
 
         public get_size(): number {
@@ -80,8 +86,45 @@ function rcj_test_tile() {
         console.debug("Test Tile: non-square");
         rcj_assert_exception(() => { let fail = new Tile("12345") });
 
-        // TODO test blit
+        {
+                console.debug("Test Tile: blit matching size (opaque)");
+
+                const tile = new Tile("012345678");
+                const palette = new Palette("9ABCDE012");
+
+                let surf = new Surface(new Coord(3, 3));
+                surf.clear(0);
+
+                tile.blit(surf, palette, Coord.zero, true);
+                for (let pos = new Coord(0, 0); pos.y < 3; pos.y++) {
+                        for (pos.x = 0; pos.x < 3; pos.x++) {
+                                const expected_color = palette.get_color_id(tile.get_pixel(pos));
+                                rcj_assert_equals(expected_color, surf.get_pixel(pos));
+                        }
+                }
+        }
+
+        {
+                console.debug("Test Tile: blit matching size (transparent)");
+
+                const tile = new Tile("012345678");
+                const palette = new Palette("9ABCDE012");
+
+                let surf = new Surface(new Coord(3, 3));
+                surf.clear(0);
+
+                tile.blit(surf, palette, Coord.zero, false);
+                for (let pos = new Coord(0, 0); pos.y < 3; pos.y++) {
+                        for (pos.x = 0; pos.x < 3; pos.x++) {
+                                // treat 0th index as clear, so surface will be 0 there
+                                const pixel = tile.get_pixel(pos);
+                                const expected_color = pixel == 0 ? 0 : palette.get_color_id(tile.get_pixel(pos));
+                                rcj_assert_equals(expected_color, surf.get_pixel(pos));
+                        }
+                }
+        }
+
         // TODO test set_pixel
-        // TODO test blit
-        // TODO test blit
+
+        console.debug("Tile tests complete");
 }
