@@ -13,7 +13,7 @@ class Video
 
         private static background_list = new Array<Tilemap>();
         private static sprite_list = new Array<Sprite>();
-        private static tile_list= new Array<Tile>();
+        private static tile_list = new Array<Tile>();
 
         private static surface: Surface;
 
@@ -23,6 +23,7 @@ class Video
         private static frames_per_second_target = 60;
 
         public static get color_count() { return Video.color_list.length; }
+        public static get palette_count() { return Video.palette_list.length; }
         public static get sprite_count() { return Video.sprite_list.length; }
         public static get tile_count() { return Video.tile_list.length; }
 
@@ -82,7 +83,6 @@ class Video
                 Video.frames_per_second_target = fps;
         }
 
-
         public static start(): void {
                 if (Video.started) {
                         console.warn("Tried to start video, but it's already running");
@@ -108,11 +108,16 @@ class Video
 
                 // TODO prevent duplication
                 // TODO return index
-        public static add_palette(palette: Palette) {
-                console.info(`Add palette #${Video.palette_list.length}`);
+        public static add_palette(palette: Palette): number {
+                const index = Video.palette_count;
+
+                console.info(`Add palette #${index}`);
                 palette.log();
+
                 // TODO prevent duplication
                 Video.palette_list.push(palette);
+
+                return index;
         }
 
                 // TODO prevent duplication
@@ -199,8 +204,7 @@ class Video
                 for (let pos = Coord.zero; pos.x < Video.surface.get_width(); pos.x++) {
                         for (pos.y = 0; pos.y < Video.surface.get_height(); pos.y++) {
                                 //const color = Math.floor(Math.random() * Video.color_list.length;
-                                const palette = Video.get_palette(Math.floor(Math.random() * Video.palette_list.length));
-                                const color = Math.floor(Math.random() * palette.color_count());
+                                const color = Math.floor(Math.random() * Video.color_count);
 
                                 // TODO this works fine
                                 //Video.put_pixel(x, y, color);
@@ -209,6 +213,17 @@ class Video
                                 Video.surface.set_pixel(pos, color);
                         }
                 }
+        }
+
+        // TODO avoid duplication with remove_sprite_at
+        public static remove_palette_at(palette_id: number): boolean {
+                if(palette_id < 0 || palette_id >= Video.palette_count) {
+                        console.warn(`Video: index out of range trying to remove palette by id: ${palette_id}`);
+                        return false;
+                }
+
+                Video.palette_list.splice(palette_id, 1);
+                return true;
         }
 
         // returns whether the sprite was removed
@@ -224,7 +239,7 @@ class Video
 
         // returns whether the sprite was removed
         public static remove_sprite_at(sprite_id: number): boolean {
-                if(sprite_id < 0 || sprite_id >= Video.sprite_list.length) {
+                if(sprite_id < 0 || sprite_id >= Video.sprite_count) {
                         console.warn(`Video: index out of range trying to remove sprite by id: ${sprite_id}`);
                         return false;
                 }

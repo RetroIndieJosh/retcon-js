@@ -8,12 +8,13 @@
 </head>
 
 <!--TODO this should be test.json-->
-<body onload="retconjs_init(5, 'game/sample.json', null, true);">
+
+<body onload="retconjs_init(5, 'game/test.json', null, true);">
         <h1 style="text-align:center;">RetConJS Testing</h1>
         <div class="menu-container">
                 <div class="button-container">
                         <button onclick="rcj_unit_tests();">Run Unit Tests</button>
-                        <button onclick="retconjs_test_clear_black();">Clear to Black</button>
+                        <button onclick="retconjs_test_clear_default();">Clear to Color 0 (Default)</button>
                         <button onclick="retconjs_test_clear_random();">Clear to Random</button>
                         <button onclick="retconjs_test_pixels();">Random Pixels</button>
                         <button onclick="retconjs_test_sprite();">Add Sprite</button>

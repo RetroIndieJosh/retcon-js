@@ -108,7 +108,6 @@ class Tilemap {
         private sync_tiles() {
                 if(!Video.is_initialized) return;
 
-                const palette = Video.get_palette(this.palette_id);
                 //console.log(`Tile IDs: ${this.tile_ids}`);
                 //console.log(`Video: ${video} / Palette: ${palette} / Size: ${this.width}, ${this.height}`);
                 for (let pos = new Coord(0, 0); pos.y < this.size.y; pos.y++) {
@@ -117,7 +116,7 @@ class Tilemap {
                                 // TODO check for UNCHANGED
                                 //console.log(`Tile: ${tile} @ ${x}, ${y}`);
                                 // TODO  make sure we don't draw clear (NumberGrid should help?)
-                                tile.blit(this.surface, palette, this.pos.scale_square(this.tile_size), this.opaque, this.wrap);
+                                tile.blit(this.surface, this.palette_id, this.pos.scale_square(this.tile_size), this.opaque, this.wrap);
                         }
                 }
         }

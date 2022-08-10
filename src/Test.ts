@@ -37,6 +37,7 @@ function rcj_unit_tests() {
         rcj_test_numbergrid();
         rcj_test_surface();
         rcj_test_tile();
+        rcj_test_sprite();
 
         if (fail_count == 0) console.log("All tests succeeded!");
         else console.log(`${fail_count} failed test(s)`);
@@ -50,15 +51,15 @@ function retconjs_test_increase_move_speed() {
         move_speed += 1;
 }
 
-function retconjs_test_clear_black(): void {
-        console.info("clear to black background");
+function retconjs_test_clear_default(): void {
+        console.info("clear to color 0 (default)");
         Video.set_clear_color(0);
 }
 
 function retconjs_test_clear_random(): void {
-        console.info("clear to random background color");
-        // TODO limit to number of colors in game palette
-        Video.set_clear_color(Math.floor(Math.random() * 5));
+        const color_id = Math.floor(Math.random() * Video.color_count);
+        console.info("clear to random background color " + `(${color_id})`);
+        Video.set_clear_color(color_id);
 }
 
 function retconjs_test_metronome(): void {

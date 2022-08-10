@@ -45,15 +45,16 @@ class Tile {
                 console.info(msg);
         }
 
-        public blit(surface: Surface, palette: Palette, top_left: Coord, opaque = true , wrap = false) {
-                let pos = new Coord(0, 0);
-                for (; pos.y < this.size; pos.y++) {
+        public blit(surface: Surface, palette_id: number, top_left: Coord, opaque = true , wrap = false) {
+                palette_id = Math.floor(palette_id);
+                const palette = Video.get_palette(palette_id);
+
+                for (let pos = Coord.zero; pos.y < this.size; pos.y++) {
                         for (pos.x = 0; pos.x < this.size; pos.x++) {
                                 const pos2 = top_left.add(pos);
 
                                 const palette_color_id = this.color_ids.get(pos);
                                 if(palette_color_id == 0 && !opaque) {
-                                        console.log("clear pixel");
                                         surface.set_pixel(pos2, 0, wrap);
                                         continue;
                                 }
@@ -78,7 +79,7 @@ class Tile {
 }
 
 function rcj_test_tile() {
-        console.debug("Tile Tests Start");
+        console.debug("Tile tests starting");
 
         console.debug("Test Tile: empty");
         rcj_assert_exception(() => { let fail = new Tile("") });
@@ -86,34 +87,39 @@ function rcj_test_tile() {
         console.debug("Test Tile: non-square");
         rcj_assert_exception(() => { let fail = new Tile("12345") });
 
+        // TODO avoid duplication between this and next test
         {
                 console.debug("Test Tile: blit matching size (opaque)");
 
                 const tile = new Tile("012345678");
-                const palette = new Palette("9ABCDE012");
+                const palette = new Palette("9012345678");
+                const palette_id = Video.add_palette(palette);
 
                 let surf = new Surface(new Coord(3, 3));
                 surf.clear(0);
 
-                tile.blit(surf, palette, Coord.zero, true);
+                tile.blit(surf, palette_id, Coord.zero, true);
                 for (let pos = new Coord(0, 0); pos.y < 3; pos.y++) {
                         for (pos.x = 0; pos.x < 3; pos.x++) {
                                 const expected_color = palette.get_color_id(tile.get_pixel(pos));
                                 rcj_assert_equals(expected_color, surf.get_pixel(pos));
                         }
                 }
+
+                Video.remove_palette_at(palette_id);
         }
 
         {
                 console.debug("Test Tile: blit matching size (transparent)");
 
                 const tile = new Tile("012345678");
-                const palette = new Palette("9ABCDE012");
+                const palette = new Palette("9012345678");
+                const palette_id = Video.add_palette(palette);
 
                 let surf = new Surface(new Coord(3, 3));
                 surf.clear(0);
 
-                tile.blit(surf, palette, Coord.zero, false);
+                tile.blit(surf, palette_id, Coord.zero, false);
                 for (let pos = new Coord(0, 0); pos.y < 3; pos.y++) {
                         for (pos.x = 0; pos.x < 3; pos.x++) {
                                 // treat 0th index as clear, so surface will be 0 there
@@ -122,6 +128,8 @@ function rcj_test_tile() {
                                 rcj_assert_equals(expected_color, surf.get_pixel(pos));
                         }
                 }
+
+                Video.remove_palette_at(palette_id);
         }
 
         // TODO test set_pixel

@@ -1,6 +1,8 @@
 class Palette {
         private color_ids: Array<number> = new Array<number>;
 
+        public get color_count() { return this.color_ids.length; }
+
         constructor(palette_string: string) {
                 for (let i = 0; i < palette_string.length; i++) {
                         const ch = palette_string[i];
@@ -13,10 +15,6 @@ class Palette {
                 console.info(`Palette with ${this.color_ids.length} colors`);
                 for (let i = 0; i < this.color_ids.length; i++)
                         console.info(`    ${i} => ${this.color_ids[i]}`);
-        }
-
-        public color_count() {
-                return this.color_ids.length;
         }
 
         // convert an index in the list of palette colors to index in the Video colors
