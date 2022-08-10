@@ -86,7 +86,7 @@ class Surface {
 } 
 
 function rcj_test_surface(): void {
-        console.debug("Start surface tests");
+        console.debug("Surface Tests Start");
 
         const width = 16;
         const height = 32;
@@ -154,7 +154,7 @@ function rcj_test_surface(): void {
         // TODO test reset_changed ?
 
         // TODO test render
-        console.debug("Test render");
+        //console.debug("Test render");
 
         {
                 console.debug("Test Surface: blit matching size");

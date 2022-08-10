@@ -3,10 +3,12 @@ class Tile {
         private color_ids: Array<Array<number>> = new Array<Array<number>>();
 
         constructor(tile_data: string) {
+                if (tile_data == "")
+                        throw new Error("RetConJS: empty tile data");
+
                 this.size = Math.sqrt(tile_data.length);
-                if (!(this.size % 1 == 0)) {
+                if (!(this.size % 1 == 0))
                         throw new Error(`RetConJS: non-square tile size ${tile_data.length}`);
-                }
 
                 this.color_ids = new Array<Array<number>>(this.size);
                 for (let x = 0; x < this.size; x++) {
@@ -70,4 +72,19 @@ class Tile {
         public set_pixel(x: number, y: number, palette_color_id: number) {
                 this.color_ids[x][y] = palette_color_id;
         }
+}
+
+function rcj_test_tile() {
+        console.debug("Tile Tests Start");
+
+        console.debug("Test Tile: empty");
+        rcj_assert_exception(() => { let fail = new Tile("") });
+
+        console.debug("Test Tile: non-square");
+        rcj_assert_exception(() => { let fail = new Tile("12345") });
+
+        // TODO test blit
+        // TODO test set_pixel
+        // TODO test blit
+        // TODO test blit
 }

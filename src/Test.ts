@@ -7,6 +7,13 @@ let move_speed = 1;
 
 let fail_count = 0;
 
+// expect an exception
+function rcj_assert_exception(func: () => void) {
+        try { func(); }
+        catch (ex) { return; }
+        rcj_assert_equals("exception", "no exception");
+}
+
 function rcj_assert_false(actual: boolean): boolean {
         return rcj_assert_equals(false, actual);
 }
@@ -18,7 +25,7 @@ function rcj_assert_true(actual: boolean): boolean {
 function rcj_assert_equals<T>(expected: T, actual: T): boolean {
         if (expected == actual) return true;
 
-        console.error(`Assertion failed: Expected value  ${expected}, actual ${actual}`);
+        console.error(`Assertion failed: Expected value ${expected}, actual ${actual}`);
         fail_count++;
         return false;
 }
@@ -26,9 +33,10 @@ function rcj_assert_equals<T>(expected: T, actual: T): boolean {
 function rcj_unit_tests() {
         fail_count = 0;
 
-        rcj_test_coords();
+        rcj_test_coord();
         rcj_test_numbergrid();
         rcj_test_surface();
+        rcj_test_tile();
 
         if (fail_count == 0) console.log("All tests succeeded!");
         else console.log(`${fail_count} failed test(s)`);

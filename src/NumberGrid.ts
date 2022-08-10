@@ -135,9 +135,12 @@ class NumberGrid {
 }
 
 function rcj_test_numbergrid(): void {
+        console.debug("NumberGrid Tests Start");
+
         const size = 256;
         const tile_count = 8;
         
+        // TODO make a new grid for each test and use {} to separate
         let grid = new NumberGrid(Coord.one().scale_square(size), 0, tile_count);
 
         console.debug("Test NumberGrid: set all")
