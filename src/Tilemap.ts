@@ -24,9 +24,7 @@ class Tilemap {
 
                 this.surface = new Surface(this.size.scale_square(tile_size));
 
-                // TODO a way to set up 2D arrays without needing to write this loop every time
-                // TODO Video.get_tile_count for max
-                this.tile_ids = new NumberGrid(this.size, 0, 2);
+                this.tile_ids = new NumberGrid(this.size, 0, Video.tile_count);
         }
 
         public blit(target_surface: Surface) {
@@ -80,8 +78,7 @@ class Tilemap {
                 let pos = new Coord(0, 0);
                 for (; pos.y < this.size.y; pos.y++) {
                         for (pos.x = 0; pos.x < this.size.x; pos.x++) {
-                                // TODO use Video.get_tile_count
-                                this.tile_ids.set(pos, Math.floor(Math.random() * 16), false);
+                                this.tile_ids.set(pos, Math.floor(Math.random() * Video.tile_count), false);
                         }
                 }
                 this.sync_tiles();
