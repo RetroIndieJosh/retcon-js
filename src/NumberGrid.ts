@@ -1,5 +1,7 @@
 const NUMBER_UNCHANGED = -1;
 
+// TODO add log()
+//class NumberGrid implements Loggable {
 class NumberGrid {
         private size: Coord;
 

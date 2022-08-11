@@ -1,4 +1,5 @@
-class Tile {
+class Tile implements Loggable {
+        // TODO tile size shouldn't be customizable - should always be Video.tile_size (or ideally Game.tile_size)
         private size: number = -1;
         private color_ids: NumberGrid;
 

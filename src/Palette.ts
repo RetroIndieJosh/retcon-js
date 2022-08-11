@@ -1,4 +1,4 @@
-class Palette {
+class Palette implements Loggable {
         private color_ids: Array<number> = new Array<number>;
 
         public get color_count() { return this.color_ids.length; }

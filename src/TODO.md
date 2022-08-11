@@ -7,6 +7,10 @@
  
 ## Engine
 
+- add random background (generate tilemap and add to background list)
+- visualize colors (display all in sequence)
+- visualize palettes (display all in sequence)
+- visualize tiles (display all in sequence)
 - unit tests for Sprite, TileMap, Video
 - ToString or Log for Coord type
 - `add_frame_event` instead of having input update in Video

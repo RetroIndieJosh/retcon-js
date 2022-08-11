@@ -1,0 +1,3 @@
+interface Loggable {
+        log(): void;
+}

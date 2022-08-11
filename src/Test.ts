@@ -1,4 +1,4 @@
-// RetConJS tests
+// rcj tests
 
 // TODO do game setup in here specifically for testing purposes
 
@@ -43,31 +43,31 @@ function rcj_unit_tests() {
         else console.log(`${fail_count} failed test(s)`);
 }
 
-function retconjs_test_decrease_move_speed() {
+function rcj_test_decrease_move_speed() {
         move_speed -= 1;
 }
 
-function retconjs_test_increase_move_speed() {
+function rcj_test_increase_move_speed() {
         move_speed += 1;
 }
 
-function retconjs_test_clear_default(): void {
+function rcj_test_clear_default(): void {
         console.info("clear to color 0 (default)");
         Video.set_clear_color(0);
 }
 
-function retconjs_test_clear_random(): void {
+function rcj_test_clear_random(): void {
         const color_id = Math.floor(Math.random() * Video.color_count);
         console.info("clear to random background color " + `(${color_id})`);
         Video.set_clear_color(color_id);
 }
 
-function retconjs_test_metronome(): void {
+function rcj_test_metronome(): void {
         metronome_init();
         metronome_play();
 }
 
-function retconjs_test_music(): void {
+function rcj_test_music(): void {
         const drums = new Audio("./music/replicator-drum.ogg");
         drums.loop = true;
 
@@ -85,31 +85,80 @@ function retconjs_test_music(): void {
         });
 }
 
-function retconjs_test_clear_sprites(): void {
+function genRanHex(digits: number): string {
+        return [...Array(digits)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
+}
+
+
+function rcj_test_add_color(): void {
+        const color_str = genRanHex(3);
+        const index = Video.add_color(color_str);
+
+        console.debug(`add color #${index} = 0x${color_str}`);
+}
+
+function rcj_test_add_palette(): void {
+        let pal_str = "";
+        for (let i = 0; i < Video.palette_color_count; i++)
+                pal_str += Math.floor(Math.random() * Video.color_count);
+
+        const index = Video.add_palette(new Palette(pal_str));
+        console.debug(`add palette ${index} = "${pal_str}"`);
+}
+
+// TODO move (utilities?)
+// returns random int in range [min, max)
+function random_int(min: number, max: number) {
+        return Math.floor(Math.random() * max + min);
+}
+
+function rcj_test_add_sprite(): void {
+        if (Video.palette_count == 0) {
+                console.debug("Cannot add sprite - no palettes loaded");
+                return;
+        }
+
+        if (Video.tile_count == 0) {
+                console.debug("Cannot add sprite - no tiles loaded");
+                return;
+        }
+
+        const tile_id = random_int(0, Video.tile_count);
+        const palette_id = random_int(0, Video.palette_count);
+
+        const sprite = new Sprite(tile_id, palette_id);
+        sprite.pos.x = random_int(0, 64);
+        sprite.pos.y = random_int(0, 64);
+
+        const index = Video.add_sprite(sprite);
+        console.info(`Add sprite ${index} at ${sprite.pos.x}, ${sprite.pos.y}`);
+}
+
+function rcj_test_add_tile(): void {
+        let tile_str = "";
+        for (let i = 0; i < 8 * 8; i++) {
+                tile_str += Math.floor(Math.random() * Video.palette_color_count);
+        }
+
+        const index = Video.add_tile(new Tile(tile_str));
+        console.debug(`add tile #${index}`);
+}
+
+function rcj_test_clear_sprites(): void {
         const video = Video;
         while(video.sprite_count > 0)
                 video.remove_sprite_at(0);
         video.set_clear_color(0);
 }
 
-function retconjs_test_pixels(): void {
+function rcj_test_pixels(): void {
         console.info("clear to randomized pixels");
         Video.randomize();
 }
 
-function retconjs_test_sprite(): Sprite {
-        let sprite = new Sprite(1, 0);
-        //sprite.pos.x = Math.floor(Math.random() * 64);
-        //sprite.pos.y = Math.floor(Math.random() * 64);
-
-        console.info(`Add sprite at ${sprite.pos.x}, ${sprite.pos.y}`);
-        Video.add_sprite(sprite);
-
-        return sprite;
-}
-
-function retconjs_test_sprite_move_horizontal(): void {
-        const sprite = retconjs_test_sprite();
+/*
+function rcj_test_sprite_move_horizontal(): void {
+        const sprite = rcj_test_add_sprite();
 
         let move = 0;
         const sprite_move = setInterval(() => {
@@ -122,10 +171,10 @@ function retconjs_test_sprite_move_horizontal(): void {
         }, 1000 / 60);
 
         console.info(`Test ${sprite_move}: Moving sprite horizontally for ${TEST_LENGTH} seconds`);
-        retconjs_set_timeout_sprite_test(sprite, sprite_move);
+        rcj_set_timeout_sprite_test(sprite, sprite_move);
 }
 
-function retconjs_set_timeout_sprite_test(sprite: Sprite, test_id: number) {
+function rcj_set_timeout_sprite_test(sprite: Sprite, test_id: number) {
         setTimeout(() => {
                 Video.remove_sprite(sprite);
                 clearInterval(test_id);
@@ -133,8 +182,8 @@ function retconjs_set_timeout_sprite_test(sprite: Sprite, test_id: number) {
         }, 1000 * TEST_LENGTH);
 }
 
-function retconjs_test_sprite_move_vertical(): void {
-        const sprite = retconjs_test_sprite();
+function rcj_test_sprite_move_vertical(): void {
+        const sprite = rcj_test_add_sprite();
 
         let move = 0;
         const sprite_move = setInterval(() => {
@@ -147,11 +196,11 @@ function retconjs_test_sprite_move_vertical(): void {
         }, 1000 / 60);
 
         console.info(`Test ${sprite_move}: Moving sprite vertically for ${TEST_LENGTH} seconds`);
-        retconjs_set_timeout_sprite_test(sprite, sprite_move);
+        rcj_set_timeout_sprite_test(sprite, sprite_move);
 }
 
-function retconjs_test_sprite_move_random(): void {
-        const sprite = retconjs_test_sprite();
+function rcj_test_sprite_move_random(): void {
+        const sprite = rcj_test_add_sprite();
 
         const MOVE_MULT = move_speed * 2 + 1;
         let move = 0;
@@ -161,10 +210,11 @@ function retconjs_test_sprite_move_random(): void {
         }, 1000 / 60);
 
         console.info(`Test ${sprite_move}: Moving sprite randomly for ${TEST_LENGTH} seconds`);
-        retconjs_set_timeout_sprite_test(sprite, sprite_move);
+        rcj_set_timeout_sprite_test(sprite, sprite_move);
 }
+*/
 
-function retconjs_test_input(): void {
+function rcj_test_input(): void {
         const input = new Input();
         console.log("Awaiting input");
 }

@@ -1,4 +1,4 @@
-class Tilemap {
+class Tilemap implements Loggable {
         private tile_size: number;
 
         public pos = Coord.zero;
@@ -15,8 +15,8 @@ class Tilemap {
         private palette_id: number;
 
         constructor(tile_size: number, size: Coord, palette_id: number) {
-                this.tile_size = tile_size;
-                this.size = size;
+                this.tile_size = Math.floor(tile_size);
+                this.size = size.floor;
                 this.palette_id = palette_id;
 
                 console.info(`Create tile ${this.size.x}x${this.size.y} tiles of `
@@ -120,4 +120,63 @@ class Tilemap {
                         }
                 }
         }
+}
+
+function rcj_test_tilemap() {
+        console.debug("TileMap tests starting");
+
+        console.debug("Test TileMap: empty");
+        rcj_assert_exception(() => { let fail = new Tile("") });
+
+        console.debug("Test Tile: non-square");
+        rcj_assert_exception(() => { let fail = new Tile("12345") });
+
+        // TODO avoid duplication between this and next test
+        {
+                console.debug("Test Tile: blit matching size (opaque)");
+
+                const tile = new Tile("012345678");
+                const palette = new Palette("9012345678");
+                const palette_id = Video.add_palette(palette);
+
+                let surf = new Surface(new Coord(3, 3));
+                surf.clear(0);
+
+                tile.blit(surf, palette_id, Coord.zero, true);
+                for (let pos = new Coord(0, 0); pos.y < 3; pos.y++) {
+                        for (pos.x = 0; pos.x < 3; pos.x++) {
+                                const expected_color = palette.get_color_id(tile.get_pixel(pos));
+                                rcj_assert_equals(expected_color, surf.get_pixel(pos));
+                        }
+                }
+
+                Video.remove_palette_at(palette_id);
+        }
+
+        {
+                console.debug("Test Tile: blit matching size (transparent)");
+
+                const tile = new Tile("012345678");
+                const palette = new Palette("9012345678");
+                const palette_id = Video.add_palette(palette);
+
+                let surf = new Surface(new Coord(3, 3));
+                surf.clear(0);
+
+                tile.blit(surf, palette_id, Coord.zero, false);
+                for (let pos = new Coord(0, 0); pos.y < 3; pos.y++) {
+                        for (pos.x = 0; pos.x < 3; pos.x++) {
+                                // treat 0th index as clear, so surface will be 0 there
+                                const pixel = tile.get_pixel(pos);
+                                const expected_color = pixel == 0 ? 0 : palette.get_color_id(tile.get_pixel(pos));
+                                rcj_assert_equals(expected_color, surf.get_pixel(pos));
+                        }
+                }
+
+                Video.remove_palette_at(palette_id);
+        }
+
+        // TODO test set_pixel
+
+        console.debug("Tile tests complete");
 }

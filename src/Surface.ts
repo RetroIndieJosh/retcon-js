@@ -1,3 +1,5 @@
+        // TODO add log()
+//class Surface implements Loggable {
 class Surface {
         protected pixels: NumberGrid;
 
@@ -171,20 +173,21 @@ function rcj_test_surface(): void {
 
         // TODO
         {
-                console.debug("Test Surface: blit smaller (clip)");
+                console.debug("Test Surface: blit smaller with offset (clip)");
 
+                const offset = new Coord(8, 7);
                 const surf_small = new Surface(new Coord(width / 2, height / 2));
 
-                surf.blit(surf_small, Coord.zero, false);
+                surf.blit(surf_small, offset, false);
                 for (let pos = new Coord(0, 0); pos.y < height / 2; pos.y++) {
                         for (pos.x = 0; pos.x < width / 2; pos.x++) {
-                                rcj_assert_equals(surf_small.get_pixel(pos), surf.get_pixel(pos));
+                                rcj_assert_equals(surf_small.get_pixel(pos), surf.get_pixel(pos.add(offset)));
                         }
                 }
         }
 
         {
-                console.debug("Test Surface: blit larger (clip)");
+                console.debug("Test Surface: blit larger, no offset (clip)");
                 const surf_large = new Surface(new Coord(width * 2, height * 2));
 
                 surf.blit(surf_large, Coord.zero, false);
