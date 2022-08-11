@@ -1,13 +1,17 @@
 # LOWREZJAM 2022 To Do
+
+## Standards
+
+- only floor `number`s if using as array index (don't bother when passing to function - that function should hand it)
+- always use NumberGrid for Array<NUmber><Number> (may want to genericize to NumberArray<T> where <T> is number of dimensions)
  
 ## Engine
 
-- change all backend stuff to use Coord type
-- unit tests for Coord and NumberGrid
-- change tile_ids in Tile and TileMap to NumberGrid (check dirty=>changed works)
+- unit tests for Sprite, TileMap, Video
 - ToString or Log for Coord type
 - `add_frame_event` instead of having input update in Video
   - frame management independent of video (refreshing is a frame event)
+  - make sure they execute in correct sequence (may need two events for rendering: clear, run other events, then render to canvas)
 - use text for the viewers to draw the corresponding index
   - will want something like `get_center` and `get_real_center` where the latter is screen coords converted using Video.scale
 - migrate Actor to its own file and incorporate update in engine

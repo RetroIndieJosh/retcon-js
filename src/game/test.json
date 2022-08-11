@@ -1,0 +1,10 @@
+{
+        "title": "Test Game",
+        "tile_size": 8,
+        "colors": "6F6",
+        "palettes": [ ],
+        "tiles": [ ],
+        "tilesets": [ ],
+        "tilemaps": [ ],
+        "sprites": [ ]
+}
