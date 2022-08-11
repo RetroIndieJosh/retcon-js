@@ -26,8 +26,11 @@ class GameData {
         public tilemaps: Array<TilemapData> = new Array<TilemapData>();
 }
 
-function retconjs_init(scale: number, game_path: string,  on_done: () => void, debug: boolean = false): void {
+function retconjs_init(scale: number, game_path: string | null = null,  on_done: () => void, debug = false): void {
         Input.initialize();
+
+        if (game_path == null) return;
+
         fetch(game_path)
                 .then(res => res.json())
                 .then(res => retconjs_load_game(res, scale, debug))
@@ -37,7 +40,7 @@ function retconjs_init(scale: number, game_path: string,  on_done: () => void, d
 }
 
 function retconjs_load_game(game_data: GameData, scale: number, debug: boolean) {
-        Video.initialize('retcon', Coord.one.scale_square(64), scale, game_data.colors);
+        Video.initialize('retcon', new Coord(64, 64), scale, game_data.colors);
 
         // load palettes
         game_data.palettes.forEach(palette_data => {

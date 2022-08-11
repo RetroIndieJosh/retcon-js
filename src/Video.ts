@@ -68,6 +68,7 @@ class Video
                 this._palette_color_count = 4;
                 this._tile_size = 8;
 
+                this.randomize();
 
                 this.initialized = true;
         }
@@ -109,7 +110,6 @@ class Video
                         Input.clear();
                 }, 1000 / this.frames_per_second_target);
 
-                this.randomize();
                 this.started = true;
         }
 
@@ -261,14 +261,8 @@ class Video
         public static randomize(): void {
                 for (let pos = Coord.zero; pos.x < this.surface.get_width(); pos.x++) {
                         for (pos.y = 0; pos.y < this.surface.get_height(); pos.y++) {
-                                //const color = Math.floor(Math.random() * this.color_list.length;
-                                const color = Math.floor(Math.random() * this.color_count);
-
-                                // TODO this works fine
-                                //this.put_pixel(x, y, color);
-
-                                // TODO this works only if numbergrid marks same color draws as dirty
-                                this.surface.set_pixel(pos, color);
+                                const color = random_int(0, Video.color_count);
+                                this.put_pixel(pos, color);
                         }
                 }
         }

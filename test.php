@@ -9,11 +9,22 @@
 
 <!--TODO this should be test.json-->
 
-<body onload="retconjs_init(5, 'game/test.json', null, true);">
+<body onload='retconjs_init(5, null, null)'>
         <h1 style="text-align:center;">RetConJS Testing</h1>
         <div class="menu-container">
                 <div class="button-container">
+                        <button onclick="retconjs_init(5, 'game/test.json', null, true);">Init Game</button>
+
+                        <!--TODO disable if video initialized-->
+                        <button onclick="Video.initialize('retcon', new Coord(64, 64), 5, '6F6')">Init Video</button>
+                        <button onclick="rcj_test_pixels();">Randomize Display Pixels</button>
+
+                        <!--TODO disable if video started-->
+                        <button onclick="Video.start()">Start Video</button>
+
                         <button onclick="rcj_unit_tests();">Run Unit Tests</button>
+
+                        <button onclick="rcj_test_init_random_game();">Init Random Game</button>
 
                         <button onclick="rcj_test_add_color();">Add Random Color</button>
                         <button onclick="rcj_test_add_palette();">Add Random Palette</button>
@@ -29,18 +40,11 @@
                         <button onclick="rcj_test_clear_default();">Clear to Color 0 (Default)</button>
                         <button onclick="rcj_test_clear_random();">Clear to Random Color</button>
 
-                        <!-- TODO list colors-->
-                        <!-- TODO list palettes-->
-                        <!-- TODO list tiles-->
-                        <!-- TODO list tilemaps-->
-                        <!-- TODO list sprites-->
-                        <!-- TODO list actors-->
-
-                        <!--
-                        <button onclick="rcj_test_pixels();">Randomize Display Pixels</button>
                         <button onclick="rcj_test_sprite_move_horizontal();">Horizontal Movement</button>
                         <button onclick="rcj_test_sprite_move_vertical();">Vertical Movement</button>
                         <button onclick="rcj_test_sprite_move_random();">Random Movement</button>
+
+                        <!--
                         <button onclick="rcj_test_clear_sprites();">Clear All Sprites</button>
                         <button onclick="rcj_test_increase_move_speed();">Increase Move Speed</button>
                         <button onclick="rcj_test_decrease_move_speed();">Decrease Move Speed</button>

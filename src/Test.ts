@@ -112,15 +112,15 @@ function random_int(min: number, max: number) {
         return Math.floor(Math.random() * max + min);
 }
 
-function rcj_test_add_sprite(): void {
+function rcj_test_add_sprite(): Sprite | null {
         if (Video.palette_count == 0) {
                 console.debug("Cannot add sprite - no palettes loaded");
-                return;
+                return null;
         }
 
         if (Video.tile_count == 0) {
                 console.debug("Cannot add sprite - no tiles loaded");
-                return;
+                return null;
         }
 
         const tile_id = random_int(0, Video.tile_count);
@@ -132,6 +132,8 @@ function rcj_test_add_sprite(): void {
 
         const index = Video.add_sprite(sprite);
         console.info(`Add sprite ${index} at ${sprite.pos.x}, ${sprite.pos.y}`);
+
+        return sprite;
 }
 
 function rcj_test_add_tile(): void {
@@ -151,14 +153,20 @@ function rcj_test_clear_sprites(): void {
         video.set_clear_color(0);
 }
 
+function rcj_test_init_random_game(): void {
+        for (let i = 0; i < 8; i++) rcj_test_add_color();
+        for (let i = 0; i < 8; i++) rcj_test_add_palette();
+        for (let i = 0; i < 8; i++) rcj_test_add_tile();
+}
+
 function rcj_test_pixels(): void {
         console.info("clear to randomized pixels");
         Video.randomize();
 }
 
-/*
 function rcj_test_sprite_move_horizontal(): void {
         const sprite = rcj_test_add_sprite();
+        if (sprite == null) return;
 
         let move = 0;
         const sprite_move = setInterval(() => {
@@ -184,6 +192,7 @@ function rcj_set_timeout_sprite_test(sprite: Sprite, test_id: number) {
 
 function rcj_test_sprite_move_vertical(): void {
         const sprite = rcj_test_add_sprite();
+        if (sprite == null) return;
 
         let move = 0;
         const sprite_move = setInterval(() => {
@@ -201,6 +210,7 @@ function rcj_test_sprite_move_vertical(): void {
 
 function rcj_test_sprite_move_random(): void {
         const sprite = rcj_test_add_sprite();
+        if (sprite == null) return;
 
         const MOVE_MULT = move_speed * 2 + 1;
         let move = 0;
@@ -212,7 +222,6 @@ function rcj_test_sprite_move_random(): void {
         console.info(`Test ${sprite_move}: Moving sprite randomly for ${TEST_LENGTH} seconds`);
         rcj_set_timeout_sprite_test(sprite, sprite_move);
 }
-*/
 
 function rcj_test_input(): void {
         const input = new Input();
