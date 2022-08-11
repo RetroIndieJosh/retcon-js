@@ -74,7 +74,8 @@ class Video
 
         private static clear() {
                 this.surface.clear(this.clear_color);
-                this.surface.render();
+                // TODO since our surface is the entire canvas space, we shouldn't need to re-render
+                //this.surface.render();
         }
 
         // TODO move to private, add to frame action list

@@ -56,6 +56,13 @@ class NumberGrid {
 
         public get(pos: Coord) {
                 pos = pos.floor;
+
+                // TODO this is clip - handle wrap!
+                if (!pos.is_in(Coord.zero, this.size)) {
+                        // TODO shouldn't this be ignored? a warning? but then what do we return?
+                        throw new Error(`Illegal NumberGrid coord: ${pos} not in ((0, 0), (${this.size}))`);
+                }
+
                 if(this.changed[pos.x][pos.y])
                         return this.values[pos.x][pos.y];
                 return NUMBER_UNCHANGED;

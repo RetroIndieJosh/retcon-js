@@ -35,23 +35,28 @@ class Surface {
                 return this.pixels.copy();
         }
 
+        // TODO make a property
         public get_height(): number {
                 return this.pixels.get_height();
         }
 
+        // TODO make a property
         public get_pixel(pos: Coord): number {
                 return this.pixels.get(pos);
         }
 
+        // TODO make a property for pixels and then use get_pixels for range
         // TODO a way to get a range of pixels [top_left, top_left+size)
         public get_pixels(): NumberGrid {
                 return this.pixels;
         }
 
+        // TODO make a property
         public get_size(): Coord {
                 return this.pixels.get_size();
         }
 
+        // TODO make a property
         public get_width(): number {
                 return this.pixels.get_width();
         }
@@ -70,13 +75,16 @@ class Surface {
                 this.pixels.clear_changed();
         }
 
-        public set_pixel(pos: Coord, color_id: number, wrap: boolean = false) {
+        public set_pixel(pos: Coord, color_id: number, wrap = false) {
                 this.pixels.set(pos, color_id, wrap);
         }
 
         public set_pixels(top_left: Coord, pixels: NumberGrid, wrap: boolean) {
-                const width = Math.min(top_left.x + pixels.get_width(), this.pixels.get_width());
-                const height = Math.min(top_left.y + pixels.get_height(), this.pixels.get_height());
+                // TODO fix for clipping
+                //const width = Math.min(top_left.x + pixels.get_width(), this.pixels.get_width());
+                //const height = Math.min(top_left.y + pixels.get_height(), this.pixels.get_height());
+                const width = pixels.get_width();
+                const height = pixels.get_height();
 
                 for (let pos = new Coord(0, 0); pos.y < height; pos.y++) {
                         for (pos.x = 0; pos.x < width; pos.x++) {

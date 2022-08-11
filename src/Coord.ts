@@ -24,6 +24,7 @@ class Coord {
                 this.y = y;
         }
 
+        // TODO rename to "plus" so it's not confused with "add element to list"
         public add(other_coord: Coord): Coord {
                 return new Coord(this.x + other_coord.x, this.y + other_coord.y);
         }
@@ -65,11 +66,14 @@ class Coord {
                 return new Coord(this.x * scale, this.y * scale);
         }
 
+        // TODO rename to "minus" to parallel renamed plus()
         public subtract(other_coord: Coord): Coord {
                 let x = this.x - other_coord.x;
                 let y = this.y - other_coord.y;
                 return new Coord(x, y);
         }
+
+        public toString() { return `(${this.x}, ${this.y})`; }
 }
 
 function rcj_test_coord() {
