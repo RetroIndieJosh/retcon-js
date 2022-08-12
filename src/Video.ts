@@ -13,6 +13,7 @@ class Video
         // tiles are tile_size by tile_size pixels
         private static _tile_size = 8;
         public static get tile_size() { return this._tile_size; }
+        public static get tile_size_coord() { return new Coord(this._tile_size, this._tile_size); }
 
         private static clear_color = 0;
 
@@ -263,7 +264,7 @@ class Video
                 color = Math.floor(color);
                 this.ctx.fillStyle = this.get_color(color);
 
-                pos = pos.floor.scale_square(scale);
+                pos = pos.floor.times_square(scale);
                 this.ctx.fillRect(pos.x, pos.y, scale, scale);
         }
 

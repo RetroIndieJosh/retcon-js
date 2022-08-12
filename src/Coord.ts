@@ -29,6 +29,10 @@ class Coord {
                 this.y += other_coord.y;
         }
 
+        public copy(): Coord {
+                return new Coord(this.x, this.y);
+        }
+
         public equals(other_coord: Coord): boolean {
                 return this.x == other_coord.x && this.y == other_coord.y;
         }
@@ -66,17 +70,27 @@ class Coord {
                 return new Coord(this.x + other_coord.x, this.y + other_coord.y);
         }
 
-        public scale(scale: Coord): Coord {
-                return new Coord(this.x * scale.x, this.y * scale.y);
+        public scale(scale: Coord): void {
+                this.x *= scale.x;
+                this.y *= scale.y;
         }
 
-        public scale_square(scale: number): Coord {
-                return new Coord(this.x * scale, this.y * scale);
+        public scale_square(scale: number): void {
+                this.x *= scale;
+                this.y *= scale;
         }
 
         public subtract(other_coord: Coord): void {
                 this.x -= other_coord.x;
                 this.y -= other_coord.y;
+        }
+
+        public times(scale: Coord): Coord {
+                return new Coord(this.x * scale.x, this.y * scale.y);
+        }
+
+        public times_square(scale: number): Coord {
+                return new Coord(this.x * scale, this.y * scale);
         }
 
         public toString() { return `(${this.x}, ${this.y})`; }
@@ -120,11 +134,11 @@ function rcj_test_coord() {
         rcj_assert_false(pos2.is_in(Coord.zero, pos2));
 
         console.debug("Test Coord: scaling")
-        rcj_assert_true(pos.scale(new Coord(scale, scale)).equals(pos.scale_square(scale)));
-        rcj_assert_coord(pos.scale_square(2), x * 2, y * 2);
-        rcj_assert_coord(pos2.scale_square(2), x2 * 2, y2 * 2);
-        rcj_assert_coord(pos.scale(pos2), x * x2, y * y2);
-        rcj_assert_coord(pos2.scale(pos), x * x2, y * y2);
+        rcj_assert_true(pos.times(new Coord(scale, scale)).equals(pos.times_square(scale)));
+        rcj_assert_coord(pos.times_square(2), x * 2, y * 2);
+        rcj_assert_coord(pos2.times_square(2), x2 * 2, y2 * 2);
+        rcj_assert_coord(pos.times(pos2), x * x2, y * y2);
+        rcj_assert_coord(pos2.times(pos), x * x2, y * y2);
 
         console.debug("Test Coord: addition")
         rcj_assert_coord(pos.plus(pos2), x + x2, y + y2);
@@ -136,6 +150,7 @@ function rcj_test_coord() {
         rcj_assert_coord(pos2.minus(pos), x2 - x, y2 - y);
 
         // TODO test coord add/subtract
+        // TODO test coord scale/scale_square
 
         console.debug("Coord test complete");
 }

@@ -22,7 +22,7 @@ class Tilemap implements Loggable {
                 console.info(`Create tile ${this.size.x}x${this.size.y} tiles of `
                         + `${this.tile_size} pixels squared with palette ${this.palette_id}`);
 
-                this.surface = new Surface(this.size.scale_square(tile_size));
+                this.surface = new Surface(this.size.times_square(tile_size));
 
                 this.tile_ids = new NumberGrid(this.size, 0, Video.tile_count);
         }
@@ -116,7 +116,8 @@ class Tilemap implements Loggable {
                                 // TODO check for UNCHANGED
                                 //console.log(`Tile: ${tile} @ ${x}, ${y}`);
                                 // TODO  make sure we don't draw clear (NumberGrid should help?)
-                                tile.blit(this.surface, this.palette_id, this.pos.scale_square(this.tile_size), this.opaque, this.wrap);
+                                tile.blit(this.surface, this.palette_id, this.pos.times_square(this.tile_size), 
+                                        this.opaque, this.wrap);
                         }
                 }
         }

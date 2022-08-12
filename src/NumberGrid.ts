@@ -149,7 +149,7 @@ function rcj_test_numbergrid(): void {
         const tile_count = 8;
         
         // TODO make a new grid for each test and use {} to separate
-        let grid = new NumberGrid(Coord.one.scale_square(size), 0, tile_count);
+        let grid = new NumberGrid(Coord.one.times_square(size), 0, tile_count);
 
         console.debug("Test NumberGrid: set all")
         for (let i = 0; i < tile_count; i++) {

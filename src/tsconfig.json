@@ -23,6 +23,7 @@
                 "Tile.ts",
                 "Tilemap.ts",
                 "Sprite.ts",
+                "Actor.ts",
                 "Input.ts",
                 "retcon.ts",
                 "Test.ts",
