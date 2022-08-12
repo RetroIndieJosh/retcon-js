@@ -30,6 +30,7 @@
                 "metronome/metronome.ts",
                 "metronome/metronomeworker.ts",
 
+                "Pickup.ts",
                 "Player.ts",
                 "Door.ts",
                 "LowRezJam.ts"

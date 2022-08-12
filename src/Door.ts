@@ -1,14 +1,13 @@
 const DOOR_TILE_ID = 1;
-const DOOR_OPEN_TILE_ID = 2;
+const DOOR_OPEN_TILE_ID = 5;
 const DOOR_PALETTE_ID = 1; // for doors AND keys
 
 class Door extends Actor {
-        private _color_id: number;
-        public get color_id() { return this._color_id; }
+        public get door_type() { return this.palette_id; }
 
-        constructor(color_id: number) {
-                super(DOOR_TILE_ID, DOOR_PALETTE_ID);
-                this._color_id = color_id;
+        constructor(palette_id: number) {
+                console.debug(`door with palette ${palette_id}`);
+                super(DOOR_TILE_ID, palette_id);
         }
 
         protected override on_collide(other_actor: Actor): void {
@@ -16,9 +15,9 @@ class Door extends Actor {
                 if(other_actor instanceof Player) {
                         console.debug("Colliding thing is player");
                         const player = other_actor as Player;
-                        if(player.has_key(this._color_id)) {
+                        if(player.has_key(this.door_type)) {
                                 console.debug("Player has key");
-                                player.remove_key(this._color_id);
+                                player.remove_key(this.door_type);
                                 this.is_solid = false;
                                 this.set_tile(Coord.zero, DOOR_OPEN_TILE_ID);
                         }

@@ -5,6 +5,9 @@ const WALL_PALETTE_ID = 0;
 const WALL_TILE_ID = 4;
 
 
+const DOOR_PALETTE_MIN = 2;
+const DOOR_PALETTE_MAX = 4;
+
 // TODO static?
 class LowRezJam {
         private static instance: LowRezJam;
@@ -43,7 +46,7 @@ class LowRezJam {
                 // init doors
                 const door_count = 4;
                 for(let i = 0; i < door_count; i++) {
-                        const door = new Door(1);
+                        const door = new Door(random_int(DOOR_PALETTE_MIN, DOOR_PALETTE_MAX+1));
 
                         const x = random_int(0, 8) * 8;
                         const y = random_int(0, 8) * 8;

@@ -109,7 +109,7 @@ function rcj_test_add_palette(): void {
 // TODO move (utilities?)
 // returns random int in range [min, max)
 function random_int(min: number, max: number) {
-        return Math.floor(Math.random() * max + min);
+        return Math.floor(Math.random() * (max - min)) + min;
 }
 
 function rcj_test_add_sprite(): Sprite | null {

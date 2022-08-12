@@ -11,18 +11,18 @@ class Player extends Actor {
                 super(PLAYER_TILE_ID, PLAYER_PALETTE_ID);
         }
 
-        public add_key(color_id: number) {
-                this.keys.push(color_id);
+        public add_key(door_type: number) {
+                this.keys.push(door_type);
         }
 
-        public has_key(color_id: number) : boolean {
-                return this.keys.indexOf(color_id) != -1;
+        public has_key(door_type: number) : boolean {
+                return this.keys.indexOf(door_type) != -1;
         }
 
-        public remove_key(color_id: number) : void {
-                const index = this.keys.indexOf(color_id);
+        public remove_key(door_type: number) : void {
+                const index = this.keys.indexOf(door_type);
                 if(index == -1) {
-                        console.warn(`Tried to remove key player doesn't have (${color_id})`);
+                        console.warn(`Tried to remove key player doesn't have (${door_type})`);
                         return;
                 }
                 this.keys.splice(index, 1);
@@ -46,5 +46,8 @@ class Player extends Actor {
 
                 move.scale_square(PLAYER_SPEED);
                 this.move(move);
+        }
+
+        protected on_collide(other_actor: Actor): void {
         }
 }
