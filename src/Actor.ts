@@ -1,14 +1,18 @@
 class Actor extends Sprite {
-        private is_solid = true;
-        private check_solid: (actor: Actor) => boolean;
+        private static check_solid: (actor: Actor) => Actor | null;
 
-        constructor(tile_id: number, palette_id: number, check_solid: (actor: Actor) => boolean, is_solid = true) {
+        protected is_solid = true;
+
+        constructor(tile_id: number, palette_id: number, is_solid = true) {
                 super(tile_id, palette_id);
 
-                this.check_solid = check_solid;
                 this.is_solid = is_solid;
 
                 Video.add_sprite(this);
+        }
+
+        public static set_check_solid(check_solid: (actor: Actor) => Actor | null) {
+                Actor.check_solid = check_solid;
         }
 
         public collides_with(other_actor: Actor): boolean {
@@ -36,7 +40,10 @@ class Actor extends Sprite {
                 if(!this.is_solid) return;
 
                 // undo move if solid and hit solid
-                if(this.check_solid(this))  {
+                const colliding_actor = Actor.check_solid(this)
+                if(colliding_actor != null)  {
+                        this.on_collide(colliding_actor);
+                        colliding_actor.on_collide(this);
                         this.pos = old_pos;
                         return;
                 }
@@ -44,5 +51,7 @@ class Actor extends Sprite {
 
         public update(dt: number) {}
 
-        protected on_collide(other_actor: Actor): void {}
+        protected on_collide(other_actor: Actor): void {
+                console.debug("on_collide");
+        }
 }
