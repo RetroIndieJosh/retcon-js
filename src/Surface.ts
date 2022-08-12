@@ -103,6 +103,7 @@ function rcj_test_surface(): void {
         let surf = new Surface(new Coord(width, height));
 
         console.debug("Test Surface: clear");
+        surf.randomize_pixels();
         surf.clear(0);
         for (let pos = new Coord(0, 0); pos.y < height; pos.y++) {
                 for (pos.x = 0; pos.x < width; pos.x++) {

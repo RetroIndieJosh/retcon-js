@@ -4,7 +4,7 @@ class LowRezJam {
 
         //private doors: Array<Actor>;
         private player: Sprite;
-        private tilemap: Tilemap;
+        //private tilemap: Tilemap;
 
         // TODO game path
         public static init(): void {
@@ -17,13 +17,15 @@ class LowRezJam {
 
                 Input.add_key_updater(this.update);
 
+                /*
                 this.tilemap = new Tilemap(8, new Coord(8, 8), 0);
                 this.tilemap.set_all(0);
                 Video.add_background(this.tilemap);
+                */
 
                 // initialize objects
 
-                this.player = new Sprite(3, 0, false);
+                this.player = new Sprite(3, 1, false);
                 this.player.pos = new Coord(28, 28);
                 Video.add_sprite(this.player);
 
@@ -87,23 +89,20 @@ class LowRezJam {
         }
         */
 
+        // TODO Make this a frame event, not a keyboard event
         // NOTE: DO NOT USE "this" - IT REFERS TO THE DOCUMENT!!!!!!
         private update(_: KeyboardEvent) {
                 const game = LowRezJam.instance;
 
-                //game.clear_tile(game.player.position);
-
                 // TODO send list of door tile positions as "list of solids" to prevent movement into them
-                if(Input.key_pressed_this_frame("ArrowLeft") || Input.key_pressed_this_frame("a"))
+                if(Input.is_key_down("ArrowLeft") || Input.is_key_down("a"))
                         game.player.pos.add(Coord.left);
-                else if(Input.key_pressed_this_frame("ArrowRight") || Input.key_pressed_this_frame("d"))
+                else if(Input.is_key_down("ArrowRight") || Input.is_key_down("d"))
                         game.player.pos.add(Coord.right);
 
-                if(Input.key_pressed_this_frame("ArrowUp") || Input.key_pressed_this_frame("w"))
+                if(Input.is_key_down("ArrowUp") || Input.is_key_down("w"))
                         game.player.pos.add(Coord.up);
-                else if(Input.key_pressed_this_frame("ArrowDown") || Input.key_pressed_this_frame("s"))
+                else if(Input.is_key_down("ArrowDown") || Input.is_key_down("s"))
                         game.player.pos.add(Coord.down);
-
-                //game.player.draw(game.tilemap);
         }
 }
