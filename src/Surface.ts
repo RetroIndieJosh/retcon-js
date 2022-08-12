@@ -88,7 +88,7 @@ class Surface {
 
                 for (let pos = new Coord(0, 0); pos.y < height; pos.y++) {
                         for (pos.x = 0; pos.x < width; pos.x++) {
-                                const pos2 = top_left.add(pos);
+                                const pos2 = top_left.plus(pos);
                                 this.set_pixel(pos2, pixels.get(pos));
                         }
                 }
@@ -189,7 +189,7 @@ function rcj_test_surface(): void {
                 surf.blit(surf_small, offset, false);
                 for (let pos = new Coord(0, 0); pos.y < height / 2; pos.y++) {
                         for (pos.x = 0; pos.x < width / 2; pos.x++) {
-                                rcj_assert_equals(surf_small.get_pixel(pos), surf.get_pixel(pos.add(offset)));
+                                rcj_assert_equals(surf_small.get_pixel(pos), surf.get_pixel(pos.plus(offset)));
                         }
                 }
         }

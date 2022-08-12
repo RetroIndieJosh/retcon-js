@@ -1,36 +1,9 @@
-// TODO integrate in engine
-class Actor {
-        // tile position
-        public position: Coord = new Coord(-1, -1);
-        public tile_id: number = -1;
-
-        public draw(tilemap: Tilemap): void {
-                const tile_id = Math.floor(this.tile_id);
-                const position = this.position.floor;
-
-                tilemap.set_tile(position, tile_id);
-        }
-
-        public is_at(position: Coord) : boolean {
-                return this.position.floor.equals(position.floor);
-        }
-
-        public move(move: Coord, tilemap: Tilemap) {
-                const new_position = this.position.add(move);
-
-                if(!tilemap.has_tile_coordinate(new_position))
-                        return;
-
-                this.position = this.position.add(move);
-        }
-}
-
 // TODO static?
 class LowRezJam {
         private static instance: LowRezJam;
 
-        private doors: Array<Actor>;
-        private player: Actor;
+        //private doors: Array<Actor>;
+        private player: Sprite;
         private tilemap: Tilemap;
 
         // TODO game path
@@ -44,14 +17,17 @@ class LowRezJam {
 
                 Input.add_key_updater(this.update);
 
-                this.tilemap = new Tilemap(8, Coord.one.scale_square(8), 0);
+                this.tilemap = new Tilemap(8, new Coord(8, 8), 0);
                 this.tilemap.set_all(0);
                 Video.add_background(this.tilemap);
 
                 // initialize objects
 
-                this.player = new Actor();
+                this.player = new Sprite(3, 0, false);
+                this.player.pos = new Coord(28, 28);
+                Video.add_sprite(this.player);
 
+                /*
                 const door_count = 4;
                 this.doors = new Array<Actor>();
                 for(let i = 0; i < door_count; i++) {
@@ -67,22 +43,26 @@ class LowRezJam {
                         this.doors[i].position = position;
                         this.doors[i].tile_id = 1;
                 }
+                */
 
+                /*
                 const position = this.get_unoccupied_tile();
-                if(position != null) this.player.position = position;
+                if(position != null) this.player.pos = position;
+                */
 
-                this.player.tile_id = 3;
+                // (shouldn't need) initial draw
 
-                // initial draw
-
+                /*
                 for(let i = 0; i < door_count; i++) {
                         this.doors[i].draw(this.tilemap);
                 }
                 this.player.draw(this.tilemap);
+                */
 
                 LowRezJam.instance = this;
         }
 
+        /*
         private clear_tile(position: Coord) {
                 LowRezJam.instance.tilemap.set_tile(position.floor, 0);
         }
@@ -105,27 +85,25 @@ class LowRezJam {
                         if(this.doors[i].is_at(position)) return true;
                 }
         }
+        */
 
         // NOTE: DO NOT USE "this" - IT REFERS TO THE DOCUMENT!!!!!!
         private update(_: KeyboardEvent) {
-                console.log(`Update ${LowRezJam.instance}: tilemap ${LowRezJam.instance.tilemap}, `
-                        + `player at ${LowRezJam.instance.player.position.x}, ${LowRezJam.instance.player.position.y}`)
-
                 const game = LowRezJam.instance;
 
-                game.clear_tile(game.player.position);
+                //game.clear_tile(game.player.position);
 
                 // TODO send list of door tile positions as "list of solids" to prevent movement into them
                 if(Input.key_pressed_this_frame("ArrowLeft") || Input.key_pressed_this_frame("a"))
-                        game.player.move(Coord.left, game.tilemap);
+                        game.player.pos.add(Coord.left);
                 else if(Input.key_pressed_this_frame("ArrowRight") || Input.key_pressed_this_frame("d"))
-                        game.player.move(Coord.right, game.tilemap);
+                        game.player.pos.add(Coord.right);
 
                 if(Input.key_pressed_this_frame("ArrowUp") || Input.key_pressed_this_frame("w"))
-                        game.player.move(Coord.up, game.tilemap);
+                        game.player.pos.add(Coord.up);
                 else if(Input.key_pressed_this_frame("ArrowDown") || Input.key_pressed_this_frame("s"))
-                        game.player.move(Coord.down, game.tilemap);
+                        game.player.pos.add(Coord.down);
 
-                game.player.draw(game.tilemap);
+                //game.player.draw(game.tilemap);
         }
 }

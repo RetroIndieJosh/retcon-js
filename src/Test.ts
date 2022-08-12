@@ -100,7 +100,7 @@ function rcj_test_add_color(): void {
 function rcj_test_add_palette(): void {
         let pal_str = "";
         for (let i = 0; i < Video.palette_color_count; i++)
-                pal_str += Math.floor(Math.random() * Video.color_count);
+                pal_str += random_int(0, Video.color_count);
 
         const index = Video.add_palette(new Palette(pal_str));
         console.debug(`add palette ${index} = "${pal_str}"`);

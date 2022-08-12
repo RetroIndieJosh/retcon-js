@@ -63,15 +63,15 @@ function retconjs_load_game(game_data: GameData, scale: number, debug: boolean) 
 
         Video.start();
 
-        if(!debug) return;
-
-        console.info(`Starting game ${game_data.title} with:\n`
+        console.debug(`Starting game ${game_data.title} with:\n`
                 + `${Video.color_count} colors\n`
                 + `${game_data.palettes.length} palettes\n`
                 + `${game_data.tiles.length} tiles\n`
                 + `${game_data.tilesets.length} tilesets\n`
                 + `${game_data.tilemaps.length} tilemaps\n`
         );
+
+        if(!debug) return;
 
         setInterval(() => {
                 let sprite_count_element = document.getElementById("sprite-count");

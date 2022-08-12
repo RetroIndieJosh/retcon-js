@@ -52,7 +52,7 @@ class Tile implements Loggable {
 
                 for (let pos = Coord.zero; pos.y < this.size; pos.y++) {
                         for (pos.x = 0; pos.x < this.size; pos.x++) {
-                                const pos2 = top_left.add(pos);
+                                const pos2 = top_left.plus(pos);
 
                                 const palette_color_id = this.color_ids.get(pos);
                                 if(palette_color_id == 0 && !opaque) {

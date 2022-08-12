@@ -6,11 +6,12 @@ class Video
 
         private static scale: number | undefined = undefined;
 
-
         // TODO these are more like Game properties and shouldn't be in video?
-        private static _palette_color_count: number;
+        private static _palette_color_count = 4;
         public static get palette_color_count() { return this._palette_color_count; }
-        private static _tile_size: number; // tile is tile_size by tile_size pixels
+
+        // tiles are tile_size by tile_size pixels
+        private static _tile_size = 8;
         public static get tile_size() { return this._tile_size; }
 
         private static clear_color = 0;
@@ -64,10 +65,6 @@ class Video
                 for (let i = 0; i < this.color_list.length; i++) 
                         console.info(`    #${i} => ${this.color_list[i]}`);
 
-                // TODO do this in game and load from json file
-                this._palette_color_count = 4;
-                this._tile_size = 8;
-
                 this.randomize();
 
                 this.initialized = true;
@@ -98,10 +95,11 @@ class Video
         }
 
         public static start(): void {
-                if (this.started) {
-                        console.warn("Tried to start video, but it's already running");
-                        return;
-                }
+                if (!this.is_initialized)
+                        throw new Error("Video must be initialized before starting");
+
+                if (this.started)
+                        throw new Error("Tried to start video, but it's already running");
 
                 setInterval(function () {
                         Video.render();
