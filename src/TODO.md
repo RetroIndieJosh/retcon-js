@@ -3,7 +3,7 @@
 ## Standards
 
 - only floor `number`s if using as array index (don't bother when passing to function - that function should handle it)
-- always use NumberGrid for `Array<NUmber><Number>` (automagically handles clip and dirty - and will later handle wrap)
+- always use NumberGrid for `Array<Number><Number>` (automagically handles clip and dirty - and will later handle wrap)
  
 ## Engine
 
@@ -13,16 +13,12 @@
 - visualize tiles (display all in sequence)
 - unit tests for Sprite, TileMap, Video
 - ToString or Log for Coord type
-- `add_frame_event` instead of having input update in Video
-  - frame management independent of video (refreshing is a frame event)
-  - make sure they execute in correct sequence (may need two events for rendering: clear, run other events, then render to canvas)
 - `call_after_frames(callback, frame_count)` calls the callback after frame_count frames have elapsed
 - `call_for_frames(callback, frame_count)` calls the callback every frame for frame_count frames
 - use text for the viewers to draw the corresponding index
   - will want something like `get_center` and `get_real_center` where the latter is screen coords converted using Video.scale
 - migrate Actor to its own file and incorporate update in engine
-- AABB collision
-- pixel collision: do AABB first, then pixel to check exact
+- pixel collision: do AABB first, then pixel to check exact (can be based on color or a tile used as a mask with only 0/1)
 
 ## Minimum Viable
 
@@ -31,6 +27,7 @@
 - keys open (destroy) doors with matching color (and are themselves destroyed)
 - pause menu to show all currently held keys
 - special item to pick up to win the game
+- travel between rooms (screens)
 - hard-coded tilemap mazes with a well thought out order
 
 ## Wishlist - Game

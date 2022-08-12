@@ -41,4 +41,8 @@ class Actor extends Sprite {
                         return;
                 }
         }
+
+        public update(dt: number) {}
+
+        protected on_collide(other_actor: Actor): void {}
 }

@@ -6,16 +6,23 @@
         "colors": "000F000F000FFFF",
         "palettes-comment": [
                 "for sprites, the first palette index is always 'clear' regardless of what color we put in",
-                "[color count (1)][color ID (1) for each color]"
+                "[color count (1)][color ID (1) for each color]",
+                "0 = environment",
+                "1 = doors/keys",
+                "2 = player/enemies"
         ],
         "palettes": [
-                "00",
-                "01",
-                "02",
-                "03",
-                "04"
+                "04",
+                "0123",
+                "021"
         ],
-        "tiles-comment": "[color ID (1) for each pixel]",
+        "tiles-comment": [
+                "0 = empty",
+                "1 = closed door",
+                "2 = open door",
+                "3 = player",
+                "4 = solid"
+        ],
         "tiles": [
                 "0000000000000000000000000000000000000000000000000000000000000000",
                 "0000000001111110011111100111111001111110011111100111111000000000",

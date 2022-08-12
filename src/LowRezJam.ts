@@ -1,8 +1,9 @@
 // TODO move to math
 const invsqrt2 = 1/Math.sqrt(2);
 
-//const player_speed = 0.5;
-const player_speed = 1;
+const WALL_PALETTE_ID = 0;
+const WALL_TILE_ID = 4;
+
 
 // TODO static?
 class LowRezJam {
@@ -11,28 +12,36 @@ class LowRezJam {
         private actors: Array<Actor>;
         private player: Actor;
 
-        // TODO game path
         public static init(): void {
                 retconjs_init(8, "game/lowrezjam.json", () => new LowRezJam());
-
-                Video.add_frame_event(LowRezJam.update);
         }
 
         constructor() {
                 if(LowRezJam.instance != undefined) 
                         throw new Error("Only one game allowed!");
 
-                // initialize objects
-
                 this.actors = new Array<Actor>();
 
-                this.player = new Actor(3, 1, this.check_solid);
+                // init player
+                this.player = new Player(this.check_solid);
                 this.player.pos = new Coord(28, 28);
                 this.actors.push(this.player);
 
+                // init walls
+                for(let pos = new Coord(0, 0); pos.x < 8; pos.x++) {
+                        for(pos.y = 0; pos.y < 8; pos.y++) {
+                                if(pos.x == 0 || pos.x == 7 || pos.y == 0 || pos.y == 7) {
+                                        const wall = new Actor(WALL_TILE_ID, WALL_PALETTE_ID, this.check_solid);
+                                        wall.pos = pos.times_square(8);
+                                        this.actors.push(wall);
+                                }
+                        }
+                }
+
+                // init doors
                 const door_count = 4;
                 for(let i = 0; i < door_count; i++) {
-                        const door = new Actor(1, 1, this.check_solid);
+                        const door = new Door(1, this.check_solid);
 
                         const x = random_int(0, 8) * 8;
                         const y = random_int(0, 8) * 8;
@@ -42,6 +51,8 @@ class LowRezJam {
 
                         this.actors.push(door);
                 }
+
+                Video.add_frame_event(this.update_actors);
 
                 LowRezJam.instance = this;
         }
@@ -64,24 +75,7 @@ class LowRezJam {
                 return is_solid;
         }
 
-        private static update(dt: number): void {
-                const game = LowRezJam.instance;
-                let move = Coord.zero;
-
-                if(Input.is_key_down("ArrowLeft") || Input.is_key_down("a"))
-                        move.add(Coord.left);
-                else if(Input.is_key_down("ArrowRight") || Input.is_key_down("d"))
-                        move.add(Coord.right);
-
-                if(Input.is_key_down("ArrowUp") || Input.is_key_down("w"))
-                        move.add(Coord.up);
-                else if(Input.is_key_down("ArrowDown") || Input.is_key_down("s"))
-                        move.add(Coord.down);
-
-                if(move.x != 0 && move.y != 0) 
-                        move.scale_square(invsqrt2);
-
-                move.scale_square(player_speed);
-                game.player.move(move);
+        private update_actors(dt: number) {
+                LowRezJam.instance.actors.forEach(actor => actor.update(dt));
         }
 }

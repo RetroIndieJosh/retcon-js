@@ -29,6 +29,9 @@
                 "Test.ts",
                 "metronome/metronome.ts",
                 "metronome/metronomeworker.ts",
+
+                "Player.ts",
+                "Door.ts",
                 "LowRezJam.ts"
         ],
         "$schema": "https://json.schemastore.org/tsconfig",
