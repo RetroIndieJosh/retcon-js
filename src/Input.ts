@@ -13,23 +13,23 @@ class Input {
                         return;
                 }
 
-                this.is_initialized = true;
+                this.key_states = new Map<string, KeyState>();
 
                 document.addEventListener('keydown', event => this.on_key_down(event), false);
                 document.addEventListener('keyup', event => this.on_key_up(event), false);
 
-                document.addEventListener('keyup', event => {
-                }, false);
+                Video.add_frame_event(this.clear);
 
-                this.key_states = new Map<string, KeyState>();
+                this.is_initialized = true;
         }
 
         public static add_key_updater(func: (_: KeyboardEvent) => void ) {
                 document.addEventListener('keydown', func);
         }
 
-        public static clear() {
-                this.key_states.forEach(key_state => key_state.pressed_this_frame = false);
+        // clear every frame
+        public static clear(dt: number) {
+                Input.key_states.forEach(key_state => key_state.pressed_this_frame = false);
         }
 
         public static is_key_down(key_name: string): boolean {

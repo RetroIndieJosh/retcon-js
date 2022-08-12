@@ -27,8 +27,6 @@ class GameData {
 }
 
 function retconjs_init(scale: number, game_path: string | null = null,  on_done: () => void, debug = false): void {
-        Input.initialize();
-
         if (game_path == null) return;
 
         fetch(game_path)
@@ -61,6 +59,7 @@ function retconjs_load_game(game_data: GameData, scale: number, debug: boolean) 
         tiles.set_all(0);
         */
 
+        Input.initialize();
         Video.start();
 
         console.debug(`Starting game ${game_data.title} with:\n`

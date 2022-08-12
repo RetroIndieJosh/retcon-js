@@ -16,12 +16,12 @@ class Video
 
         private static clear_color = 0;
 
-        private static color_list = new Array<Color>();
-        private static palette_list = new Array<Palette>();
+        private static colors = new Array<Color>();
+        private static palettes = new Array<Palette>();
 
-        private static background_list = new Array<Tilemap>();
-        private static sprite_list = new Array<Sprite>();
-        private static tile_list = new Array<Tile>();
+        private static backgrounds = new Array<Tilemap>();
+        private static sprites = new Array<Sprite>();
+        private static tiles = new Array<Tile>();
 
         private static surface: Surface;
 
@@ -29,11 +29,12 @@ class Video
         private static started = false;
 
         private static frames_per_second_target = 60;
+        private static frame_events = new Array<(dt: number) => void>();
 
-        public static get color_count() { return this.color_list.length; }
-        public static get palette_count() { return this.palette_list.length; }
-        public static get sprite_count() { return this.sprite_list.length; }
-        public static get tile_count() { return this.tile_list.length; }
+        public static get color_count() { return this.colors.length; }
+        public static get palette_count() { return this.palettes.length; }
+        public static get sprite_count() { return this.sprites.length; }
+        public static get tile_count() { return this.tiles.length; }
 
         public static get is_initialized(): boolean {
                 return this.initialized;
@@ -59,11 +60,11 @@ class Video
                 this.canvas.height = size.y * scale;
 
                 // load colors
-                const color_string_list = color_string.match(/.{1,3}/g);
-                color_string_list?.forEach(color_string => this.color_list.push(`#${color_string}`));
+                const color_strings = color_string.match(/.{1,3}/g);
+                color_strings?.forEach(color_string => this.colors.push(`#${color_string}`));
                 console.info("Colors:");
-                for (let i = 0; i < this.color_list.length; i++) 
-                        console.info(`    #${i} => ${this.color_list[i]}`);
+                for (let i = 0; i < this.colors.length; i++) 
+                        console.info(`    #${i} => ${this.colors[i]}`);
 
                 this.randomize();
 
@@ -79,8 +80,8 @@ class Video
         // TODO move to private, add to frame action list
         private static render() {
                 this.clear();
-                this.background_list.forEach(background => background.blit(this.surface));
-                this.sprite_list.forEach(sprite => sprite.blit(this.surface));
+                this.backgrounds.forEach(background => background.blit(this.surface));
+                this.sprites.forEach(sprite => sprite.blit(this.surface));
                 this.surface.render();
         }
 
@@ -94,6 +95,13 @@ class Video
                 this.frames_per_second_target = fps;
         }
 
+        private static prev_frame_time = 0;
+        private static dt = 0;
+
+        public static add_frame_event(func: (dt: number) => void) {
+                this.frame_events.push(func);
+        }
+
         public static start(): void {
                 if (!this.is_initialized)
                         throw new Error("Video must be initialized before starting");
@@ -104,8 +112,11 @@ class Video
                 setInterval(function () {
                         Video.render();
 
-                        // TODO this should probably not be handling input
-                        Input.clear();
+                        Video.dt = new Date().getTime() - Video.prev_frame_time;
+                        Video.frame_events.forEach(func => func(Video.dt));
+                        //console.debug(`dt = ${Video.dt}`);
+
+                        Video.prev_frame_time = new Date().getTime();
                 }, 1000 / this.frames_per_second_target);
 
                 this.started = true;
@@ -114,7 +125,7 @@ class Video
         // TODO 
         public static add_background(background: Tilemap) {
                 // TODO prevent (allow?) duplication
-                this.background_list.push(background);
+                this.backgrounds.push(background);
         }
 
         public static add_color(color_str: string): number {
@@ -124,7 +135,7 @@ class Video
                 // TODO prevent duplication
 
                 const index = this.color_count;
-                this.color_list.push(`#${color_str}`);
+                this.colors.push(`#${color_str}`);
                 return index;
         }
 
@@ -135,18 +146,18 @@ class Video
                 palette.log();
 
                 // TODO prevent duplication
-                this.palette_list.push(palette);
+                this.palettes.push(palette);
 
                 return index;
         }
 
         // TODO prevent duplication
         public static add_tile(tile: Tile): number {
-                console.info(`Add tile #${this.tile_list.length}`);
+                console.info(`Add tile #${this.tiles.length}`);
                 tile.log();
 
                 const index = this.tile_count;
-                this.tile_list.push(tile);
+                this.tiles.push(tile);
                 return index;
         }
 
@@ -157,54 +168,54 @@ class Video
                         return -1;
                 }
 
-                let id = this.sprite_list.length;
-                this.sprite_list.push(sprite);
+                let id = this.sprites.length;
+                this.sprites.push(sprite);
                 sprite.log();
                 return id;
         }
 
         public static get_color(color_id: number) {
-                if (this.color_list.length == 0) {
+                if (this.colors.length == 0) {
                         throw new Error("RetConJS: No colors loaded - must have at least one!");
                 }
 
                 // TODO checking
-                if (color_id < 0 || color_id >= this.color_list.length) {
+                if (color_id < 0 || color_id >= this.colors.length) {
                         // TODO come up with some way to make these warnings faster so they don't lag the game
                         //console.warn(`Illegal color index: ${color_id}`);
                         return "#000";
                 }
 
-                return this.color_list[color_id];
+                return this.colors[color_id];
         }
 
         public static get_palette(palette_id: number): Palette {
-                if (this.palette_list.length == 0)
+                if (this.palettes.length == 0)
                         throw new Error("RetConJS: Trying to access palette, but none loaded!"); 
 
-                if (palette_id < 0 || palette_id >= this.palette_list.length) {
+                if (palette_id < 0 || palette_id >= this.palettes.length) {
                         // TODO come up with some way to make these warnings faster so they don't lag the game
                         //console.warn(`Illegal palette index: ${palette_id}`);
-                        return this.palette_list[0];
+                        return this.palettes[0];
                 }
 
                 // TODO checking
-                return this.palette_list[palette_id];
+                return this.palettes[palette_id];
         }
 
         // TODO use tilesets
         public static get_tile(tile_id: number) {
                 tile_id = Math.floor(tile_id);
 
-                if (this.tile_list.length == 0)
+                if (this.tiles.length == 0)
                         throw new Error("RetConJS: Trying to access tile, but none loaded!"); 
 
-                if (tile_id < 0 || tile_id >= this.tile_list.length) {
+                if (tile_id < 0 || tile_id >= this.tiles.length) {
                         // TODO come up with some way to make these warnings faster so they don't lag the game
                         //console.warn(`Illegal tile index: ${tile_id}`);
-                        return this.tile_list[0];
+                        return this.tiles[0];
                 }
-                return this.tile_list[tile_id];
+                return this.tiles[tile_id];
         }
 
         public static list_elements(name: string, list: Array<Loggable>) {
@@ -222,25 +233,25 @@ class Video
         }
 
         public static list_backgrounds() {
-                this.list_elements("background", this.background_list);
+                this.list_elements("background", this.backgrounds);
         }
 
         public static list_colors() {
                 console.debug("Listing all loaded colors");
-                this.color_list.forEach((color, index) => console.debug(`Color #${index}: ${color}`));
+                this.colors.forEach((color, index) => console.debug(`Color #${index}: ${color}`));
                 console.debug("End of colors");
         }
 
         public static list_palettes() {
-                this.list_elements("palette", this.palette_list);
+                this.list_elements("palette", this.palettes);
         }
 
         public static list_sprites() {
-                this.list_elements("sprite", this.sprite_list);
+                this.list_elements("sprite", this.sprites);
         }
 
         public static list_tiles() {
-                this.list_elements("tile", this.tile_list);
+                this.list_elements("tile", this.tiles);
         }
 
         public static put_pixel(pos: Coord, color: number, only_changed = true) {
@@ -272,7 +283,7 @@ class Video
                         return false;
                 }
 
-                this.palette_list.splice(palette_id, 1);
+                this.palettes.splice(palette_id, 1);
                 return true;
         }
 
@@ -283,7 +294,7 @@ class Video
                         return false;
                 }
 
-                const sprite_id = this.sprite_list.indexOf(sprite);
+                const sprite_id = this.sprites.indexOf(sprite);
                 return this.remove_sprite_at(sprite_id);
         }
 
@@ -294,7 +305,7 @@ class Video
                         return false;
                 }
 
-                this.sprite_list.splice(sprite_id, 1);
+                this.sprites.splice(sprite_id, 1);
                 return true;
         }
 
@@ -304,7 +315,7 @@ class Video
         }
 
         private static has_sprite(sprite: Sprite): boolean {
-                return this.sprite_list.indexOf(sprite) >= 0;
+                return this.sprites.indexOf(sprite) >= 0;
         }
 
         public static test_pixel(value: number, pos: Coord): boolean { 

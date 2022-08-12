@@ -9,13 +9,13 @@ class LowRezJam {
         // TODO game path
         public static init(): void {
                 retconjs_init(8, "game/lowrezjam.json", () => new LowRezJam());
+
+                Video.add_frame_event(LowRezJam.update);
         }
 
         constructor() {
                 if(LowRezJam.instance != undefined) 
                         throw new Error("Only one game allowed!");
-
-                Input.add_key_updater(this.update);
 
                 /*
                 this.tilemap = new Tilemap(8, new Coord(8, 8), 0);
@@ -89,9 +89,7 @@ class LowRezJam {
         }
         */
 
-        // TODO Make this a frame event, not a keyboard event
-        // NOTE: DO NOT USE "this" - IT REFERS TO THE DOCUMENT!!!!!!
-        private update(_: KeyboardEvent) {
+        private static update(dt: number): void {
                 const game = LowRezJam.instance;
 
                 // TODO send list of door tile positions as "list of solids" to prevent movement into them
