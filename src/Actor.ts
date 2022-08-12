@@ -16,6 +16,8 @@ class Actor extends Sprite {
         }
 
         public collides_with(other_actor: Actor): boolean {
+                if(!this.is_solid) return false;
+
                 const amin = this.pos.floor;
                 const amax = this.pos.plus(Video.tile_size_coord).floor;
                 const bmin = other_actor.pos.floor;

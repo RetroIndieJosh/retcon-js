@@ -84,6 +84,9 @@ class Video
                 this.backgrounds.forEach(background => background.blit(this.surface));
                 this.sprites.forEach(sprite => sprite.blit(this.surface));
                 this.surface.render();
+
+                this.backgrounds = this.backgrounds.filter(background => !background.marked_for_deletion);
+                this.sprites = this.sprites.filter(sprite => !sprite.marked_for_deletion);
         }
 
         // TODO test

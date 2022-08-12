@@ -19,6 +19,8 @@
   - will want something like `get_center` and `get_real_center` where the latter is screen coords converted using Video.scale
 - migrate Actor to its own file and incorporate update in engine
 - pixel collision: do AABB first, then pixel to check exact (can be based on color or a tile used as a mask with only 0/1)
+- tilemap collision (per tile - mask?)
+- trigger collision
 
 ## Minimum Viable
 

@@ -1,14 +1,19 @@
-// TODO delete?
-/*
-const KEY_TILE_ID = 1;
+const KEY_TILE_ID = 2;
 
-class Key {
-        private _color_id: number;
-        public get color_id() { return this._color_id; }
+class Key extends Actor {
+        public get door_type() { return this.palette_id; }
 
-        constructor(color_id: number) {
-                super(DOOR_TILE_ID, DOOR_PALETTE_ID);
-                this._color_id = color_id;
+        constructor(palette_id: number) {
+                super(KEY_TILE_ID, palette_id);
+        }
+
+        protected override on_collide(other_actor: Actor): void {
+                console.debug("Collided with key: " + this.door_type);
+                if(other_actor instanceof Player) {
+                        console.debug("Colliding thing is player");
+                        const player = other_actor as Player;
+                        player.add_key(this.door_type);
+                        this.destroy();
+                }
         }
 }
-*/

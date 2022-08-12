@@ -1,2 +1,0 @@
-class Pickup extends Actor {
-}

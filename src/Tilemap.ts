@@ -1,4 +1,7 @@
 class Tilemap implements Loggable {
+        public get marked_for_deletion() { return this._marked_for_deletion; }
+        private _marked_for_deletion = false;
+
         private tile_size: number;
 
         public pos = Coord.zero;
@@ -31,6 +34,10 @@ class Tilemap implements Loggable {
 
         public blit(target_surface: Surface) {
                 this.surface.blit(target_surface, this.pos, this.wrap);
+        }
+
+        public destroy(): void {
+                this._marked_for_deletion = true;
         }
 
         public get_pixel_height(): number {

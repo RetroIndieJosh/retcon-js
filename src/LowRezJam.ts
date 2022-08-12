@@ -29,7 +29,7 @@ class LowRezJam {
 
                 // init player
                 this.player = new Player();
-                this.player.pos = new Coord(28, 28);
+                this.player.pos = new Coord(9, 9);
                 this.actors.push(this.player);
 
                 // init walls
@@ -48,13 +48,27 @@ class LowRezJam {
                 for(let i = 0; i < door_count; i++) {
                         const door = new Door(random_int(DOOR_PALETTE_MIN, DOOR_PALETTE_MAX+1));
 
-                        const x = random_int(0, 8) * 8;
-                        const y = random_int(0, 8) * 8;
+                        const x = random_int(2, 7) * 8;
+                        const y = random_int(2, 7) * 8;
                         door.pos = new Coord(x, y);
 
                         console.debug(`Add door at ${door.pos}`);
 
                         this.actors.push(door);
+                }
+
+                // init keys
+                const key_count = 4;
+                for(let i = 0; i < door_count; i++) {
+                        const key = new Key(random_int(DOOR_PALETTE_MIN, DOOR_PALETTE_MAX+1));
+
+                        const x = random_int(2, 7) * 8;
+                        const y = random_int(2, 7) * 8;
+                        key.pos = new Coord(x, y);
+
+                        console.debug(`Add door at ${key.pos}`);
+
+                        this.actors.push(key);
                 }
 
                 Actor.set_check_solid(this.check_solid);
@@ -81,5 +95,6 @@ class LowRezJam {
 
         private update_actors(dt: number) {
                 LowRezJam.instance.actors.forEach(actor => actor.update(dt));
+                LowRezJam.instance.actors = LowRezJam.instance.actors.filter(actor => !actor.marked_for_deletion);
         }
 }
