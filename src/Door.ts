@@ -11,6 +11,8 @@ class Door extends Actor {
                 super(DOOR_TILE_ID, palette_id);
         }
 
+        public override update(dt: number): void {}
+
         protected override on_collide(other_actor: Actor): void {
                 if(this.is_open) return;
 

@@ -1,11 +1,6 @@
 // TODO should this be all static? to cut through get_instance? or even better, simply methods
 class Video
 {
-        private static canvas: HTMLCanvasElement;
-        private static ctx: CanvasRenderingContext2D;
-
-        private static scale: number | undefined = undefined;
-
         // TODO these are more like Game properties and shouldn't be in video?
         private static _palette_color_count = 4;
         public static get palette_color_count() { return this._palette_color_count; }
@@ -14,6 +9,11 @@ class Video
         private static _tile_size = 8;
         public static get tile_size() { return this._tile_size; }
         public static get tile_size_coord() { return new Coord(this._tile_size, this._tile_size); }
+
+        private static canvas: HTMLCanvasElement;
+        private static ctx: CanvasRenderingContext2D;
+
+        private static scale: number | undefined = undefined;
 
         private static clear_color = 0;
 
@@ -31,15 +31,25 @@ class Video
 
         private static frames_per_second_target = 60;
         private static frame_events = new Array<(dt: number) => void>();
+        private static prev_frame_time = 0;
+        private static dt = 0;
+
+        //
+        // getters
+        //
 
         public static get color_count() { return this.colors.length; }
         public static get palette_count() { return this.palettes.length; }
         public static get sprite_count() { return this.sprites.length; }
         public static get tile_count() { return this.tiles.length; }
-
+        
         public static get is_initialized(): boolean {
                 return this.initialized;
         }
+
+        //
+        // initialization
+        //
 
         // TODO separate loading colors so this isn't so loaded
         // TODO also set canvas, width, height, scale separately ?
@@ -72,35 +82,9 @@ class Video
                 this.initialized = true;
         }
 
-        private static clear() {
-                this.surface.clear(this.clear_color);
-                // TODO since our surface is the entire canvas space, we shouldn't need to re-render
-                //this.surface.render();
-        }
-
-        // TODO move to private, add to frame action list
-        private static render() {
-                this.clear();
-                this.backgrounds.forEach(background => background.blit(this.surface));
-                this.sprites.forEach(sprite => sprite.blit(this.surface));
-                this.surface.render();
-
-                this.backgrounds = this.backgrounds.filter(background => !background.marked_for_deletion);
-                this.sprites = this.sprites.filter(sprite => !sprite.marked_for_deletion);
-        }
-
-        // TODO test
-        public static set_framerate(fps: number) {
-                if (this.started) {
-                        console.warn("Cannot modify framerate while video is running!");
-                        return;
-                }
-
-                this.frames_per_second_target = fps;
-        }
-
-        private static prev_frame_time = 0;
-        private static dt = 0;
+        //
+        // public static
+        //
 
         public static add_frame_event(func: (dt: number) => void) {
                 this.frame_events.push(func);
@@ -126,7 +110,6 @@ class Video
                 this.started = true;
         }
 
-        // TODO 
         public static add_background(background: Tilemap) {
                 // TODO prevent (allow?) duplication
                 this.backgrounds.push(background);
@@ -155,16 +138,6 @@ class Video
                 return index;
         }
 
-        // TODO prevent duplication
-        public static add_tile(tile: Tile): number {
-                console.info(`Add tile #${this.tiles.length}`);
-                tile.log();
-
-                const index = this.tile_count;
-                this.tiles.push(tile);
-                return index;
-        }
-
         // returns the index of the added sprite, or -1 if it wasn't added (already in list)
         public static add_sprite(sprite: Sprite): number {
                 if(this.has_sprite(sprite)) {
@@ -176,6 +149,16 @@ class Video
                 this.sprites.push(sprite);
                 sprite.log();
                 return id;
+        }
+
+        // TODO prevent duplication
+        public static add_tile(tile: Tile): number {
+                console.info(`Add tile #${this.tiles.length}`);
+                tile.log();
+
+                const index = this.tile_count;
+                this.tiles.push(tile);
+                return index;
         }
 
         public static get_color(color_id: number) {
@@ -318,17 +301,43 @@ class Video
                 if(clear) this.surface.clear(this.clear_color);
         }
 
-        private static has_sprite(sprite: Sprite): boolean {
-                return this.sprites.indexOf(sprite) >= 0;
+        // TODO make this a setter (and add matching getter)
+        // TODO test
+        public static set_framerate(fps: number) {
+                if (this.started) {
+                        console.warn("Cannot modify framerate while video is running!");
+                        return;
+                }
+
+                this.frames_per_second_target = fps;
         }
 
         public static test_pixel(value: number, pos: Coord): boolean { 
                 return this.surface.get_pixel(pos) == value; 
         }
-} 
 
-// TODO move (utilities? numbers?)
-function is_hex(hex: string): boolean {
-        const regex = new RegExp("[0-9a-fA-F]+");
-        return regex.test(hex);
-}
+        //
+        // private static
+        //
+
+        // TDOO make this a getter
+        private static clear() {
+                this.surface.clear(this.clear_color);
+                // TODO since our surface is the entire canvas space, we shouldn't need to re-render
+                //this.surface.render();
+        }
+
+        private static has_sprite(sprite: Sprite): boolean {
+                return this.sprites.indexOf(sprite) >= 0;
+        }
+
+        private static render() {
+                this.clear();
+                this.backgrounds.forEach(background => background.blit(this.surface));
+                this.sprites.forEach(sprite => sprite.blit(this.surface));
+                this.surface.render();
+
+                this.backgrounds = this.backgrounds.filter(background => !background.marked_for_deletion);
+                this.sprites = this.sprites.filter(sprite => !sprite.marked_for_deletion);
+        }
+} 

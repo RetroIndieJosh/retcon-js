@@ -34,6 +34,7 @@ class NumberGrid {
                 }
         }
 
+        // TODO make this a getter
         public copy(): NumberGrid {
                 let copy_grid = new NumberGrid(this.size, this.min, this.max);
                 for (let x = 0; x < this.size.x; x++) {

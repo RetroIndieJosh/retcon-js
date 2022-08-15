@@ -7,6 +7,10 @@
  
 ## Engine
 
+- test larger canvas sizes (and make it easy to set - a php method?)
+- frame advance
+- save/load state
+- display fps on text element (1000 / dt with averaging, or frames++ then display every X seconds (/X)?)
 - add random background (generate tilemap and add to background list)
 - visualize colors (display all in sequence)
 - visualize palettes (display all in sequence)

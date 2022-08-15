@@ -2,6 +2,10 @@ class Coord {
         public x: number;
         public y: number;
 
+        //
+        // getters
+        //
+
         public static get neg_one() { return new Coord(-1, -1); }
         public static get one() { return new Coord(1, 1); }
         public static get zero() { return new Coord(0, 0); }
@@ -14,21 +18,34 @@ class Coord {
         public get ceil() { return new Coord(Math.ceil(this.x), Math.ceil(this.y)); }
         public get floor() { return new Coord(Math.floor(this.x), Math.floor(this.y)); }
 
+        //
+        // public static
+        //
+
         // new Coord in range [min, max)
         public static random(min: Coord, max: Coord): Coord {
                 return new Coord(Math.random() * max.x + min.x, Math.random() * max.y + min.y)
         }
+
+        //
+        // initialization
+        //
 
         constructor(x: number, y: number) {
                 this.x = x;
                 this.y = y;
         }
 
+        //
+        // public
+        //
+
         public add(other_coord: Coord): void {
                 this.x += other_coord.x
                 this.y += other_coord.y;
         }
 
+        // TODO make this a getter
         public copy(): Coord {
                 return new Coord(this.x, this.y);
         }
@@ -42,6 +59,7 @@ class Coord {
                 let top_left: Coord;
                 let bottom_right: Coord;
 
+                // TODO must be a cleaner way to do this
                 if (size.x < 0 && size.y > 0) {
                         top_left = new Coord(start.x + size.x, start.y);
                         bottom_right = new Coord(start.x, start.y + size.y);
@@ -86,11 +104,15 @@ class Coord {
         }
 
         public times(scale: Coord): Coord {
-                return new Coord(this.x * scale.x, this.y * scale.y);
+                const new_coord = this.copy();
+                new_coord.scale(scale);
+                return new_coord;
         }
 
         public times_square(scale: number): Coord {
-                return new Coord(this.x * scale, this.y * scale);
+                const new_coord = this.copy();
+                new_coord.scale_square(scale);
+                return new_coord;
         }
 
         public toString() { return `(${this.x}, ${this.y})`; }

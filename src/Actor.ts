@@ -1,7 +1,26 @@
-class Actor extends Sprite {
+abstract class Actor extends Sprite {
+        //
+        // abstract
+        //
+
+        public abstract update(dt: number): void;
+        protected abstract on_collide(other_actor: Actor): void;
+
+        //
+        // static
+        //
+
         private static check_solid: (actor: Actor) => Actor | null;
 
+        //
+        // protected
+        //
+
         protected is_solid = true;
+
+        //
+        // initialization
+        //
 
         constructor(tile_id: number, palette_id: number, is_solid = true) {
                 super(tile_id, palette_id);
@@ -11,25 +30,20 @@ class Actor extends Sprite {
                 Video.add_sprite(this);
         }
 
-        public static set_check_solid(check_solid: (actor: Actor) => Actor | null) {
-                Actor.check_solid = check_solid;
-        }
+        //
+        // public
+        //
 
         public collides_with(other_actor: Actor): boolean {
                 if(!this.is_solid) return false;
 
-                const amin = this.pos.floor;
-                const amax = this.pos.plus(Video.tile_size_coord).floor;
-                const bmin = other_actor.pos.floor;
-                const bmax = other_actor.pos.plus(Video.tile_size_coord).floor;
+                const top_left1 = this.pos.floor;
+                const bottom_right1 = this.pos.plus(Video.tile_size_coord).floor;
+                const top_left2 = other_actor.pos.floor;
+                const bottom_right2 = other_actor.pos.plus(Video.tile_size_coord).floor;
 
-                //console.debug(`(${amin} to ${amax} vs ${bmin} to ${bmax})`);
-
-                // AABB
-                // return (a.minX <= b.maxX && a.maxX >= b.minX) &&
-                        // (a.minY <= b.maxY && a.maxY >= b.minY) &&
-                return amin.x <= bmax.x && amax.x >= bmin.x
-                        && amin.y <= bmax.y && amax.y >= bmin.y;
+                return top_left1.x <= bottom_right2.x && bottom_right1.x >= top_left2.x
+                        && top_left1.y <= bottom_right2.y && bottom_right1.y >= top_left2.y;
         }
 
         public move(move: Coord) {
@@ -51,9 +65,8 @@ class Actor extends Sprite {
                 }
         }
 
-        public update(dt: number) {}
-
-        protected on_collide(other_actor: Actor): void {
-                console.debug("on_collide");
+        // TODO make this a setter? 
+        public static set_check_solid(check_solid: (actor: Actor) => Actor | null) {
+                Actor.check_solid = check_solid;
         }
 }

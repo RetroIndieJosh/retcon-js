@@ -7,6 +7,8 @@ class Key extends Actor {
                 super(KEY_TILE_ID, palette_id);
         }
 
+        public override update(dt: number): void {}
+
         protected override on_collide(other_actor: Actor): void {
                 console.debug("Collided with key: " + this.door_type);
                 if(other_actor instanceof Player) {

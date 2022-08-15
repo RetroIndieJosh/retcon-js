@@ -8,10 +8,16 @@ const WALL_TILE_ID = 4;
 const DOOR_PALETTE_MIN = 2;
 const DOOR_PALETTE_MAX = 4;
 
+class Wall extends Actor {
+        public override update(dt: number): void { }
+        protected override on_collide(other_actor: Actor): void { }
+}
+
 // TODO static?
 class LowRezJam {
         private static instance: LowRezJam;
 
+        // TODO adjust this so we can toggle among wasd, arrows, or both
         public static ITCH_RELEASE = false;
 
         private actors: Array<Actor>;
@@ -36,7 +42,7 @@ class LowRezJam {
                 for(let pos = new Coord(0, 0); pos.x < 8; pos.x++) {
                         for(pos.y = 0; pos.y < 8; pos.y++) {
                                 if(pos.x == 0 || pos.x == 7 || pos.y == 0 || pos.y == 7) {
-                                        const wall = new Actor(WALL_TILE_ID, WALL_PALETTE_ID);
+                                        const wall = new Wall(WALL_TILE_ID, WALL_PALETTE_ID);
                                         wall.pos = pos.times_square(8);
                                         this.actors.push(wall);
                                 }
