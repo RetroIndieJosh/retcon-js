@@ -17,6 +17,7 @@ class Coord {
 
         public get ceil() { return new Coord(Math.ceil(this.x), Math.ceil(this.y)); }
         public get floor() { return new Coord(Math.floor(this.x), Math.floor(this.y)); }
+        public get swap() { return new Coord(Math.floor(this.y), Math.floor(this.x)); }
 
         //
         // public static
@@ -45,7 +46,6 @@ class Coord {
                 this.y += other_coord.y;
         }
 
-        // TODO make this a getter
         public copy(): Coord {
                 return new Coord(this.x, this.y);
         }
@@ -59,7 +59,6 @@ class Coord {
                 let top_left: Coord;
                 let bottom_right: Coord;
 
-                // TODO must be a cleaner way to do this
                 if (size.x < 0 && size.y > 0) {
                         top_left = new Coord(start.x + size.x, start.y);
                         bottom_right = new Coord(start.x, start.y + size.y);
@@ -81,11 +80,15 @@ class Coord {
         }
 
         public minus(other_coord: Coord): Coord {
-                return new Coord(this.x - other_coord.x, this.y - other_coord.y);
+                const new_coord = this.copy();
+                new_coord.subtract(other_coord);
+                return new_coord;
         }
 
         public plus(other_coord: Coord): Coord {
-                return new Coord(this.x + other_coord.x, this.y + other_coord.y);
+                const new_coord = this.copy();
+                new_coord.add(other_coord);
+                return new_coord;
         }
 
         public scale(scale: Coord): void {
@@ -118,67 +121,182 @@ class Coord {
         public toString() { return `(${this.x}, ${this.y})`; }
 }
 
-function rcj_test_coord() {
-        console.debug("Coord Tests Start");
-
-        // TODO make a new grid for each test and use {} to separate
-
-        console.debug("Test Coord: 'constant' coordinates");
-        rcj_assert_coord(Coord.zero, 0, 0);
-        rcj_assert_coord(Coord.one, 1, 1);
-        rcj_assert_coord(Coord.zero.plus(Coord.one), 1, 1);
-        rcj_assert_coord(Coord.zero.minus(Coord.one), -1, -1);
-        rcj_assert_coord(Coord.left.plus(Coord.right), 0, 0);
-        rcj_assert_coord(Coord.up.plus(Coord.down), 0, 0);
-
-        const scale = -3;
-
-        const x = 8;
-        const y = 5;
-        let pos = new Coord(x, y);
-
-        const x2 = 3;
-        const y2 = -17;
-        let pos2 = new Coord(x2, y2);
-
-        console.debug("Test Coord: self equality")
-        rcj_assert_true(pos.equals(pos));
-        rcj_assert_true(pos2.equals(pos2));
-
-        console.debug("Test Coord: set correctly")
-        rcj_assert_coord(pos, x, y);
-        rcj_assert_coord(pos2, x2, y2);
-
-        console.debug("Test Coord: containment")
-        rcj_assert_true(pos.is_in(Coord.zero, new Coord(10, 10)));
-        rcj_assert_false(pos.is_in(Coord.zero, pos));
-        rcj_assert_true(pos2.is_in(Coord.zero, new Coord(10, -20)));
-        rcj_assert_false(pos2.is_in(Coord.zero, pos2));
-
-        console.debug("Test Coord: scaling")
-        rcj_assert_true(pos.times(new Coord(scale, scale)).equals(pos.times_square(scale)));
-        rcj_assert_coord(pos.times_square(2), x * 2, y * 2);
-        rcj_assert_coord(pos2.times_square(2), x2 * 2, y2 * 2);
-        rcj_assert_coord(pos.times(pos2), x * x2, y * y2);
-        rcj_assert_coord(pos2.times(pos), x * x2, y * y2);
-
-        console.debug("Test Coord: addition")
-        rcj_assert_coord(pos.plus(pos2), x + x2, y + y2);
-        rcj_assert_coord(pos2.plus(pos), x + x2, y + y2);
-        rcj_assert_true(pos.plus(pos2).equals(pos2.plus(pos)));
-
-        console.debug("Test Coord: subtraction")
-        rcj_assert_coord(pos.minus(pos2), x - x2, y - y2);
-        rcj_assert_coord(pos2.minus(pos), x2 - x, y2 - y);
-
-        // TODO test coord add/subtract
-        // TODO test coord scale/scale_square
-
-        console.debug("Coord test complete");
+abstract class Test {
+        protected abstract initialize(): void;
+        public abstract run(): void;
 }
 
-function rcj_assert_coord(pos: Coord, x: number, y: number) {
-        rcj_assert_equals(x, pos.x);
-        rcj_assert_equals(y, pos.y);
+class CoordTest extends Test {
+        private test_pos: Coord;
+        private test_pos2: Coord;
+
+        constructor() {
+                super();
+                this.test_pos = new Coord(8, 5);
+                this.test_pos2 = new Coord(8, 5);
+        }
+
+        protected initialize(): void {
+                this.test_pos = new Coord(8, 5);
+                this.test_pos2 = new Coord(8, 5);
+        }
+
+        public run(): void {
+                console.debug("Coord Tests Start");
+
+                // TODO make a new grid for each test and use {} to separate
+
+                this.test_equals();
+
+                this.test_plus();
+                this.test_add();
+                this.test_constants(); // uses add to check left+right, up+down
+
+                this.test_minus();
+                this.test_subtract();
+
+                this.test_times();
+                this.test_times_square();
+                this.test_scale();
+                this.test_scale_square();
+
+                this.test_is_in();
+
+                console.debug("Coord test complete");
+        }
+
+        private test_add() {
+                console.debug("Test Coord: add")
+
+                this.initialize();
+
+                this.test_pos2.x += 12;
+                this.test_pos2.y += -7;
+
+                this.test_pos.add(new Coord(12, -7));
+
+                rcj_assert_coord(this.test_pos, this.test_pos2);
+        }
+
+        private test_constants() {
+                console.debug("Test Coord: 'constant' coordinates");
+
+                rcj_assert_coord(Coord.zero, new Coord(0, 0));
+                rcj_assert_coord(Coord.one, new Coord(1, 1));
+                rcj_assert_coord(Coord.neg_one, new Coord(-1, -1));
+
+                rcj_assert_coord(Coord.left.plus(Coord.right), Coord.zero);
+                rcj_assert_coord(Coord.up.plus(Coord.down), Coord.zero);
+        }
+
+        private test_equals() {
+                console.debug("Test Coord: equals")
+
+                this.initialize();
+
+                rcj_assert_true(this.test_pos.equals(this.test_pos));
+
+        }
+
+        private test_is_in() {
+                console.debug("Test Coord: is_in")
+
+                this.initialize();
+
+                rcj_assert_true(this.test_pos.is_in(Coord.zero, new Coord(10, 10)));
+                rcj_assert_false(this.test_pos.is_in(Coord.zero, this.test_pos));
+
+        }
+
+        private test_minus() {
+                console.debug("Test Coord: minus")
+
+                this.initialize();
+
+                this.test_pos2.x -= -8;
+                this.test_pos2.y -= 57;
+
+                rcj_assert_coord(this.test_pos.minus(new Coord(-8, 57)), this.test_pos2);
+
+        }
+
+        private test_plus() {
+                console.debug("Test Coord: plus")
+
+                this.initialize();
+
+                this.test_pos2.x += 12;
+                this.test_pos2.y += -7;
+
+                rcj_assert_coord(this.test_pos.plus(new Coord(12, -7)), this.test_pos2);
+
+                rcj_assert_true(this.test_pos.plus(this.test_pos2).equals(this.test_pos2.plus(this.test_pos)));
+        }
+
+        private test_scale() {
+                console.debug("Test Coord: scale")
+
+                this.initialize();
+
+                this.test_pos2.x *= 7;
+                this.test_pos2.y *= -3;
+
+                this.test_pos.scale(new Coord(7, -3));
+
+                rcj_assert_coord(this.test_pos, this.test_pos2);
+        }
+
+        private test_scale_square() {
+                console.debug("Test Coord: scale square")
+
+                this.initialize();
+
+                this.test_pos2.x *= 2;
+                this.test_pos2.y *= 2;
+
+                rcj_assert_coord(this.test_pos.times_square(2), this.test_pos2);
+        }
+
+        private test_subtract() {
+                console.debug("Test Coord: subtract")
+
+                this.initialize();
+
+                this.test_pos2.x -= -8;
+                this.test_pos2.y -= 57;
+
+                this.test_pos.subtract(new Coord(-8, 57));
+                rcj_assert_coord(this.test_pos, this.test_pos2);
+
+        }
+
+        private test_times() {
+                console.debug("Test Coord: times")
+
+                this.initialize();
+
+                this.test_pos2.x *= 7;
+                this.test_pos2.y *= -3;
+
+                rcj_assert_coord(this.test_pos.times(new Coord(7, -3)), this.test_pos2);
+
+        }
+
+        private test_times_square() {
+                console.debug("Test Coord: times_square")
+
+                this.initialize();
+
+                this.test_pos2.x *= 2;
+                this.test_pos2.y *= 2;
+
+                rcj_assert_coord(this.test_pos.times_square(2), this.test_pos2);
+        }
+}
+
+// TODO move to Test.ts
+function rcj_assert_coord(pos: Coord, pos2: Coord) {
+        rcj_assert_equals(pos.x, pos2.x);
+        rcj_assert_equals(pos.y, pos2.y);
 
 }

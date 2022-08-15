@@ -4,19 +4,32 @@
 
 - only floor `number`s if using as array index (don't bother when passing to function - that function should handle it)
 - always use NumberGrid for `Array<Number><Number>` (automagically handles clip and dirty - and will later handle wrap)
+- getters should have no side effects within or outside the target class and should not create new objects
+- once the engine matures, never add a feature "for future use" - only if it's needed for an actual project
+- sorting:
+    - abstract, virtual, regular
+    - variables, methods
+    - static, non-static
+    - public, protected, private
+    - non-class methods go after class (only if they apply specifically to the class; others go in a separate grouping file)
  
 ## Engine
 
+- clean up all TODO items - if they can't / shouldn't be done now, move them to this file
+
+- display fps on text element (1000 / dt with averaging, or frames++ then display every X seconds (/X)?)
 - test larger canvas sizes (and make it easy to set - a php method?)
+
 - frame advance
 - save/load state
-- display fps on text element (1000 / dt with averaging, or frames++ then display every X seconds (/X)?)
-- add random background (generate tilemap and add to background list)
+
 - visualize colors (display all in sequence)
 - visualize palettes (display all in sequence)
 - visualize tiles (display all in sequence)
+
 - unit tests for Sprite, TileMap, Video
-- ToString or Log for Coord type
+
+- add random background (generate tilemap and add to background list)
 - `call_after_frames(callback, frame_count)` calls the callback after frame_count frames have elapsed
 - `call_for_frames(callback, frame_count)` calls the callback every frame for frame_count frames
 - use text for the viewers to draw the corresponding index
@@ -25,6 +38,8 @@
 - pixel collision: do AABB first, then pixel to check exact (can be based on color or a tile used as a mask with only 0/1)
 - tilemap collision (per tile - mask?)
 - trigger collision
+
+- cleaner negative coordinate handling in `Coord.is_in()`
 
 ## Minimum Viable
 

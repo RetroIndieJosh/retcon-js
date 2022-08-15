@@ -33,7 +33,8 @@ function rcj_assert_equals<T>(expected: T, actual: T): boolean {
 function rcj_unit_tests() {
         fail_count = 0;
 
-        rcj_test_coord();
+        (new CoordTest()).run();
+
         rcj_test_numbergrid();
         rcj_test_surface();
         rcj_test_tile();
