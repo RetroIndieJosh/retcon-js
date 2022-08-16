@@ -77,7 +77,7 @@ class LowRezJam {
                         this.actors.push(key);
                 }
 
-                Actor.set_check_solid(this.check_solid);
+                Actor.check_solid = this.check_solid;
                 Video.add_frame_event(this.update_actors);
 
                 LowRezJam.instance = this;

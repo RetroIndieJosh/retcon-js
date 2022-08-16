@@ -61,11 +61,11 @@ class Input {
                 if (event.ctrlKey) {
                         // Even though event.key is not 'Control' (e.g., 'a' is pressed),
                         // event.ctrlKey may be true if Ctrl key is pressed at the same time.
-                        console.log(`Combination of ctrlKey + ${key_name}`);
+                        console.debug(`Combination of ctrlKey + ${key_name}`);
 
                         // TODO
                 } else {
-                        console.log(`Key pressed ${key_name}`);
+                        console.debug(`Key pressed ${key_name}`);
 
                         let state = this.key_states.get(key_name);
                         if (state == undefined) state = new KeyState();
@@ -82,10 +82,10 @@ class Input {
                 // As the user releases the Ctrl key, the key is no longer active,
                 // so event.ctrlKey is false.
                 if (key_name === 'Control') {
-                        console.log('Control key was released');
+                        console.debug('Control key was released');
                 }
 
-                console.log(`Key released ${key_name}`);
+                console.debug(`Key released ${key_name}`);
                 let state = this.key_states.get(key_name);
                 if (state == undefined) state = new KeyState();
                 state.is_down = false;

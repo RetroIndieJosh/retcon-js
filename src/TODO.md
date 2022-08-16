@@ -17,6 +17,8 @@
 
 - clean up all TODO items - if they can't / shouldn't be done now, move them to this file
 
+- fix collision off by one pixel
+ 
 - display fps on text element (1000 / dt with averaging, or frames++ then display every X seconds (/X)?)
 - test larger canvas sizes (and make it easy to set - a php method?)
 

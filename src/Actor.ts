@@ -10,7 +10,11 @@ abstract class Actor extends Sprite {
         // static
         //
 
-        private static check_solid: (actor: Actor) => Actor | null;
+        public static set check_solid(value: (actor: Actor) => Actor | null) {
+                this._check_solid = value;
+        }
+
+        private static _check_solid: (actor: Actor) => Actor | null;
 
         //
         // protected
@@ -56,17 +60,12 @@ abstract class Actor extends Sprite {
                 if(!this.is_solid) return;
 
                 // undo move if solid and hit solid
-                const colliding_actor = Actor.check_solid(this)
-                if(colliding_actor != null)  {
+                const colliding_actor = Actor._check_solid(this);
+                if(colliding_actor != null) {
                         this.on_collide(colliding_actor);
                         colliding_actor.on_collide(this);
                         this.pos = old_pos;
                         return;
                 }
-        }
-
-        // TODO make this a setter? 
-        public static set_check_solid(check_solid: (actor: Actor) => Actor | null) {
-                Actor.check_solid = check_solid;
         }
 }

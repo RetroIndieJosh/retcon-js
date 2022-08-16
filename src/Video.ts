@@ -29,7 +29,7 @@ class Video
         private static initialized = false;
         private static started = false;
 
-        private static frames_per_second_target = 60;
+        private static frames_per_second_target = 30;
         private static frame_events = new Array<(dt: number) => void>();
         private static prev_frame_time = 0;
         private static dt = 0;
