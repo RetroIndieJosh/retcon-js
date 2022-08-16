@@ -144,8 +144,6 @@ class CoordTest extends Test {
         public run(): void {
                 console.debug("Coord Tests Start");
 
-                // TODO make a new grid for each test and use {} to separate
-
                 this.test_equals();
 
                 this.test_plus();
@@ -292,11 +290,4 @@ class CoordTest extends Test {
 
                 rcj_assert_coord(this.test_pos.times_square(2), this.test_pos2);
         }
-}
-
-// TODO move to Test.ts
-function rcj_assert_coord(pos: Coord, pos2: Coord) {
-        rcj_assert_equals(pos.x, pos2.x);
-        rcj_assert_equals(pos.y, pos2.y);
-
 }

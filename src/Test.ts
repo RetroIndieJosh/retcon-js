@@ -7,6 +7,13 @@ let move_speed = 1;
 
 let fail_count = 0;
 
+// TODO move to Test.ts
+function rcj_assert_coord(pos: Coord, pos2: Coord) {
+        rcj_assert_equals(pos.x, pos2.x);
+        rcj_assert_equals(pos.y, pos2.y);
+
+}
+
 // expect an exception
 function rcj_assert_exception(func: () => void) {
         try { func(); }

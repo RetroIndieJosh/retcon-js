@@ -21,6 +21,7 @@
  
 - display fps on text element (1000 / dt with averaging, or frames++ then display every X seconds (/X)?)
 - test larger canvas sizes (and make it easy to set - a php method?)
+    - optimize drawing (only render dirty pixels/tiles, early return for updates)
 
 - frame advance
 - save/load state

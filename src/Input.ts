@@ -1,6 +1,11 @@
 class KeyState {
         public is_down: boolean = false;
         public pressed_this_frame: boolean = false;
+
+        constructor(is_down: boolean, pressed_this_frame: boolean) {
+                this.is_down = is_down;
+                this.pressed_this_frame = pressed_this_frame;
+        }
 }
 
 class Input {
@@ -51,29 +56,47 @@ class Input {
         }
 
         private static on_key_down(event: KeyboardEvent) {
-                const key_name = event.key;
+                const key_name = event.key.toLowerCase();
 
                 if (key_name === 'Control') {
                         // do not alert when only Control key is pressed.
                         return;
                 }
 
-                if (event.ctrlKey) {
-                        // Even though event.key is not 'Control' (e.g., 'a' is pressed),
-                        // event.ctrlKey may be true if Ctrl key is pressed at the same time.
-                        console.debug(`Combination of ctrlKey + ${key_name}`);
+                let msg = "";
 
-                        // TODO
-                } else {
-                        console.debug(`Key pressed ${key_name}`);
-
-                        let state = this.key_states.get(key_name);
-                        if (state == undefined) state = new KeyState();
-                        state.is_down = true;
-                        state.pressed_this_frame = true;
-                        this.key_states.set(key_name, state);
+                if (event.altKey) {
+                        // TODO is this the right capitzliation?
+                        this.set_key_state("Alt", true, true);
+                        msg += "alt+";
                 }
 
+                if (event.ctrlKey) {
+                        // TODO is this the right capitzliation?
+                        this.set_key_state("Ctrl", true, true);
+                        msg += "ctrl+";
+                }
+
+                if (event.shiftKey) {
+                        // TODO is this the right capitzliation?
+                        this.set_key_state("Shift", true, true);
+                        console.debug("=> with Shift");
+                        msg += "shift+";
+                }
+
+                this.set_key_state(key_name, true, true);
+                console.debug(`${msg}${key_name} pressed`);
+        }
+
+        private static set_key_state(key_name: string, is_down: boolean, pressed_this_frame: boolean) {
+                let state = this.key_states.get(key_name);
+                if (state == undefined)
+                        state = new KeyState(true, true);
+
+                state.is_down = is_down;
+                state.pressed_this_frame = pressed_this_frame;
+
+                this.key_states.set(key_name, state);
         }
 
         private static on_key_up(event: KeyboardEvent) {
@@ -86,9 +109,6 @@ class Input {
                 }
 
                 console.debug(`Key released ${key_name}`);
-                let state = this.key_states.get(key_name);
-                if (state == undefined) state = new KeyState();
-                state.is_down = false;
-                this.key_states.set(key_name, state);
+                this.set_key_state(key_name, false, false);
         }
 }
