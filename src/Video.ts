@@ -324,11 +324,11 @@ class Video
         // private static
         //
 
-        // TDOO make this a getter
         private static clear() {
                 this.surface.clear(this.clear_color);
-                // TODO since our surface is the entire canvas space, we shouldn't need to re-render
-                //this.surface.render();
+
+                this.ctx.fillStyle = this.get_color(this.clear_color);
+                this.ctx.fillRect(0, 0, Video.surface.get_width(), Video.surface.get_height());
         }
 
         private static has_sprite(sprite: Sprite): boolean {
@@ -337,6 +337,7 @@ class Video
 
         private static render() {
                 this.clear();
+
                 this.backgrounds.forEach(background => background.blit(this.surface));
                 this.sprites.forEach(sprite => sprite.blit(this.surface));
                 this.surface.render();

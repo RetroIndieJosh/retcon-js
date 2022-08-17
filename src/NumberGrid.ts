@@ -145,12 +145,18 @@ class NumberGrid {
         public toString() {
                 let str = "";
 
+                str += "values:\n";
                 for (const pos = new Coord(0, 0); pos.y < this.size.y; pos.y++) {
                         for (pos.x = 0; pos.x < this.size.x; pos.x++) {
-                                //if (this.changed[pos.x][pos.y])
-                                        str += hex_string(this.values[pos.x][pos.y]).toUpperCase();
-                                //else
-                                        //str += "*";
+                                str += hex_string(this.values[pos.x][pos.y]).toUpperCase();
+                        }
+                        str += "\n";
+                }
+
+                str += "changed:\n";
+                for (const pos = new Coord(0, 0); pos.y < this.size.y; pos.y++) {
+                        for (pos.x = 0; pos.x < this.size.x; pos.x++) {
+                                str += this.changed[pos.x][pos.y] ? 1 : 0;
                         }
                         str += "\n";
                 }
