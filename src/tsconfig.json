@@ -27,6 +27,7 @@
                 "Actor.ts",
                 "Input.ts",
                 "retcon.ts",
+                "NumberGridTest.ts",
                 "Test.ts",
                 "metronome/metronome.ts",
                 "metronome/metronomeworker.ts",

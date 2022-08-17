@@ -82,14 +82,6 @@ class Video
                 this.initialized = true;
         }
 
-        //
-        // public static
-        //
-
-        public static add_frame_event(func: (dt: number) => void) {
-                this.frame_events.push(func);
-        }
-
         public static start(): void {
                 if (!this.is_initialized)
                         throw new Error("Video must be initialized before starting");
@@ -108,6 +100,14 @@ class Video
                 }, 1000 / this.frames_per_second_target);
 
                 this.started = true;
+        }
+
+        //
+        // public static
+        //
+
+        public static add_frame_event(func: (dt: number) => void) {
+                this.frame_events.push(func);
         }
 
         public static add_background(background: Tilemap) {
@@ -314,6 +314,10 @@ class Video
 
         public static test_pixel(value: number, pos: Coord): boolean { 
                 return this.surface.get_pixel(pos) == value; 
+        }
+
+        public static toString() {
+                return this.surface;
         }
 
         //
