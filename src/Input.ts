@@ -38,19 +38,19 @@ class Input {
         }
 
         public static is_key_down(key_name: string): boolean {
-                const state = this.key_states.get(key_name);
+                const state = this.key_states.get(key_name.toLowerCase());
                 if (state == undefined) return false;
                 return state.is_down;
         }
 
         public static is_key_up(key_name: string): boolean {
-                const state = this.key_states.get(key_name);
+                const state = this.key_states.get(key_name.toLowerCase());
                 if (state == undefined) return false;
                 return !state.is_down;
         }
 
         public static key_pressed_this_frame(key_name: string): boolean {
-                const state = this.key_states.get(key_name);
+                const state = this.key_states.get(key_name.toLowerCase());
                 if (state == undefined) return false;
                 return state.pressed_this_frame;
         }
@@ -66,20 +66,17 @@ class Input {
                 let msg = "";
 
                 if (event.altKey) {
-                        // TODO is this the right capitzliation?
-                        this.set_key_state("Alt", true, true);
+                        this.set_key_state("alt", true, true);
                         msg += "alt+";
                 }
 
                 if (event.ctrlKey) {
-                        // TODO is this the right capitzliation?
-                        this.set_key_state("Ctrl", true, true);
+                        this.set_key_state("ctrl", true, true);
                         msg += "ctrl+";
                 }
 
                 if (event.shiftKey) {
-                        // TODO is this the right capitzliation?
-                        this.set_key_state("Shift", true, true);
+                        this.set_key_state("shift", true, true);
                         console.debug("=> with Shift");
                         msg += "shift+";
                 }
@@ -89,7 +86,7 @@ class Input {
         }
 
         private static set_key_state(key_name: string, is_down: boolean, pressed_this_frame: boolean) {
-                let state = this.key_states.get(key_name);
+                let state = this.key_states.get(key_name.toLowerCase());
                 if (state == undefined)
                         state = new KeyState(true, true);
 
@@ -100,7 +97,7 @@ class Input {
         }
 
         private static on_key_up(event: KeyboardEvent) {
-                const key_name = event.key;
+                const key_name = event.key.toLowerCase();
 
                 // As the user releases the Ctrl key, the key is no longer active,
                 // so event.ctrlKey is false.

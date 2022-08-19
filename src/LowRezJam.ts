@@ -1,9 +1,5 @@
-// TODO move to math
-const invsqrt2 = 1/Math.sqrt(2);
-
 const WALL_PALETTE_ID = 0;
 const WALL_TILE_ID = 4;
-
 
 const DOOR_PALETTE_MIN = 2;
 const DOOR_PALETTE_MAX = 4;
@@ -91,7 +87,7 @@ class LowRezJam {
                         }
 
                         if(other_actor.collides_with(actor))  {
-                                //console.debug("is solid");
+                                console.debug("is solid");
                                 return other_actor;
                         }
                 }

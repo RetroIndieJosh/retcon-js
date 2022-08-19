@@ -34,7 +34,6 @@ class NumberGrid {
                 }
         }
 
-        // TODO make this a getter
         public copy(): NumberGrid {
                 let copy_grid = new NumberGrid(this.size, this.min, this.max);
                 for (let x = 0; x < this.size.x; x++) {
@@ -46,7 +45,7 @@ class NumberGrid {
                 return copy_grid;
         }
 
-        public for_each(func: (pos: Coord, value: number) => void) {
+        public for_each(func: (pos: Coord, value: number) => void): void {
                 let pos = new Coord(0, 0);
                 for (; pos.x < this.size.x; pos.x++) {
                         for (pos.y = 0; pos.y < this.size.y; pos.y++) {
@@ -55,13 +54,12 @@ class NumberGrid {
                 }
         }
 
-        public get(pos: Coord) {
+        public get(pos: Coord): number {
                 pos = pos.floor;
 
-                // TODO this is clip - handle wrap!
                 if (!pos.is_in(Coord.zero, this.size)) {
-                        // TODO shouldn't this be ignored? a warning? but then what do we return?
-                        throw new Error(`Illegal NumberGrid coord: ${pos} not in ((0, 0), (${this.size}))`);
+                        // TODO get random junk from memory instead
+                        return this.random_value();
                 }
 
                 if(this.changed[pos.x][pos.y])

@@ -42,7 +42,7 @@ class Player extends Actor {
                         move.add(Coord.down);
 
                 if(move.x != 0 && move.y != 0) 
-                        move.scale_square(invsqrt2);
+                        move.scale_square(INVSQRT2);
 
                 move.scale_square(PLAYER_SPEED);
                 this.move(move);
