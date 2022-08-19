@@ -7,11 +7,9 @@ let move_speed = 1;
 
 let fail_count = 0;
 
-// TODO move to Test.ts
 function rcj_assert_coord(pos: Coord, pos2: Coord) {
         rcj_assert_equals(pos.x, pos2.x);
         rcj_assert_equals(pos.y, pos2.y);
-
 }
 
 // expect an exception
@@ -85,7 +83,7 @@ function rcj_test_music(): void {
         const pad = new Audio("./music/replicator-pad.ogg");
         pad.loop = true;
 
-        // TODO these loops only work if all the patterns are the same length (but awkward pause at the end)
+        // NOTE these loops only work if all the patterns are the same length (but awkward pause at the end)
         drums.addEventListener("canplaythrough", (event) => {
                 drums.play();
                 pad.play();
@@ -112,12 +110,6 @@ function rcj_test_add_palette(): void {
 
         const index = Video.add_palette(new Palette(pal_str));
         console.debug(`add palette ${index} = "${pal_str}"`);
-}
-
-// TODO move (utilities?)
-// returns random int in range [min, max)
-function random_int(min: number, max: number) {
-        return Math.floor(Math.random() * (max - min)) + min;
 }
 
 function rcj_test_add_sprite(): Sprite | null {
@@ -147,18 +139,24 @@ function rcj_test_add_sprite(): Sprite | null {
 function rcj_test_add_tile(): void {
         let tile_str = "";
         for (let i = 0; i < 8 * 8; i++) {
-                tile_str += Math.floor(Math.random() * Video.palette_color_count);
+                tile_str += random_int(0, Video.palette_color_count);
         }
 
         const index = Video.add_tile(new Tile(tile_str));
         console.debug(`add tile #${index}`);
 }
 
+function rcj_test_add_background(): void {
+        // TODO max size based on video resolution
+        const max_size = Coord.one.times_square(8);
+        const tilemap = new Tilemap(Coord.random(Coord.one, max_size), random_int(0, Video.palette_color_count));
+        const index = Video.add_background(tilemap);
+        console.debug(`add tile #${index}`);
+}
+
 function rcj_test_clear_sprites(): void {
-        const video = Video;
-        while(video.sprite_count > 0)
-                video.remove_sprite_at(0);
-        video.set_clear_color(0);
+        while(Video.sprite_count > 0)
+                Video.remove_sprite_at(0);
 }
 
 function rcj_test_init_random_game(): void {

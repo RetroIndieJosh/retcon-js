@@ -30,6 +30,7 @@
                         <button onclick="rcj_test_add_palette();">Add Random Palette</button>
                         <button onclick="rcj_test_add_tile();">Add Random Tile</button>
                         <button onclick="rcj_test_add_sprite();">Add Random Sprite</button>
+                        <button onclick="rcj_test_add_background();">Add Random Background</button>
 
                         <button onclick="Video.list_colors();">List colors</button>
                         <button onclick="Video.list_palettes();">List palettes</button>

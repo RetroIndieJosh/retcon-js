@@ -1,16 +1,20 @@
-        // TODO add log()
 //class Surface implements Loggable {
 class Surface {
-        protected pixels: NumberGrid;
+        protected _pixels: NumberGrid;
+
+        public get pixels(): NumberGrid { return this._pixels; }
+
+        public get height(): number { return this._pixels.height; }
+        public get size(): Coord { return this._pixels.size; }
+        public get width(): number { return this._pixels.width; }
 
         constructor(size: Coord) {
-                this.pixels = new NumberGrid(size, 0, 16);
-                this.pixels.randomize();
+                this._pixels = new NumberGrid(size, 0, 16);
+                this._pixels.randomize();
         }
 
-        // TODO blit subsection with x, y, right, bottom and reuse that to optimize non-wrap blitting
         public blit(target_surface: Surface, top_left: Coord, wrap: boolean) {
-                if (this.pixels == undefined) return;
+                if (this._pixels == undefined) return;
 
                 if (wrap) {
                         console.error("Wrap is currently not implemented");
@@ -23,68 +27,50 @@ class Surface {
                         */
                 }
                 else {
-                        target_surface.set_pixels(top_left, this.pixels, wrap);
+                        target_surface.set_pixels(top_left, this._pixels, wrap);
                 }
         }
 
         public clear(color_id: number) {
-                this.pixels.set_all(color_id);
+                this._pixels.set_all(color_id);
         }
 
         public copy_pixels(): NumberGrid {
-                return this.pixels.copy();
+                return this._pixels.copy();
         }
 
-        // TODO make a property
-        public get_height(): number {
-                return this.pixels.get_height();
-        }
-
-        // TODO make a property
         public get_pixel(pos: Coord): number {
-                return this.pixels.get(pos);
+                return this._pixels.get(pos);
         }
 
-        // TODO make a property for pixels and then use get_pixels for range
-        // TODO a way to get a range of pixels [top_left, top_left+size)
-        public get_pixels(): NumberGrid {
-                return this.pixels;
-        }
+        public get_pixels(top_left: Coord, size: Coord) {
+                // TODO
 
-        // TODO make a property
-        public get_size(): Coord {
-                return this.pixels.get_size();
-        }
-
-        // TODO make a property
-        public get_width(): number {
-                return this.pixels.get_width();
         }
 
         public randomize_pixels() {
-                this.pixels.randomize();
+                this._pixels.randomize();
         }
 
         public render(only_changed = true) {
-                this.pixels.for_each((pos, color) => Video.put_pixel(pos, color, only_changed));
+                this._pixels.for_each((pos, color) => Video.put_pixel(pos, color, only_changed));
                 this.reset_changed();
         }
 
         public reset_changed() {
-                // TODO rename to reset_changed
-                this.pixels.clear_changed();
+                this._pixels.reset_changed();
         }
 
         public set_pixel(pos: Coord, color_id: number, wrap = false) {
-                this.pixels.set(pos, color_id, wrap);
+                this._pixels.set(pos, color_id, wrap);
         }
 
         public set_pixels(top_left: Coord, pixels: NumberGrid, wrap: boolean) {
                 // TODO fix for clipping
                 //const width = Math.min(top_left.x + pixels.get_width(), this.pixels.get_width());
-                //const height = Math.min(top_left.y + pixels.get_height(), this.pixels.get_height());
-                const width = pixels.get_width();
-                const height = pixels.get_height();
+                //const height = Math.min(top_left.y + pixels.height, this.pixels.height());
+                const width = pixels.width;
+                const height = pixels.height;
 
                 for (let pos = new Coord(0, 0); pos.y < height; pos.y++) {
                         for (pos.x = 0; pos.x < width; pos.x++) {
@@ -123,7 +109,7 @@ function rcj_test_surface(): void {
 
                 const surf2 = new Surface(new Coord(width, height));
 
-                surf.set_pixels(Coord.zero, surf2.get_pixels(), false);
+                surf.set_pixels(Coord.zero, surf2.pixels, false);
                 for (let pos = new Coord(0, 0); pos.y < height; pos.y++) {
                         for (pos.x = 0; pos.x < width; pos.x++) {
                                 rcj_assert_equals(surf.get_pixel(pos), surf.get_pixel(pos));
@@ -136,7 +122,7 @@ function rcj_test_surface(): void {
 
                 const surf_small = new Surface(new Coord(width / 2, height / 2));
 
-                surf.set_pixels(Coord.zero, surf_small.get_pixels(), false);
+                surf.set_pixels(Coord.zero, surf_small.pixels, false);
                 for (let pos = new Coord(0, 0); pos.y < height / 2; pos.y++) {
                         for (pos.x = 0; pos.x < width / 2; pos.x++) {
                                 rcj_assert_equals(surf_small.get_pixel(pos), surf.get_pixel(pos));
@@ -149,7 +135,7 @@ function rcj_test_surface(): void {
 
                 const surf_large = new Surface(new Coord(width * 2, height * 2));
 
-                surf.set_pixels(Coord.zero, surf_large.get_pixels(), false);
+                surf.set_pixels(Coord.zero, surf_large.pixels, false);
                 for (let pos = new Coord(0, 0); pos.y < height; pos.y++) {
                         for (pos.x = 0; pos.x < width; pos.x++) {
                                 rcj_assert_equals(surf_large.get_pixel(pos), surf.get_pixel(pos));

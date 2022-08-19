@@ -1,9 +1,8 @@
 const NUMBER_UNCHANGED = -1;
 
-// TODO add log()
 //class NumberGrid implements Loggable {
 class NumberGrid {
-        private size: Coord;
+        private _size: Coord;
 
         private min: number;
         private max: number;
@@ -11,8 +10,12 @@ class NumberGrid {
         private changed: Array<Array<boolean>>;
         private values: Array<Array<number>>;
 
+        public get height(): number { return this.size.y; }
+        public get size(): Coord { return this._size; }
+        public get width(): number { return this.size.x; }
+
         constructor(size: Coord, min: number, max: number) {
-                this.size = size.floor;
+                this._size = size.floor;
 
                 this.min = Math.floor(min);
                 this.max = Math.floor(max);
@@ -26,7 +29,7 @@ class NumberGrid {
                 this.randomize();
         }
 
-        public clear_changed() {
+        public reset_changed() {
                 for (let x = 0; x < this.size.x; x++) {
                         for (let y = 0; y < this.size.y; y++) {
                                 this.changed[x][y] = false;
@@ -65,18 +68,6 @@ class NumberGrid {
                 if(this.changed[pos.x][pos.y])
                         return this.values[pos.x][pos.y];
                 return NUMBER_UNCHANGED;
-        }
-
-        public get_height(): number {
-                return this.size.y;
-        }
-
-        public get_size(): Coord {
-                return this.size;
-        }
-
-        public get_width(): number {
-                return this.size.x;
         }
 
         public randomize(): void {

@@ -20,13 +20,22 @@
 - fix collision off by one pixel
 - implement wrap in NumberGrid
  
-- display fps on text element (1000 / dt with averaging, or frames++ then display every X seconds (/X)?)
-- test larger canvas sizes (and make it easy to set - a php method?)
-    - optimize drawing (only render dirty pixels/tiles, early return for updates)
-
-- frame advance
 - save/load state
 
+## Video
+
+- subsection blit (Surface)
+    - blit subsection with x, y, right, bottom and reuse that to optimize non-wrap blitting
+- test larger canvas sizes (and make it easy to set - a php method?)
+    - optimize drawing (only render dirty pixels/tiles, early return for updates)
+- ignore non-dirty in `Tilemap.sync_tiles`
+
+## Debug
+
+- frame advance
+
+- display fps on text element (1000 / dt with averaging, or frames++ then display every X seconds (/X)?)
+- figure out what to do with log vs tostring
 - visualize colors (display all in sequence)
 - visualize palettes (display all in sequence)
 - visualize tiles (display all in sequence)

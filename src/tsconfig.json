@@ -26,6 +26,7 @@
                 "Sprite.ts",
                 "Actor.ts",
                 "Input.ts",
+                "Game.ts",
                 "retcon.ts",
                 "NumberGridTest.ts",
                 "Test.ts",

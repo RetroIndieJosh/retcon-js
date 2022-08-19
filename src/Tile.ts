@@ -1,48 +1,49 @@
 class Tile implements Loggable {
-        // TODO tile size shouldn't be customizable - should always be Video.tile_size (or ideally Game.tile_size)
-        private size: number = -1;
+        public get size(): number { return this._size; }
+
+        private _size: number = -1;
         private color_ids: NumberGrid;
 
         constructor(tile_data: string) {
                 if (tile_data == "")
                         throw new Error("RetConJS: empty tile data");
 
-                this.size = Math.sqrt(tile_data.length);
-                if (!(this.size % 1 == 0))
+                this._size = Math.sqrt(tile_data.length);
+                if (!(this._size % 1 == 0))
                         throw new Error(`RetConJS: non-square tile size ${tile_data.length}`);
 
-                this.color_ids = new NumberGrid(new Coord(this.size, this.size), 0, Video.color_count);
+                this.color_ids = new NumberGrid(new Coord(this._size, this._size), 0, Video.color_count);
 
-                // TODO move msg and console info stuff to log(debug = true)
+                // TODO this should only log when requested
+                console.debug(`load tile ${tile_data}`);
 
-                //console.info(`load tile ${tile_data}`);
-
+                // TODO this should only log when requested
                 let index = 0;
                 let pos = new Coord(0, 0);
-                //let msg = "";
-                for (; pos.y < this.size; pos.y++) {
-                        for (pos.x = 0; pos.x < this.size; pos.x++) {
+                let msg = "";
+                for (; pos.y < this._size; pos.y++) {
+                        for (pos.x = 0; pos.x < this._size; pos.x++) {
                                 const hex = `0x${tile_data[index]}`;
                                 this.color_ids.set(pos, Number(hex));
-                                //msg += `(${pos.x},${pos.y})/${index}=${hex}|${this.color_ids.get(pos)}) `;
+                                msg += `(${pos.x},${pos.y})/${index}=${hex}|${this.color_ids.get(pos)}) `;
                                 index++;
                         }
-                        //msg += "\n";
+                        msg += "\n";
                 }
-                //console.info(msg);
+                console.debug(msg);
         }
 
         public log() {
                 let msg = "";
                 let pos = new Coord(0, 0);
-                for (; pos.y < this.size; pos.y++) {
-                        for (pos.x = 0; pos.x < this.size; pos.x++) {
+                for (; pos.y < this._size; pos.y++) {
+                        for (pos.x = 0; pos.x < this._size; pos.x++) {
                                 msg += `${this.color_ids.get(pos)} `;
                         }
                         msg += "\n";
                 }
 
-                console.info(`Tile size ${this.size}`);
+                console.info(`Tile size ${this._size}`);
                 console.info(msg);
         }
 
@@ -50,8 +51,8 @@ class Tile implements Loggable {
                 palette_id = Math.floor(palette_id);
                 const palette = Video.get_palette(palette_id);
 
-                for (let pos = Coord.zero; pos.y < this.size; pos.y++) {
-                        for (pos.x = 0; pos.x < this.size; pos.x++) {
+                for (let pos = Coord.zero; pos.y < this._size; pos.y++) {
+                        for (pos.x = 0; pos.x < this._size; pos.x++) {
                                 const pos2 = top_left.plus(pos);
 
                                 const palette_color_id = this.color_ids.get(pos);
@@ -68,10 +69,6 @@ class Tile implements Loggable {
 
         public get_pixel(pos: Coord): number {
                 return this.color_ids.get(pos);
-        }
-
-        public get_size(): number {
-                return this.size;
         }
 
         public set_pixel(pos: Coord, palette_color_id: number) {

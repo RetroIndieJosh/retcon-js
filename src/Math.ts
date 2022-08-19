@@ -8,3 +8,8 @@ function is_hex(hex: string): boolean {
         const regex = new RegExp("[0-9a-fA-F]+");
         return regex.test(hex);
 }
+
+// random int in range [min, max)
+function random_int(min: number, max: number) {
+        return Math.floor(Math.random() * (max - min)) + min;
+}

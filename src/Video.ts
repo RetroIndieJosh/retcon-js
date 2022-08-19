@@ -5,11 +5,6 @@ class Video
         private static _palette_color_count = 4;
         public static get palette_color_count() { return this._palette_color_count; }
 
-        // tiles are tile_size by tile_size pixels
-        private static _tile_size = 8;
-        public static get tile_size() { return this._tile_size; }
-        public static get tile_size_coord() { return new Coord(this._tile_size, this._tile_size); }
-
         private static canvas: HTMLCanvasElement;
         private static ctx: CanvasRenderingContext2D;
 
@@ -111,8 +106,10 @@ class Video
         }
 
         public static add_background(background: Tilemap) {
-                // TODO prevent (allow?) duplication
+                const index = this.backgrounds.length;
+                // TODO prevent duplicate entries
                 this.backgrounds.push(background);
+                return index;
         }
 
         public static add_color(color_str: string): number {
@@ -255,8 +252,8 @@ class Video
         }
 
         public static randomize(): void {
-                for (let pos = Coord.zero; pos.x < this.surface.get_width(); pos.x++) {
-                        for (pos.y = 0; pos.y < this.surface.get_height(); pos.y++) {
+                for (let pos = Coord.zero; pos.x < this.surface.width; pos.x++) {
+                        for (pos.y = 0; pos.y < this.surface.height; pos.y++) {
                                 const color = random_int(0, Video.color_count);
                                 this.put_pixel(pos, color);
                         }
@@ -328,7 +325,7 @@ class Video
                 this.surface.clear(this.clear_color);
 
                 this.ctx.fillStyle = this.get_color(this.clear_color);
-                this.ctx.fillRect(0, 0, Video.surface.get_width(), Video.surface.get_height());
+                this.ctx.fillRect(0, 0, Video.surface.width, Video.surface.height);
         }
 
         private static has_sprite(sprite: Sprite): boolean {

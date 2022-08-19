@@ -42,9 +42,9 @@ abstract class Actor extends Sprite {
                 if(!this.is_solid) return false;
 
                 const top_left1 = this.pos.floor;
-                const bottom_right1 = this.pos.plus(Video.tile_size_coord).floor;
+                const bottom_right1 = this.pos.plus(Game.tile_size_coord).floor;
                 const top_left2 = other_actor.pos.floor;
-                const bottom_right2 = other_actor.pos.plus(Video.tile_size_coord).floor;
+                const bottom_right2 = other_actor.pos.plus(Game.tile_size_coord).floor;
 
                 return top_left1.x <= bottom_right2.x && bottom_right1.x >= top_left2.x
                         && top_left1.y <= bottom_right2.y && bottom_right1.y >= top_left2.y;

@@ -9,11 +9,9 @@ class Wall extends Actor {
         protected override on_collide(other_actor: Actor): void { }
 }
 
-// TODO static?
 class LowRezJam {
         private static instance: LowRezJam;
 
-        // TODO adjust this so we can toggle among wasd, arrows, or both
         public static ITCH_RELEASE = false;
 
         private actors: Array<Actor>;

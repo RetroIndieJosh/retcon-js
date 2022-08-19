@@ -2,8 +2,6 @@ class Tilemap implements Loggable {
         public get marked_for_deletion() { return this._marked_for_deletion; }
         private _marked_for_deletion = false;
 
-        private tile_size: number;
-
         public pos = Coord.zero;
 
         protected opaque = true;
@@ -18,17 +16,21 @@ class Tilemap implements Loggable {
         private _palette_id: number;
 
         public get palette_id() { return this._palette_id;}
+        public get pixel_height(): number { return this.size.y * Game.tile_size; }
+        public get pixel_size(): Coord { return this.size; }
+        public get pixel_width(): number { return this.size.x * Game.tile_size; }
+        public get tile_height(): number { return this.size.y; }
+        public get tile_size(): Coord { return this.size; } // number of tiles (x,y) in the TileMap, NOT size of tiles!
+        public get tile_width(): number { return this.size.x; }
 
-        constructor(tile_size: number, size: Coord, _palette_id: number) {
-                this.tile_size = Math.floor(tile_size);
+        constructor(size: Coord, _palette_id: number) {
                 this.size = size.floor;
                 this._palette_id = _palette_id;
 
-                console.info(`Create tile ${this.size.x}x${this.size.y} tiles of `
-                        + `${this.tile_size} pixels squared with palette ${this._palette_id}`);
+                console.info(`Create tilemap ${this.size.x}x${this.size.y} tiles of `
+                        + `${Game.tile_size} pixels squared with palette ${this._palette_id}`);
 
-                this.surface = new Surface(this.size.times_square(tile_size));
-
+                this.surface = new Surface(this.size.times_square(Game.tile_size));
                 this.tile_ids = new NumberGrid(this.size, 0, Video.tile_count);
         }
 
@@ -38,31 +40,6 @@ class Tilemap implements Loggable {
 
         public destroy(): void {
                 this._marked_for_deletion = true;
-        }
-
-        public get_pixel_height(): number {
-                return this.size.y * this.tile_size;
-        }
-
-        public get_pixel_size(): Coord {
-                return this.size;
-        }
-
-        public get_pixel_width(): number {
-                return this.size.x * this.tile_size;
-        }
-
-        public get_tile_height(): number {
-                return this.size.y;
-        }
-
-        // number of tiles (x,y) in the TileMap, NOT size of tiles!
-        public get_tile_size(): Coord {
-                return this.size;
-        }
-
-        public get_tile_width(): number {
-                return this.size.x;
         }
 
         public has_tile_coordinate(pos: Coord) {
@@ -109,7 +86,6 @@ class Tilemap implements Loggable {
         public set_tile(pos: Coord, tile_id: number) {
                 pos = pos.floor;
 
-                // TODO warn if tile size mismatches?
                 this.tile_ids.set(pos, tile_id, false);
                 this.sync_tiles();
         }
@@ -122,10 +98,8 @@ class Tilemap implements Loggable {
                 for (let pos = new Coord(0, 0); pos.y < this.size.y; pos.y++) {
                         for (pos.x = 0; pos.x < this.size.x; pos.x++) {
                                 const tile = Video.get_tile(this.tile_ids.get(pos));
-                                // TODO check for UNCHANGED
                                 //console.log(`Tile: ${tile} @ ${x}, ${y}`);
-                                // TODO  make sure we don't draw clear (NumberGrid should help?)
-                                tile.blit(this.surface, this._palette_id, this.pos.times_square(this.tile_size), 
+                                tile.blit(this.surface, this._palette_id, this.pos.times_square(Game.tile_size), 
                                         this.opaque, this.wrap);
                         }
                 }

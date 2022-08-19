@@ -1,29 +1,32 @@
 // TODO fix clear random / clear color not working
 
 class SizedDataBase {
-        public width: number = -1;
-        public height: number = -1;
+        public width = -1;
+        public height = -1;
 }
 
 class TileDataBase extends SizedDataBase {
-        public tiles: string = "";
+        public tiles = "";
 }
 
 class TilemapData extends TileDataBase {
-        public palette: number = -1;
-        public tileset: number = -1;
+        public palette = -1;
+        public tileset = -1;
 }
 
 class ActorData extends TileDataBase { }
 
 // TODO write separate software (Python?) compiler that converts .map, .set, .tile, and .pal files into json, then retcon reads that json file
 class GameData {
-        public title: string = "";
-        public colors: string = "";
-        public palettes: Array<string> = new Array<string>();
-        public tiles: Array<string> = new Array<string>();
-        public tilesets: Array<string> = new Array<string>();
-        public tilemaps: Array<TilemapData> = new Array<TilemapData>();
+        public title = "";
+        public tile_size = 8;
+
+        public colors = "";
+        public palettes = new Array<string>();
+
+        public tiles = new Array<string>();
+        public tilesets = new Array<string>();
+        public tilemaps = new Array<TilemapData>();
 }
 
 function retconjs_init(scale: number, game_path: string | null = null,  on_done: () => void, debug = false): void {
@@ -39,6 +42,8 @@ function retconjs_init(scale: number, game_path: string | null = null,  on_done:
 
 function retconjs_load_game(game_data: GameData, scale: number, debug: boolean) {
         Video.initialize('retcon', new Coord(64, 64), scale, game_data.colors);
+
+        Game.initialize(game_data);
 
         // load palettes
         game_data.palettes.forEach(palette_data => {
