@@ -45,18 +45,6 @@ function retconjs_load_game(game_data: GameData, scale: number, debug: boolean) 
 
         Game.initialize(game_data);
 
-        // load palettes
-        game_data.palettes.forEach(palette_data => {
-                const palette = new Palette(palette_data);
-                Video.add_palette(palette);
-        });
-
-        // load tiles (TODO from game data)
-        game_data.tiles.forEach(tile_data => {
-                const tile = new Tile(tile_data);
-                Video.add_tile(tile);
-        });
-
         // load tilemap background
         /*
         const tiles = new Tilemap(8, 8, 8, 1);

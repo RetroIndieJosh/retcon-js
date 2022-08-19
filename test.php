@@ -7,8 +7,6 @@
         <title>retcon.js - tests</title>
 </head>
 
-<!--TODO this should be test.json-->
-
 <body onload='retconjs_init(5, null, null)'>
         <h1 style="text-align:center;">RetConJS Testing</h1>
         <div class="menu-container">

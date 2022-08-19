@@ -2,7 +2,8 @@ const PLAYER_SPEED = 0.5;
 //const player_speed = 1;
 
 const PLAYER_PALETTE_ID = 2;
-const PLAYER_TILE_ID = 3;
+//const PLAYER_TILE_ID = 3;
+const PLAYER_TILE_ID = 4;
 
 class Player extends Actor {
         private keys = new Array<number>;

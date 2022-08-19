@@ -1,10 +1,5 @@
-// TODO should this be all static? to cut through get_instance? or even better, simply methods
 class Video
 {
-        // TODO these are more like Game properties and shouldn't be in video?
-        private static _palette_color_count = 4;
-        public static get palette_color_count() { return this._palette_color_count; }
-
         private static canvas: HTMLCanvasElement;
         private static ctx: CanvasRenderingContext2D;
 
@@ -14,6 +9,9 @@ class Video
 
         private static colors = new Array<Color>();
         private static palettes = new Array<Palette>();
+
+        private static _palette_color_count = 4;
+        public static get palette_color_count() { return this._palette_color_count; }
 
         private static backgrounds = new Array<Tilemap>();
         private static sprites = new Array<Sprite>();

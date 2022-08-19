@@ -29,7 +29,7 @@ class LowRezJam {
 
                 // init player
                 this.player = new Player();
-                this.player.pos = new Coord(9, 9);
+                this.player.pos = new Coord(8, 8);
                 this.actors.push(this.player);
 
                 // init walls
@@ -77,14 +77,14 @@ class LowRezJam {
                 LowRezJam.instance = this;
         }
 
-        private check_solid(actor: Actor): Actor | null {
+        private check_solid(actor: Actor, square: Square): Actor | null {
                 for(let i = 0; i < LowRezJam.instance.actors.length; i++) {
                         const other_actor = LowRezJam.instance.actors[i];
                         if(other_actor == actor)  {
                                 continue;
                         }
 
-                        if(other_actor.collides_with(actor))  {
+                        if(other_actor.collides_with(square))  {
                                 console.debug("is solid");
                                 return other_actor;
                         }

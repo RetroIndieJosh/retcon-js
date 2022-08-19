@@ -6,5 +6,17 @@ class Game {
 
         public static initialize(game_data: GameData): void {
                 Game._tile_size = game_data.tile_size;
+
+                // load palettes
+                game_data.palettes.forEach(palette_data => {
+                        const palette = new Palette(palette_data);
+                        Video.add_palette(palette);
+                });
+
+                // load tiles (TODO from game data)
+                game_data.tiles.forEach(tile_data => {
+                        const tile = new Tile(tile_data);
+                        Video.add_tile(tile);
+                });
         }
 }
