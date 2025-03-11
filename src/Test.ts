@@ -14,14 +14,16 @@ function retconjs_test_increase_move_speed() {
 }
 
 function retconjs_test_clear_black(): void {
-        console.info("Clear to black");
-        Video.get_instance().set_clear_color(0);
+        console.info("Clear background (tile 0)");
+        Video.get_instance().set_bg_all(0, 0);
 }
 
 function retconjs_test_clear_random(): void {
-        console.info("clear to random colors");
+        const color_id = Math.floor(Math.random() * 5);
+        const color = Video.get_instance().get_color(color_id);
+        console.info(`clear to color #${color_id} (${color})`);
         // TODO limit to number of colors in game palette
-        Video.get_instance().set_clear_color(Math.floor(Math.random() * 5));
+        Video.get_instance().set_clear_color(color_id);
 }
 
 function retconjs_test_metronome(): void {

@@ -4,7 +4,6 @@ class Tilemap {
         public x: number = 0;
         public y: number = 0;
 
-        protected opaque: boolean = true;
         protected wrap: boolean = false;
 
         // width and height of the map in tiles
@@ -95,7 +94,7 @@ class Tilemap {
                                 const tile = video.get_tile(this.tile_ids[x][y]);
                                 //console.log(`Tile: ${tile} @ ${x}, ${y}`);
                                 // TODO  make sure we don't draw clear
-                                tile.blit(this.surface, palette, x * this.tile_size, y * this.tile_size, this.opaque, this.wrap);
+                                tile.blit(this.surface, palette, x * this.tile_size, y * this.tile_size, this.wrap);
                         }
                 }
         }

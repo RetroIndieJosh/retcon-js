@@ -13,9 +13,10 @@ class Video extends Surface
         private color_list: Array<Color> = new Array<Color>();
         private palette_list: Array<Palette> = new Array<Palette>();
 
-        private background_list: Array<Tilemap> = new Array<Tilemap>();
         private sprite_list: Array<Sprite> = new Array<Sprite>();
         private tile_list: Array<Tile> = new Array<Tile>();
+
+        private background: Tilemap | undefined = undefined;
 
         public static get_instance(): Video {
                 if (Video.instance == undefined) {
@@ -29,13 +30,26 @@ class Video extends Surface
                 if (Video.instance == undefined) return;
 
                 const video: Video = Video.get_instance();
+
+                // create background layers
+                // TODO support arbitrary number of layers
+                console.log("Create background layers");
+                video.background = new Tilemap(8, 8, 8, 1); 
+
+                console.log("Clear background layers");
+                video.background.set_all(0);
+
                 setInterval(function () {
-                        video.clear(0);
-                        video.background_list.forEach(background => background.blit(video));
+                        video.ctx.fillStyle = video.get_color(video.clear_color);
+                        video.ctx.fillRect(0, 0, video.canvas.width, video.canvas.height);
+
+                        // TODO draw multiple backgrounds
+                        //video.layer_list.forEach(background => background.blit(video));
+                        video.background?.blit(video);
                         video.sprite_list.forEach(sprite => sprite.blit(video));
                         video.render();
 
-                        // TODO this should probably not be handling input
+                        // TODO handle input separately from render
                         Input.clear();
                 }, 1000 / 60);
         }
@@ -65,26 +79,18 @@ class Video extends Surface
                 this.canvas.height = height * scale;
 
                 // load colors
+                console.log("Load colors");
                 const color_string_list = color_string.match(/.{1,3}/g);
                 color_string_list?.forEach(color_string => this.color_list.push(`#${color_string}`));
                 console.log(`Colors: ${this.color_list}`);
-
-                this.randomize_pixels();
-        }
-
-        // TODO 
-        public add_background(background: Tilemap) {
-                // TODO prevent (allow?) duplication
-                this.background_list.push(background);
         }
 
         public add_palette(palette: Palette) {
-                // TODO prevent duplication
+                console.log(`Add palette ${palette}`);
                 this.palette_list.push(palette);
         }
 
         public add_tile(tile: Tile) {
-                // TODO prevent duplication
                 this.tile_list.push(tile);
         }
 
@@ -176,8 +182,7 @@ class Video extends Surface
                 return true;
         }
 
-        public sprite_count() : number { return this.sprite_list.length; }
-
+        // draw one frame
         public render() {
                 if (this.scale == undefined) return;
 
@@ -189,8 +194,23 @@ class Video extends Surface
                 });
         }
 
+        // set the background clear color on top of which all layers and sprites are drawn
         public set_clear_color(color_id: number, clear: boolean = true) {
                 this.clear_color = color_id;
                 if(clear) this.clear(this.clear_color);
         }
+
+        // set all tiles in background bg_id to tile_id
+        public set_bg_all(bg_id: number, tile_id: number) {
+                this.background?.set_all(tile_id);
+        }
+
+        // TODO utilize bg_id
+        // set tile in background bg_id at (x, y) to tile_id
+        public set_bg_tile(bg_id: number, x: number, y: number, tile_id: number) {
+                this.background?.set_tile(x, y, tile_id);
+        }
+
+        // the number of sprites currently rendered
+        public sprite_count() : number { return this.sprite_list.length; }
 } 

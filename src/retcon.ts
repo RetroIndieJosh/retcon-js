@@ -47,11 +47,6 @@ function retconjs_load_game(game_data: GameData, scale: number, debug: boolean) 
                 video.add_tile(tile);
         });
 
-        // load tilemap background
-        const tiles = new Tilemap(8, 8, 8, 1);
-        video.add_background(tiles);
-        tiles.set_all(0);
-
         Video.start();
 
         if(!debug) return;

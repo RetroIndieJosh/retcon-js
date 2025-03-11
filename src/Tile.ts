@@ -24,7 +24,7 @@ class Tile {
                 console.info(`Tile size ${this.size}: ${tile_data}`);
         }
 
-        public blit(surface: Surface, palette: Palette, left: number, top: number, opaque: boolean, wrap: boolean) {
+        public blit(surface: Surface, palette: Palette, left: number, top: number, wrap: boolean) {
                 const video = Video.get_instance();
                 for (let x = 0; x < this.size; x++) {
                         for (let y = 0; y < this.size; y++) {
@@ -32,9 +32,9 @@ class Tile {
                                 const yy = y + top;
 
                                 const palette_color_id = this.color_ids[x][y];
-                                if(palette_color_id == 0 && !opaque) {
-                                        console.log("clear pixel");
-                                        surface.set_pixel(xx, yy, 0, wrap);
+                                if(palette_color_id == 0) {
+                                        //console.log("clear pixel");
+                                        //surface.set_pixel(xx, yy, 0, wrap);
                                         continue;
                                 }
 
