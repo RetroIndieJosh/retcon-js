@@ -51,7 +51,7 @@ function retconjs_test_music(): void {
 
 function retconjs_test_clear_sprites(): void {
         const video = Video.get_instance();
-        while(video.sprite_count() > 0)
+        while(video.sprite_count > 0)
                 video.remove_sprite_at(0);
         video.set_clear_color(0);
 }
@@ -59,6 +59,11 @@ function retconjs_test_clear_sprites(): void {
 function retconjs_test_pixels(): void {
         console.info("clear to randomized pixels");
         Video.get_instance().randomize_pixels();
+}
+
+function retconjs_test_scale(factor: number): void {
+        const video = Video.get_instance();
+        video.scale = video.scale * factor;
 }
 
 function retconjs_test_sprite(): Sprite {
@@ -126,6 +131,10 @@ function retconjs_test_sprite_move_random(): void {
 
         console.info(`Test ${sprite_move}: Moving sprite randomly for ${TEST_LENGTH} seconds`);
         retconjs_set_timeout_sprite_test(sprite, sprite_move);
+}
+
+function retconjs_test_text_frame(on: boolean): void {
+        Video.get_instance().text_frame();
 }
 
 function retconjs_test_input(): void {

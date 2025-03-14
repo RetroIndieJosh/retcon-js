@@ -1,8 +1,23 @@
+html, 
+body {
+        margin: 0;
+        height: 100%;
+        width: 100%;        
+}
+
+#game {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        width: 100%;
+}
+
 canvas {
         padding: 0;
         margin: auto;
         display: block;
-        width: 512px;
         border: 1px solid magenta;
 }
 

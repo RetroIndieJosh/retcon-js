@@ -6,7 +6,7 @@ class Video extends Surface
         private canvas: HTMLCanvasElement;
         private ctx: CanvasRenderingContext2D;
 
-        private scale: number | undefined = undefined;
+        private _scale: number = 1;
 
         private clear_color: number = 0;
 
@@ -74,9 +74,7 @@ class Video extends Surface
                         throw new Error("Failed to create canvas");
                 }
 
-                this.scale = scale;
-                this.canvas.width = width * scale;
-                this.canvas.height = height * scale;
+                this._scale = scale;
 
                 // load colors
                 console.log("Load colors");
@@ -182,22 +180,47 @@ class Video extends Surface
                 return true;
         }
 
+        public text_display: boolean = true;
+
+        public text_frame() {
+                var text = "<div style='font: 14px Courier New'>";
+                for(var y = 0; y < this.pixels.height; y++) {
+                        for(var x = 0; x < this.pixels.width; x++) {
+                                const color_id = this.pixels.get(x, y);
+                                const color = this.get_color(this.pixels.get(x, y));
+                                const color_str = color_id >= 0 ? color_id.toString(16) : 'X';
+                                text += `<span style='text-color:${color}'>${color_str}</span>`;
+                        }
+                        text += "<br />";
+                }
+                text += "</div>";
+                const game = document.getElementById("game");
+                if(game == undefined) {
+                        console.log("Cannot find 'game' element");
+                        return;
+                }
+                game.innerHTML = text;
+        }
+
         // draw one frame
         public render() {
-                if (this.scale == undefined) return;
+                if (this._scale == undefined) return;
 
-                const scale = this.scale;
+                const scale = this._scale;
+
                 this.pixels.for_each((x, y, value) => {
                         if (value == NUMBER_UNCHANGED) return;
                         this.ctx.fillStyle = this.get_color(value);
+                        //this.ctx.fillStyle = this.get_color(this.pixels.random_value());
                         this.ctx.fillRect(x * scale, y * scale, scale, scale);
                 });
         }
 
-        // set the background clear color on top of which all layers and sprites are drawn
-        public set_clear_color(color_id: number, clear: boolean = true) {
-                this.clear_color = color_id;
-                if(clear) this.clear(this.clear_color);
+        get scale() : number { return this._scale; }
+
+        set scale(scale: number) { 
+                this._scale = scale;
+                this.update_scale();
         }
 
         // set all tiles in background bg_id to tile_id
@@ -211,6 +234,20 @@ class Video extends Surface
                 this.background?.set_tile(x, y, tile_id);
         }
 
+        // set the background clear color on top of which all layers and sprites are drawn
+        public set_clear_color(color_id: number, clear: boolean = true) {
+                this.clear_color = color_id;
+                if(clear) this.clear(this.clear_color);
+        }
+
         // the number of sprites currently rendered
-        public sprite_count() : number { return this.sprite_list.length; }
+        get sprite_count() : number { return this.sprite_list.length; }
+
+        // resize the video output
+        public update_scale(): void {
+                const width = Math.ceil(this.pixels.width * this._scale);
+                const height = Math.ceil(this.pixels.height * this._scale);
+                this.ctx.canvas.style.width = `${width}px`;
+                this.ctx.canvas.style.height = `${height}px`;
+        }
 } 

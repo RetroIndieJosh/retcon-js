@@ -1,8 +1,8 @@
 const NUMBER_UNCHANGED = -1;
 
 class NumberGrid {
-        private width: number;
-        private height: number;
+        private _width: number;
+        private _height: number;
 
         private min: number;
         private max: number;
@@ -11,8 +11,8 @@ class NumberGrid {
         private values: Array<Array<number>>;
 
         constructor(width: number, height: number, min: number, max: number) {
-                this.width = Math.floor(width);
-                this.height = Math.floor(height);
+                this._width = Math.floor(width);
+                this._height = Math.floor(height);
 
                 this.min = Math.floor(min);
                 this.max = Math.floor(max);
@@ -27,8 +27,8 @@ class NumberGrid {
         }
 
         public apply_each(func: (x: number, y: number, self: NumberGrid) => void) {
-                for (let x = 0; x < this.width; x++) {
-                        for (let y = 0; y < this.height; y++) {
+                for (let x = 0; x < this._width; x++) {
+                        for (let y = 0; y < this._height; y++) {
                                 func(x, y, this);
                         }
                 }
@@ -39,8 +39,8 @@ class NumberGrid {
         }
 
         public for_each(func: (x: number, y: number, value: number) => void) {
-                for (let x = 0; x < this.width; x++) {
-                        for (let y = 0; y < this.height; y++) {
+                for (let x = 0; x < this._width; x++) {
+                        for (let y = 0; y < this._height; y++) {
                                 func(x, y, this.values[x][y]);
                         }
                 }
@@ -54,14 +54,14 @@ class NumberGrid {
                 return NUMBER_UNCHANGED;
         }
 
-        public get_height(): number {
-                if (this.height == undefined) return -1;
-                return this.height;
+        get height(): number {
+                if (this._height == undefined) return -1;
+                return this._height;
         }
 
-        public get_width(): number {
-                if (this.width == undefined) return -1;
-                return this.width;
+        get width(): number {
+                if (this._width == undefined) return -1;
+                return this._width;
         }
 
         public randomize(): void {
@@ -73,8 +73,8 @@ class NumberGrid {
         }
 
         public set_all(value: number, wrap: boolean) {
-                for (let x = 0; x < this.width; x++) {
-                        for (let y = 0; y < this.height; y++) {
+                for (let x = 0; x < this._width; x++) {
+                        for (let y = 0; y < this._height; y++) {
                                 this.set(x, y, value, wrap);
                         }
                 }
@@ -89,26 +89,26 @@ class NumberGrid {
                         // TODO vertical disappears on second pass up
                         // wrap horizontal
                         if (x < 0) {
-                                const div = Math.floor(x / this.width) + 1;
-                                x += this.width * div;
+                                const div = Math.floor(x / this._width) + 1;
+                                x += this._width * div;
                         }
-                        else if (x >= this.width) {
-                                const div = Math.floor(x / this.width);
-                                x -= this.width * div;
+                        else if (x >= this._width) {
+                                const div = Math.floor(x / this._width);
+                                x -= this._width * div;
                         }
 
                         // wrap vertical
                         if (y < 0) {
-                                const div = Math.floor(y / this.height) + 1;
-                                y += this.height * div;
+                                const div = Math.floor(y / this._height) + 1;
+                                y += this._height * div;
                         }
-                        else if (y >= this.height) {
-                                const div = Math.floor(y / this.height);
-                                y -= this.height * div;
+                        else if (y >= this._height) {
+                                const div = Math.floor(y / this._height);
+                                y -= this._height * div;
                         }
                 } else {
                         // clip
-                        if (x < 0 || x >= this.width || y < 0 || y >= this.height)
+                        if (x < 0 || x >= this._width || y < 0 || y >= this._height)
                                 return;
                 }
 
@@ -116,5 +116,15 @@ class NumberGrid {
                 this.values[x][y] = value;
                 this.changed[x][y] = true;
         }
-}
 
+        public to_html(): string {
+                var text = "";
+                for(var y = 0; y < this.height; y++) {
+                        for(var x = 0; x < this.width; x++) {
+                                text += ('00' + this.values[x][y].toString(16)).slice(-2);
+                        }
+                        text += "<br />";
+                }
+                return `<div>${text}</div>`;
+        }
+}
